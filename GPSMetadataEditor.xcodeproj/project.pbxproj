@@ -10,6 +10,7 @@
 		1A2B3C4D5E6F700000000001 /* GPSMetadataEditorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000101 /* GPSMetadataEditorApp.swift */; };
 		1A2B3C4D5E6F700000000002 /* FileIntakeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000102 /* FileIntakeView.swift */; };
 		1A2B3C4D5E6F700000000003 /* FileIntakeSmokeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000103 /* FileIntakeSmokeTests.swift */; };
+		1A2B3C4D5E6F700000000004 /* AppDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000104 /* AppDesign.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -26,6 +27,7 @@
 		1A2B3C4D5E6F700000000101 /* GPSMetadataEditorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPSMetadataEditorApp.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F700000000102 /* FileIntakeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileIntakeView.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F700000000103 /* FileIntakeSmokeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileIntakeSmokeTests.swift; sourceTree = "<group>"; };
+		1A2B3C4D5E6F700000000104 /* AppDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDesign.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F700000000120 /* GPSMetadataEditor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GPSMetadataEditor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A2B3C4D5E6F700000000121 /* GPSMetadataEditorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GPSMetadataEditorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -86,6 +88,7 @@
 		1A2B3C4D5E6F700000000144 /* Support */ = {
 			isa = PBXGroup;
 			children = (
+				1A2B3C4D5E6F700000000104 /* AppDesign.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -208,6 +211,7 @@
 			files = (
 				1A2B3C4D5E6F700000000001 /* GPSMetadataEditorApp.swift in Sources */,
 				1A2B3C4D5E6F700000000002 /* FileIntakeView.swift in Sources */,
+				1A2B3C4D5E6F700000000004 /* AppDesign.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

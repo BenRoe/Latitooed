@@ -88,44 +88,44 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| FILE-01 | TBD | Pending |
-| FILE-02 | TBD | Pending |
-| FILE-03 | TBD | Pending |
-| FILE-04 | TBD | Pending |
-| FILE-05 | TBD | Pending |
-| LOC-01 | TBD | Pending |
-| LOC-02 | TBD | Pending |
-| LOC-03 | TBD | Pending |
-| LOC-04 | TBD | Pending |
-| LOC-05 | TBD | Pending |
-| LOC-06 | TBD | Pending |
-| BATCH-01 | TBD | Pending |
-| BATCH-02 | TBD | Pending |
-| BATCH-03 | TBD | Pending |
-| BATCH-04 | TBD | Pending |
-| BATCH-05 | TBD | Pending |
-| BATCH-06 | TBD | Pending |
-| META-01 | TBD | Pending |
-| META-02 | TBD | Pending |
-| META-03 | TBD | Pending |
-| META-04 | TBD | Pending |
-| META-05 | TBD | Pending |
-| META-06 | TBD | Pending |
-| META-07 | TBD | Pending |
-| PERSIST-01 | TBD | Pending |
-| PERSIST-02 | TBD | Pending |
-| PERSIST-03 | TBD | Pending |
-| PERSIST-04 | TBD | Pending |
-| PKG-01 | TBD | Pending |
-| PKG-02 | TBD | Pending |
-| PKG-03 | TBD | Pending |
-| PKG-04 | TBD | Pending |
+| FILE-01 | Phase 1 | Pending |
+| FILE-02 | Phase 1 | Pending |
+| FILE-03 | Phase 1 | Pending |
+| FILE-04 | Phase 1 | Pending |
+| FILE-05 | Phase 1 | Pending |
+| LOC-01 | Phase 2 | Pending |
+| LOC-02 | Phase 2 | Pending |
+| LOC-03 | Phase 2 | Pending |
+| LOC-04 | Phase 2 | Pending |
+| LOC-05 | Phase 2 | Pending |
+| LOC-06 | Phase 2 | Pending |
+| BATCH-01 | Phase 3 | Pending |
+| BATCH-02 | Phase 4 | Pending |
+| BATCH-03 | Phase 4 | Pending |
+| BATCH-04 | Phase 4 | Pending |
+| BATCH-05 | Phase 3 | Pending |
+| BATCH-06 | Phase 3 | Pending |
+| META-01 | Phase 3 | Pending |
+| META-02 | Phase 3 | Pending |
+| META-03 | Phase 4 | Pending |
+| META-04 | Phase 4 | Pending |
+| META-05 | Phase 3 | Pending |
+| META-06 | Phase 3 | Pending |
+| META-07 | Phase 3 | Pending |
+| PERSIST-01 | Phase 4 | Pending |
+| PERSIST-02 | Phase 4 | Pending |
+| PERSIST-03 | Phase 4 | Pending |
+| PERSIST-04 | Phase 4 | Pending |
+| PKG-01 | Phase 5 | Pending |
+| PKG-02 | Phase 5 | Pending |
+| PKG-03 | Phase 5 | Pending |
+| PKG-04 | Phase 5 | Pending |
 
 **Coverage:**
 - v1 requirements: 32 total
-- Mapped to phases: 0
-- Unmapped: 32
+- Mapped to phases: 32
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-05-15*
-*Last updated: 2026-05-15 after initial definition*
+*Last updated: 2026-05-15 after roadmap creation*

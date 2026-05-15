@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: unknown
-last_updated: "2026-05-15T21:40:14.642Z"
+status: in_progress
+last_updated: "2026-05-15T21:49:02Z"
 progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 4
-  completed_plans: 0
-  percent: 0
+  completed_plans: 1
+  percent: 25
 ---
 
 # Project State: GPS Metadata Editor
@@ -19,7 +19,7 @@ progress:
 See: `.planning/PROJECT.md` (updated 2026-05-15)
 
 **Core value:** Users can reliably apply a chosen GPS coordinate to many local media files without installing command-line dependencies.
-**Current focus:** Phase 1 - App Shell and File Intake
+**Current focus:** Phase 01 — app-shell-and-file-intake
 
 ## Workflow
 
@@ -36,7 +36,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-15)
 
 | Phase | Status | Progress |
 |-------|--------|----------|
-| 1 - App Shell and File Intake | Pending | 0% |
+| 1 - App Shell and File Intake | In Progress | 25% |
 | 2 - Coordinate Selection | Pending | 0% |
 | 3 - Core Metadata Writing | Pending | 0% |
 | 4 - Batch Results, Video, and History | Pending | 0% |
@@ -49,10 +49,11 @@ See: `.planning/PROJECT.md` (updated 2026-05-15)
 - Batch writes are sequential and cancellable.
 - SwiftData persists recent coordinates, batch history, and preferences only.
 - The initial distribution assumption is outside the Mac App Store.
+- Plan 01-01 established the native macOS SwiftUI app shell and kept Phase 2 location functionality reserved but inactive.
 
 ## Next Action
 
-Run `$gsd-discuss-phase 1` to gather context for Phase 1.
+Continue Phase 1 with plan 01-02 for actual file picker, drag/drop, classification, and warning behavior.
 
 ---
 *State initialized: 2026-05-15*

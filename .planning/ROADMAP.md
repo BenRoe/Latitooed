@@ -20,6 +20,7 @@
 ### Phase 1: App Shell and File Intake
 
 **Goal:** Create the native Mac utility shell and let users assemble a trustworthy file set.
+**Progress:** 1/4 plans complete. Plan 01-01 created the app shell and first-launch file-intake surface.
 **Mode:** mvp
 **UI hint:** yes
 **Requirements:** FILE-01, FILE-02, FILE-03, FILE-04, FILE-05

@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in_progress
-last_updated: "2026-05-15T21:49:02Z"
+last_updated: "2026-05-15T21:57:22Z"
 progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 4
-  completed_plans: 1
-  percent: 25
+  completed_plans: 2
+  percent: 50
 ---
 
 # Project State: GPS Metadata Editor
@@ -36,7 +36,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-15)
 
 | Phase | Status | Progress |
 |-------|--------|----------|
-| 1 - App Shell and File Intake | In Progress | 25% |
+| 1 - App Shell and File Intake | In Progress | 50% |
 | 2 - Coordinate Selection | Pending | 0% |
 | 3 - Core Metadata Writing | Pending | 0% |
 | 4 - Batch Results, Video, and History | Pending | 0% |
@@ -50,10 +50,11 @@ See: `.planning/PROJECT.md` (updated 2026-05-15)
 - SwiftData persists recent coordinates, batch history, and preferences only.
 - The initial distribution assumption is outside the Mac App Store.
 - Plan 01-01 established the native macOS SwiftUI app shell and kept Phase 2 location functionality reserved but inactive.
+- Plan 01-02 established URL-preserving file-intake value snapshots and a resource-value classifier that rejects unsupported, directory, missing, inaccessible, read-only, locked, and duplicate inputs before table insertion.
 
 ## Next Action
 
-Continue Phase 1 with plan 01-02 for actual file picker, drag/drop, classification, and warning behavior.
+Continue Phase 1 with the next plan for wiring picker/drop UI state into the file-intake service.
 
 ---
 *State initialized: 2026-05-15*

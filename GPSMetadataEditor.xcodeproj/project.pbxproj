@@ -18,6 +18,7 @@
 		1A2B3C4D5E6F700000000009 /* SelectedMediaFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000109 /* SelectedMediaFile.swift */; };
 		1A2B3C4D5E6F70000000000A /* IntakeWarning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70000000010A /* IntakeWarning.swift */; };
 		1A2B3C4D5E6F70000000000B /* FileIntakeResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70000000010B /* FileIntakeResult.swift */; };
+		1A2B3C4D5E6F70000000000C /* FileIntakeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70000000010C /* FileIntakeService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,6 +43,7 @@
 		1A2B3C4D5E6F700000000109 /* SelectedMediaFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedMediaFile.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F70000000010A /* IntakeWarning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntakeWarning.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F70000000010B /* FileIntakeResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileIntakeResult.swift; sourceTree = "<group>"; };
+		1A2B3C4D5E6F70000000010C /* FileIntakeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileIntakeService.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F700000000120 /* GPSMetadataEditor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GPSMetadataEditor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A2B3C4D5E6F700000000121 /* GPSMetadataEditorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GPSMetadataEditorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -96,6 +98,7 @@
 			children = (
 				1A2B3C4D5E6F700000000102 /* FileIntakeView.swift */,
 				1A2B3C4D5E6F700000000147 /* Models */,
+				1A2B3C4D5E6F700000000148 /* Services */,
 			);
 			path = FileIntake;
 			sourceTree = "<group>";
@@ -111,6 +114,14 @@
 				1A2B3C4D5E6F70000000010B /* FileIntakeResult.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		1A2B3C4D5E6F700000000148 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				1A2B3C4D5E6F70000000010C /* FileIntakeService.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 		1A2B3C4D5E6F700000000144 /* Support */ = {
@@ -247,6 +258,7 @@
 				1A2B3C4D5E6F700000000009 /* SelectedMediaFile.swift in Sources */,
 				1A2B3C4D5E6F70000000000A /* IntakeWarning.swift in Sources */,
 				1A2B3C4D5E6F70000000000B /* FileIntakeResult.swift in Sources */,
+				1A2B3C4D5E6F70000000000C /* FileIntakeService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

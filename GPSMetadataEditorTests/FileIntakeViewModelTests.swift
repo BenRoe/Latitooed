@@ -54,4 +54,25 @@ struct FileIntakeViewModelTests {
         #expect(detail.containingFolderName == "Trip")
         #expect(detail.containingFolderURL == URL(filePath: "/Volumes/Photos/Trip", directoryHint: .isDirectory))
     }
+
+    @Test func intakeCommandDelegatesURLClassificationThroughService() throws {
+        let directory = try temporaryDirectory()
+        let supportedURL = directory.appending(path: "family photo.JPG")
+        let unsupportedURL = directory.appending(path: "notes.txt")
+        try Data().write(to: supportedURL)
+        try Data().write(to: unsupportedURL)
+        let viewModel = FileIntakeViewModel()
+
+        viewModel.intake(urls: [supportedURL, unsupportedURL], source: .drop)
+
+        #expect(viewModel.selectedFiles.map(\.url) == [supportedURL])
+        #expect(viewModel.selectedFiles.map(\.kind) == [.jpeg])
+        #expect(viewModel.latestWarningDetails.map(\.reason) == [.unsupported])
+    }
+
+    private func temporaryDirectory() throws -> URL {
+        let url = URL.temporaryDirectory.appending(path: UUID().uuidString, directoryHint: .isDirectory)
+        try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
+        return url
+    }
 }

@@ -20,7 +20,7 @@
 ### Phase 1: App Shell and File Intake
 
 **Goal:** Create the native Mac utility shell and let users assemble a trustworthy file set.
-**Progress:** 2/4 plans complete. Plan 01-01 created the app shell and first-launch file-intake surface. Plan 01-02 added file-intake value types, URL classification, duplicate prevention, and warning generation.
+**Progress:** 3/4 plans complete. Plan 01-01 created the app shell and first-launch file-intake surface. Plan 01-02 added file-intake value types, URL classification, duplicate prevention, and warning generation. Plan 01-03 wired picker and Finder drop URLs through main-actor intake state into the selected-files and warning UI.
 **Mode:** mvp
 **UI hint:** yes
 **Requirements:** FILE-01, FILE-02, FILE-03, FILE-04, FILE-05

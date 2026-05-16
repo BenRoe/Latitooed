@@ -8,7 +8,7 @@
 ### File Intake
 
 - [x] **FILE-01**: User can select multiple local media files through a file picker.
-- [ ] **FILE-02**: User can drag and drop supported media files into the app window.
+- [x] **FILE-02**: User can drag and drop supported media files into the app window.
 - [x] **FILE-03**: User can see each selected file's display name, detected file type, current GPS status, and latest write result.
 - [x] **FILE-04**: User receives a clear warning when a selected file is unsupported, inaccessible, read-only, locked, or missing.
 - [x] **FILE-05**: User-selected files with spaces, Unicode characters, and external-drive paths are handled without path parsing failures.
@@ -89,7 +89,7 @@
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | FILE-01 | Phase 1 | Complete in 01-01 |
-| FILE-02 | Phase 1 | Pending |
+| FILE-02 | Phase 1 | Complete in 01-03 |
 | FILE-03 | Phase 1 | Complete in 01-02 |
 | FILE-04 | Phase 1 | Complete in 01-02 |
 | FILE-05 | Phase 1 | Complete in 01-02 |

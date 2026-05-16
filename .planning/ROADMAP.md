@@ -20,7 +20,7 @@
 ### Phase 1: App Shell and File Intake
 
 **Goal:** As a Mac user, I want to select and review supported local media files, so that I can prepare them for GPS metadata editing.
-**Progress:** 4/5 plans complete. Plan 01-01 created the app shell and first-launch file-intake surface. Plan 01-02 added file-intake value types, URL classification, duplicate prevention, and warning generation. Plan 01-03 wired picker and Finder drop URLs through main-actor intake state into the selected-files and warning UI. Plan 01-04 extracted the final review surfaces for drop zones, selected-file rows, bottom-left details, warning details, and the quiet reserved location panel. Plan 01-05 is planned to close the MVP user-story verification gap.
+**Progress:** 5/5 plans complete. Plan 01-01 created the app shell and first-launch file-intake surface. Plan 01-02 added file-intake value types, URL classification, duplicate prevention, and warning generation. Plan 01-03 wired picker and Finder drop URLs through main-actor intake state into the selected-files and warning UI. Plan 01-04 extracted the final review surfaces for drop zones, selected-file rows, bottom-left details, warning details, and the quiet reserved location panel. Plan 01-05 converted the MVP goal to a valid user story and closed the verification format gap.
 **Mode:** mvp
 **UI hint:** yes
 **Requirements:** FILE-01, FILE-02, FILE-03, FILE-04, FILE-05

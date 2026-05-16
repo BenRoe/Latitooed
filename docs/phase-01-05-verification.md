@@ -69,4 +69,47 @@ Phase `01-05` is verified when:
 ## Notes
 
 - This gap does not require Swift source changes.
-- This does not replace the later Xcode build/test check for the Phase 1 app code. Run that on a macOS machine with Xcode tools installed when available.
+- This does not replace the later Xcode build/test check for the Phase 1 app code. Run that on a macOS machine with full Xcode installed and selected.
+
+## Xcode Setup If `xcodebuild` Fails
+
+If this command:
+
+```bash
+xcodebuild -project GPSMetadataEditor.xcodeproj -scheme GPSMetadataEditor -destination 'platform=macOS' test
+```
+
+fails with:
+
+```text
+xcode-select: error: tool 'xcodebuild' requires Xcode, but active developer directory '/Library/Developer/CommandLineTools' is a command line tools instance
+```
+
+then Command Line Tools are selected instead of full Xcode.
+
+1. Install full Xcode if it is not installed.
+2. Select the full Xcode developer directory:
+
+   ```bash
+   sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
+   ```
+
+3. Confirm the active path:
+
+   ```bash
+   xcode-select --print-path
+   ```
+
+   Expected output:
+
+   ```text
+   /Applications/Xcode.app/Contents/Developer
+   ```
+
+4. If prompted, accept the Xcode license:
+
+   ```bash
+   sudo xcodebuild -license accept
+   ```
+
+5. Re-run the Phase 1 test command.

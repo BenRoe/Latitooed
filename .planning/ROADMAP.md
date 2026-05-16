@@ -9,7 +9,7 @@
 
 | Phase | Name | Goal | Requirements |
 |-------|------|------|--------------|
-| 1 | App Shell and File Intake | Create the native Mac utility shell and let users assemble a trustworthy file set. | FILE-01, FILE-02, FILE-03, FILE-04, FILE-05 |
+| 1 | App Shell and File Intake | As a Mac user, I want to select and review supported local media files, so that I can prepare them for GPS metadata editing. | FILE-01, FILE-02, FILE-03, FILE-04, FILE-05 |
 | 2 | Coordinate Selection | Let users choose an exact target coordinate through MapKit or manual entry. | LOC-01, LOC-02, LOC-03, LOC-04, LOC-05, LOC-06 |
 | 3 | Core Metadata Writing | Write GPS metadata to eligible still images using bundled ExifTool through a safe service boundary. | BATCH-01, BATCH-05, BATCH-06, META-01, META-02, META-05, META-06, META-07 |
 | 4 | Batch Results, Video, and History | Make the batch workflow cancellable, transparent, and persistent enough for daily use. | BATCH-02, BATCH-03, BATCH-04, META-03, META-04, PERSIST-01, PERSIST-02, PERSIST-03, PERSIST-04 |
@@ -19,7 +19,7 @@
 
 ### Phase 1: App Shell and File Intake
 
-**Goal:** Create the native Mac utility shell and let users assemble a trustworthy file set.
+**Goal:** As a Mac user, I want to select and review supported local media files, so that I can prepare them for GPS metadata editing.
 **Progress:** 4/5 plans complete. Plan 01-01 created the app shell and first-launch file-intake surface. Plan 01-02 added file-intake value types, URL classification, duplicate prevention, and warning generation. Plan 01-03 wired picker and Finder drop URLs through main-actor intake state into the selected-files and warning UI. Plan 01-04 extracted the final review surfaces for drop zones, selected-file rows, bottom-left details, warning details, and the quiet reserved location panel. Plan 01-05 is planned to close the MVP user-story verification gap.
 **Mode:** mvp
 **UI hint:** yes

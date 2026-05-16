@@ -28,6 +28,8 @@ final class FileIntakeViewModel {
         let filename: String
         let containingFolderName: String
         let containingFolderURL: URL
+        let latestResult: FileResultStatus
+        let latestMessage: String?
     }
 
     var selectedFiles: [SelectedMediaFile] = []
@@ -46,7 +48,9 @@ final class FileIntakeViewModel {
         return SelectedFileDetail(
             filename: selectedFile.displayName,
             containingFolderName: selectedFile.containingFolderName,
-            containingFolderURL: selectedFile.containingFolderURL
+            containingFolderURL: selectedFile.containingFolderURL,
+            latestResult: selectedFile.latestResult,
+            latestMessage: selectedFile.latestMessage
         )
     }
 

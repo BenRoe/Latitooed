@@ -12,6 +12,7 @@ struct FileIntakeViewModelTests {
         viewModel.apply(FileIntakeResult(accepted: [first, second], warnings: []), source: .picker)
 
         #expect(viewModel.selectedFiles == [first, second])
+        #expect(viewModel.selectedFiles.count == 2)
         #expect(viewModel.latestWarningDetails.isEmpty)
         #expect(viewModel.latestNotice?.style == .success)
     }
@@ -53,6 +54,39 @@ struct FileIntakeViewModelTests {
         #expect(detail.filename == "IMG 001.HEIC")
         #expect(detail.containingFolderName == "Trip")
         #expect(detail.containingFolderURL == URL(filePath: "/Volumes/Photos/Trip", directoryHint: .isDirectory))
+        #expect(detail.latestResult == .pending)
+        #expect(detail.latestMessage == nil)
+    }
+
+    @Test func selectedDetailIncludesLatestResultMessageForDetailPanel() throws {
+        let viewModel = FileIntakeViewModel()
+        let file = SelectedMediaFile(
+            url: URL(filePath: "/Volumes/Photos/Trip/clip.MP4"),
+            kind: .mp4,
+            latestResult: .warning,
+            latestMessage: "Video metadata support will be checked during writing."
+        )
+
+        viewModel.apply(FileIntakeResult(accepted: [file], warnings: []), source: .drop)
+        viewModel.selectFile(id: file.id)
+
+        let detail = try #require(viewModel.selectedFileDetail)
+        #expect(detail.filename == "clip.MP4")
+        #expect(detail.latestResult == .warning)
+        #expect(detail.latestMessage == "Video metadata support will be checked during writing.")
+    }
+
+    @Test func latestWarningsExposeEveryRejectedItemForWarningSummary() {
+        let viewModel = FileIntakeViewModel()
+        let unsupported = IntakeWarning(filename: "notes.txt", url: URL(filePath: "/tmp/notes.txt"), reason: .unsupported)
+        let directory = IntakeWarning(filename: "Album", url: URL(filePath: "/tmp/Album", directoryHint: .isDirectory), reason: .directory)
+        let locked = IntakeWarning(filename: "locked.heic", url: URL(filePath: "/tmp/locked.heic"), reason: .locked)
+
+        viewModel.apply(FileIntakeResult(accepted: [], warnings: [unsupported, directory, locked]), source: .drop)
+
+        #expect(viewModel.latestWarningDetails.map(\.filename) == ["notes.txt", "Album", "locked.heic"])
+        #expect(viewModel.latestWarningDetails.map(\.reason) == [.unsupported, .directory, .locked])
+        #expect(viewModel.latestNotice?.message == "3 items could not be added.")
     }
 
     @Test func intakeCommandDelegatesURLClassificationThroughService() throws {

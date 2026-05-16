@@ -33,9 +33,16 @@ private struct SelectedFileDetailContent: View {
                     .lineLimit(1)
                     .help(detail.containingFolderURL.path())
 
-                Text("Access will be checked again before metadata changes in a later phase.")
+                Label("Latest result: \(detail.latestResult.displayName)", systemImage: "clock")
                     .font(.caption)
                     .foregroundStyle(.secondary)
+
+                if let latestMessage = detail.latestMessage {
+                    Text(latestMessage)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .textSelection(.enabled)
+                }
             }
         } else {
             Label("Select a row to review file details", systemImage: "sidebar.left")

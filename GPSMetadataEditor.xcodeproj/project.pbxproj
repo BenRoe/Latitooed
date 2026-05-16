@@ -20,6 +20,7 @@
 		1A2B3C4D5E6F70000000000B /* FileIntakeResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70000000010B /* FileIntakeResult.swift */; };
 		1A2B3C4D5E6F70000000000C /* FileIntakeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70000000010C /* FileIntakeService.swift */; };
 		1A2B3C4D5E6F70000000000D /* FileIntakeViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70000000010D /* FileIntakeViewModelTests.swift */; };
+		1A2B3C4D5E6F70000000000E /* FileIntakeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70000000010E /* FileIntakeViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +47,7 @@
 		1A2B3C4D5E6F70000000010B /* FileIntakeResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileIntakeResult.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F70000000010C /* FileIntakeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileIntakeService.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F70000000010D /* FileIntakeViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileIntakeViewModelTests.swift; sourceTree = "<group>"; };
+		1A2B3C4D5E6F70000000010E /* FileIntakeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileIntakeViewModel.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F700000000120 /* GPSMetadataEditor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GPSMetadataEditor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A2B3C4D5E6F700000000121 /* GPSMetadataEditorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GPSMetadataEditorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -99,6 +101,7 @@
 			isa = PBXGroup;
 			children = (
 				1A2B3C4D5E6F700000000102 /* FileIntakeView.swift */,
+				1A2B3C4D5E6F70000000010E /* FileIntakeViewModel.swift */,
 				1A2B3C4D5E6F700000000147 /* Models */,
 				1A2B3C4D5E6F700000000148 /* Services */,
 			);
@@ -262,6 +265,7 @@
 				1A2B3C4D5E6F70000000000A /* IntakeWarning.swift in Sources */,
 				1A2B3C4D5E6F70000000000B /* FileIntakeResult.swift in Sources */,
 				1A2B3C4D5E6F70000000000C /* FileIntakeService.swift in Sources */,
+				1A2B3C4D5E6F70000000000E /* FileIntakeViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

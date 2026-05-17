@@ -113,7 +113,7 @@ struct FileIntakeServiceTests {
     }
 
     @Test func lockedFilesProduceWarningRecords() throws {
-        let url = try temporaryDirectory().appending(path: "locked.mp4")
+        var url = try temporaryDirectory().appending(path: "locked.mp4")
         try Data().write(to: url)
         var values = URLResourceValues()
         values.isUserImmutable = true

@@ -1,23 +1,26 @@
 ---
 phase: 01-app-shell-and-file-intake
-verified: 2026-05-16T00:00:00Z
-status: human_needed
-score: 6/6 source must-haves verified; 1 Xcode verification pending
+verified: 2026-05-17T11:51:50+02:00
+status: passed
+score: 7/7 must-haves verified
 overrides_applied: 0
 gaps: []
 human_verification:
   - command: "xcodebuild -project GPSMetadataEditor.xcodeproj -scheme GPSMetadataEditor -destination 'platform=macOS' test"
     expected: "Command exits 0 on a macOS machine with full Xcode selected as the active developer directory."
-    last_result: "Failed during SwiftCompile: FileDropZone.swift mixed `.tint` and `.quaternary` concrete ShapeStyle types in one ternary. Fixed by type-erasing both branches with `AnyShapeStyle`; rerun required."
+    last_result: "Passed on Mac. App window shown; file picker import and drop-area import both worked."
 residual_risks:
   - "01-REVIEW.md records one advisory warning about duplicate detection using raw URL equality for alternate spellings or symlinked paths. It is not a blocker for the 01-05 MVP goal-format gap."
+runtime_observations:
+  - "Xcode console showed `Unable to obtain a task name port right for pid ... (os/kern) failure (0x5)` from BaseBoard while the app still launched and functioned."
+  - "Xcode console showed `fopen failed for data file: errno = 2 (No such file or directory)` from libCoreFSCache while the app still launched and functioned."
 ---
 
 # Phase 1: App Shell and File Intake Verification Report
 
 **Phase Goal:** As a Mac user, I want to select and review supported local media files, so that I can prepare them for GPS metadata editing.
-**Verified:** 2026-05-16
-**Status:** human_needed
+**Verified:** 2026-05-17
+**Status:** passed
 **Re-verification:** Yes - after gap closure plan 01-05
 
 ## Goal Achievement
@@ -48,8 +51,9 @@ The implemented Phase 1 surface provides a native macOS SwiftUI app shell, nativ
 | 4 | User can drop supported local media files into the app window | PASSED | `FileDropZone.swift` uses `.dropDestination(for: URL.self)` and routes dropped URLs through the same view-model intake command. |
 | 5 | User can review accepted files, selected-file details, and latest warning details | PASSED | `SelectedFilesTable`, `FileDetailPanel`, and `WarningSummaryView` are present and composed by `FileIntakeView`. |
 | 6 | Unsupported, duplicate, missing, inaccessible, read-only, locked, and directory inputs are modeled as warnings | PASSED | `FileIntakeService` returns `FileIntakeResult(accepted:warnings:)`; tests cover warning reasons, unsupported files, directories, duplicates, missing files, read-only files, and locked fixtures where deterministic. |
+| 7 | The app builds, launches, and supports file picker plus drop-area import on macOS | PASSED | User ran the Xcode build/test flow on Mac after the `FileDropZone` compile fix. App window appeared; file picker import and drop area import both worked. |
 
-**Score:** 6/6 truths verified
+**Score:** 7/7 truths verified
 
 ### Required Artifacts
 
@@ -89,23 +93,26 @@ The implemented Phase 1 surface provides a native macOS SwiftUI app shell, nativ
 | `gsd-sdk query verify.key-links .planning/phases/01-app-shell-and-file-intake/01-05-PLAN.md` | `all_verified: true` |
 | Forbidden-pattern scan for legacy SwiftUI/concurrency patterns in app/test source | Passed; no matches |
 | `git diff --check` | Passed |
-| `xcodebuild -project GPSMetadataEditor.xcodeproj -scheme GPSMetadataEditor -destination 'platform=macOS' test` | Pending rerun after fixing `FileDropZone.swift` ShapeStyle type mismatch |
+| `xcodebuild -project GPSMetadataEditor.xcodeproj -scheme GPSMetadataEditor -destination 'platform=macOS' test` | Passed on Mac after fixing `FileDropZone.swift` ShapeStyle type mismatch |
+| Manual app smoke test | Passed: app window shown; files can be imported with file picker and via drop area |
 
 ### Human Verification Required
 
-The source checks and 01-05 MVP goal-format gap closure passed, but final Phase 1 verification requires the Xcode test command to run successfully on a Mac with full Xcode selected:
+None. The required Mac build/test and manual app smoke test have passed.
 
-```bash
-xcodebuild -project GPSMetadataEditor.xcodeproj -scheme GPSMetadataEditor -destination 'platform=macOS' test
-```
+### Runtime Observations
 
-The latest reported attempt reached Swift compilation and failed in `FileDropZone.swift`:
+The successful app run still printed these Xcode console messages:
 
 ```text
-member 'quaternary' in 'TintShapeStyle' produces result of type 'some ShapeStyle', but context expects 'TintShapeStyle'
+Unable to obtain a task name port right for pid 403: (os/kern) failure (0x5)
 ```
 
-That compile error was fixed by type-erasing both branches of the drop-zone stroke style ternary with `AnyShapeStyle`. Re-run the Xcode test command to continue verification.
+```text
+fopen failed for data file: errno = 2 (No such file or directory)
+```
+
+Both messages came from Apple system libraries (`BaseBoard` and `libCoreFSCache.dylib`) and did not block launch, picker import, or drop import in the reported smoke test.
 
 ### Residual Risks
 
@@ -113,9 +120,9 @@ That compile error was fixed by type-erasing both branches of the drop-zone stro
 
 ### Gaps Summary
 
-No blocking source-verification gaps remain for Phase 1 after plan 01-05. The original MVP user-story format blocker has been closed. Final phase verification is pending the required Xcode test command.
+No blocking verification gaps remain for Phase 1 after plan 01-05. The original MVP user-story format blocker has been closed, the app builds on Mac, the app window appears, and file picker plus drop-area intake both work.
 
 ---
 
-_Verified: 2026-05-16_
+_Verified: 2026-05-17_
 _Verifier: inline GSD gap-closure verification_

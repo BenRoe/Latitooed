@@ -193,6 +193,10 @@ Use these entry points:
 Do not make direct repo edits outside a GSD workflow unless the user explicitly asks to bypass it.
 <!-- GSD:workflow-end -->
 
+## Phase Closeout Reporting
+
+After each phase, include a short manual verification section in the final response. It should give the user exact host-side steps to verify the phase, including any `xcodebuild` command, Xcode launch checks, and focused UI smoke checks relevant to that phase.
+
 <!-- GSD:profile-start -->
 ## Developer Profile
 

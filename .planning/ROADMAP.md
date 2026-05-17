@@ -40,6 +40,7 @@
 ### Phase 2: Coordinate Selection
 
 **Goal:** Let users choose an exact target coordinate through MapKit or manual entry.
+**Progress:** 3/3 plans source-complete. Host-side `xcodebuild` and MapKit UI checks remain pending before this phase should be treated as fully verified.
 **Mode:** mvp
 **UI hint:** yes
 **Requirements:** LOC-01, LOC-02, LOC-03, LOC-04, LOC-05, LOC-06

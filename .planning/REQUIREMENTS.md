@@ -15,12 +15,12 @@
 
 ### Location Selection
 
-- [ ] **LOC-01**: User can search for a place using Apple MapKit without providing Google or third-party API keys.
-- [ ] **LOC-02**: User can select a search result to set the target coordinate.
-- [ ] **LOC-03**: User can click the map to set the target coordinate.
-- [ ] **LOC-04**: User can switch between standard, satellite/imagery, and hybrid-style map presentations.
-- [ ] **LOC-05**: User can manually enter latitude and longitude as a fallback to map/search selection.
-- [ ] **LOC-06**: User can see the currently selected latitude and longitude before applying a batch write.
+- [x] **LOC-01**: User can search for a place using Apple MapKit without providing Google or third-party API keys.
+- [x] **LOC-02**: User can select a search result to set the target coordinate.
+- [x] **LOC-03**: User can click the map to set the target coordinate.
+- [x] **LOC-04**: User can switch between standard, satellite/imagery, and hybrid-style map presentations.
+- [x] **LOC-05**: User can manually enter latitude and longitude as a fallback to map/search selection.
+- [x] **LOC-06**: User can see the currently selected latitude and longitude before applying a batch write.
 
 ### Batch Writing
 
@@ -93,12 +93,12 @@
 | FILE-03 | Phase 1 | Complete in 01-02 |
 | FILE-04 | Phase 1 | Complete in 01-02 |
 | FILE-05 | Phase 1 | Complete in 01-02 |
-| LOC-01 | Phase 2 | Pending |
-| LOC-02 | Phase 2 | Pending |
-| LOC-03 | Phase 2 | Pending |
-| LOC-04 | Phase 2 | Pending |
-| LOC-05 | Phase 2 | Pending |
-| LOC-06 | Phase 2 | Pending |
+| LOC-01 | Phase 2 | Complete |
+| LOC-02 | Phase 2 | Complete |
+| LOC-03 | Phase 2 | Complete |
+| LOC-04 | Phase 2 | Complete |
+| LOC-05 | Phase 2 | Complete |
+| LOC-06 | Phase 2 | Complete |
 | BATCH-01 | Phase 3 | Pending |
 | BATCH-02 | Phase 4 | Pending |
 | BATCH-03 | Phase 4 | Pending |

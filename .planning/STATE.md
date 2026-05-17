@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in_progress
-last_updated: "2026-05-17T18:53:48.342Z"
+last_updated: "2026-05-17T19:04:20.372Z"
 progress:
   total_phases: 5
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 8
-  completed_plans: 5
-  percent: 20
+  completed_plans: 8
+  percent: 40
 ---
 
 # Project State: GPS Metadata Editor
@@ -19,7 +19,7 @@ progress:
 See: `.planning/PROJECT.md` (updated 2026-05-15)
 
 **Core value:** Users can reliably apply a chosen GPS coordinate to many local media files without installing command-line dependencies.
-**Current focus:** Phase 2 — UI-SPEC approved; ready for planning
+**Current focus:** Phase 02 — Coordinate Selection
 
 ## Workflow
 
@@ -37,7 +37,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-15)
 | Phase | Status | Progress |
 |-------|--------|----------|
 | 1 - App Shell and File Intake | Complete | 100% |
-| 2 - Coordinate Selection | Pending | 0% |
+| 2 - Coordinate Selection | Source Complete, Host Verification Pending | 100% source |
 | 3 - Core Metadata Writing | Pending | 0% |
 | 4 - Batch Results, Video, and History | Pending | 0% |
 | 5 - Packaging and Release Verification | Pending | 0% |
@@ -54,10 +54,12 @@ See: `.planning/PROJECT.md` (updated 2026-05-15)
 - Plan 01-03 established `@Observable @MainActor` file-intake view state and wired native multi-select picker plus Finder URL drops through `FileIntakeService`.
 - Plan 01-04 completed the Phase 1 intake review UI by extracting file drop, selected-files table, bottom-left detail, warning summary, and quiet reserved-location surfaces.
 - Plan 01-05 converted the Phase 1 MVP goal to a valid user story and closed the verification format gap.
+- Phase 2 source implementation added coordinate validation state, explicit MapKit search, manual coordinate entry, map-click targeting, map style overlays, and right-panel integration.
+- Phase 2 still requires host-side `xcodebuild -project GPSMetadataEditor.xcodeproj -scheme GPSMetadataEditor -destination 'platform=macOS' test` plus MapKit UI smoke verification before it is fully verified.
 
 ## Next Action
 
-Begin Phase 2 coordinate selection planning and implementation.
+Run Phase 2 host verification on macOS/Xcode, then proceed to Phase 3 planning if it passes.
 
 ---
 *State initialized: 2026-05-15*

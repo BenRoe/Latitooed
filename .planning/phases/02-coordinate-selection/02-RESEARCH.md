@@ -21,6 +21,8 @@ Phase 2 must replace the reserved right-side placeholder with a native MapKit co
 - Project context: `.planning/phases/02-coordinate-selection/02-CONTEXT.md`
 - Prior UI contract: `.planning/phases/01-app-shell-and-file-intake/01-UI-SPEC.md`
 - Existing code: `GPSMetadataEditor/Features/FileIntake/*`, `GPSMetadataEditor/Support/AppDesign.swift`
+- Project skill: `.agents/skills/swift-concurrency-pro/SKILL.md`
+- Swift concurrency references: cancellation, structured concurrency, actors, and Swift 6.2 behavior
 
 ## Key Findings
 
@@ -44,6 +46,16 @@ Phase 2 must replace the reserved right-side placeholder with a native MapKit co
 - The no-selection initial camera should center on Berlin with no fake pin.
 - Selecting a search result or valid manual coordinate should update the selected coordinate and move the map camera to that coordinate.
 - Keep camera state in a `@MainActor @Observable` view model rather than embedding camera mutation logic in SwiftUI body code.
+
+### Swift Concurrency
+
+- Keep `CoordinateSelectionViewModel` `@Observable @MainActor`, matching the existing `FileIntakeViewModel` pattern and keeping UI-facing state on the main actor.
+- Do not launch loose `Task {}` blocks from SwiftUI view bodies for search. Put explicit search orchestration behind view-model methods.
+- Because explicit searches can overlap, store one active search task or cancellable search handle in the view model or search service boundary, cancel it before starting a replacement, and cancel it when resetting search state.
+- Treat `CancellationError` as normal lifecycle cancellation. Do not surface cancellation as a user-facing search error.
+- Prefer `async`/`await` MapKit APIs over completion handlers when available. If a MapKit API must be wrapped, bridge cancellation to the underlying cancel mechanism rather than ignoring cancellation.
+- Do not use `Task.detached` for search or UI updates. Search I/O naturally suspends; it does not need manual background offloading.
+- Avoid custom actors unless planning finds real shared mutable state outside the main actor. A simple `@MainActor` view model plus value-type results is enough for Phase 2.
 
 ### Map Style Controls
 
@@ -84,6 +96,7 @@ Use a small number of vertical MVP plans:
    - Add a MapKit search service/protocol that runs explicit `MKLocalSearch` requests.
    - Keep search state cancellable and testable.
    - Return lightweight search results with display title/subtitle and coordinate only.
+   - Filter `CancellationError` so canceled searches do not become inline error states.
 
 3. SwiftUI right-panel integration
    - Replace `ReservedLocationPanel` in `FileIntakeView`.
@@ -97,6 +110,7 @@ This can be one wave if implemented by one executor sequentially, or two waves i
 - **MapKit API availability drift:** Verify exact SwiftUI Map APIs in Xcode on host before marking implementation complete. The VM can edit files but cannot fully verify MapKit UI.
 - **Manual numeric input edge cases:** Formatted numeric fields can fight invalid intermediate text. Keep validation logic in the view model and test invalid ranges explicitly.
 - **Search cancellation:** Avoid detached/unstructured tasks. Keep one active search task or search object and cancel before starting a replacement.
+- **Actor reentrancy:** After `await` returns from search, verify the response still belongs to the latest query before updating main-actor state. Do not assume view-model state is unchanged across suspension points.
 - **Project file churn:** Adding many new files requires careful `.xcodeproj` updates. Plans should list exact new files and verify target membership.
 - **Accessibility for icon overlays:** Icon-only visual buttons still need text labels, tooltips/help, and accessible names.
 

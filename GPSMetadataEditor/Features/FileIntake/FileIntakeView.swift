@@ -46,7 +46,7 @@ struct FileIntakeView: View {
                 .frame(minWidth: AppDesign.Layout.leftColumnMinimumWidth, idealWidth: AppDesign.Layout.leftColumnIdealWidth)
                 .padding(AppDesign.Spacing.lg)
 
-                ReservedLocationPanel()
+                CoordinateSelectionView()
                     .frame(minWidth: AppDesign.Layout.rightColumnMinimumWidth, maxWidth: .infinity, maxHeight: .infinity)
             }
 

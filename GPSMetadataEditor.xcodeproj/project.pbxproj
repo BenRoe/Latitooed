@@ -26,6 +26,20 @@
 		1A2B3C4D5E6F700000000012 /* FileDetailPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000013 /* FileDetailPanel.swift */; };
 		1A2B3C4D5E6F700000000014 /* WarningSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000015 /* WarningSummaryView.swift */; };
 		1A2B3C4D5E6F700000000016 /* ReservedLocationPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000017 /* ReservedLocationPanel.swift */; };
+		1A2B3C4D5E6F700000000300 /* CoordinateSelectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000400 /* CoordinateSelectionViewModel.swift */; };
+		1A2B3C4D5E6F700000000301 /* CoordinateSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000401 /* CoordinateSelectionView.swift */; };
+		1A2B3C4D5E6F700000000302 /* CoordinateSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000402 /* CoordinateSelection.swift */; };
+		1A2B3C4D5E6F700000000303 /* CoordinateFieldState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000403 /* CoordinateFieldState.swift */; };
+		1A2B3C4D5E6F700000000304 /* MapPresentationStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000404 /* MapPresentationStyle.swift */; };
+		1A2B3C4D5E6F700000000305 /* CoordinateSearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000405 /* CoordinateSearchResult.swift */; };
+		1A2B3C4D5E6F700000000306 /* CoordinateSearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000406 /* CoordinateSearchService.swift */; };
+		1A2B3C4D5E6F700000000307 /* CoordinateSearchPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000407 /* CoordinateSearchPanel.swift */; };
+		1A2B3C4D5E6F700000000308 /* CoordinateFieldsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000408 /* CoordinateFieldsView.swift */; };
+		1A2B3C4D5E6F700000000309 /* CoordinateMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000409 /* CoordinateMapView.swift */; };
+		1A2B3C4D5E6F70000000030A /* MapStyleOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70000000040A /* MapStyleOverlay.swift */; };
+		1A2B3C4D5E6F70000000030B /* CoordinateSelectionViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70000000040B /* CoordinateSelectionViewModelTests.swift */; };
+		1A2B3C4D5E6F70000000030C /* CoordinateSearchServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70000000040C /* CoordinateSearchServiceTests.swift */; };
+		1A2B3C4D5E6F70000000030D /* CoordinateSelectionSmokeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70000000040D /* CoordinateSelectionSmokeTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +72,20 @@
 		1A2B3C4D5E6F700000000013 /* FileDetailPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileDetailPanel.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F700000000015 /* WarningSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WarningSummaryView.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F700000000017 /* ReservedLocationPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReservedLocationPanel.swift; sourceTree = "<group>"; };
+		1A2B3C4D5E6F700000000400 /* CoordinateSelectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateSelectionViewModel.swift; sourceTree = "<group>"; };
+		1A2B3C4D5E6F700000000401 /* CoordinateSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateSelectionView.swift; sourceTree = "<group>"; };
+		1A2B3C4D5E6F700000000402 /* CoordinateSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateSelection.swift; sourceTree = "<group>"; };
+		1A2B3C4D5E6F700000000403 /* CoordinateFieldState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateFieldState.swift; sourceTree = "<group>"; };
+		1A2B3C4D5E6F700000000404 /* MapPresentationStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapPresentationStyle.swift; sourceTree = "<group>"; };
+		1A2B3C4D5E6F700000000405 /* CoordinateSearchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateSearchResult.swift; sourceTree = "<group>"; };
+		1A2B3C4D5E6F700000000406 /* CoordinateSearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateSearchService.swift; sourceTree = "<group>"; };
+		1A2B3C4D5E6F700000000407 /* CoordinateSearchPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateSearchPanel.swift; sourceTree = "<group>"; };
+		1A2B3C4D5E6F700000000408 /* CoordinateFieldsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateFieldsView.swift; sourceTree = "<group>"; };
+		1A2B3C4D5E6F700000000409 /* CoordinateMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateMapView.swift; sourceTree = "<group>"; };
+		1A2B3C4D5E6F70000000040A /* MapStyleOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapStyleOverlay.swift; sourceTree = "<group>"; };
+		1A2B3C4D5E6F70000000040B /* CoordinateSelectionViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateSelectionViewModelTests.swift; sourceTree = "<group>"; };
+		1A2B3C4D5E6F70000000040C /* CoordinateSearchServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateSearchServiceTests.swift; sourceTree = "<group>"; };
+		1A2B3C4D5E6F70000000040D /* CoordinateSelectionSmokeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateSelectionSmokeTests.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F700000000120 /* GPSMetadataEditor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GPSMetadataEditor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A2B3C4D5E6F700000000121 /* GPSMetadataEditorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GPSMetadataEditorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -103,8 +131,51 @@
 			isa = PBXGroup;
 			children = (
 				1A2B3C4D5E6F700000000143 /* FileIntake */,
+				1A2B3C4D5E6F700000000500 /* CoordinateSelection */,
 			);
 			path = Features;
+			sourceTree = "<group>";
+		};
+		1A2B3C4D5E6F700000000500 /* CoordinateSelection */ = {
+			isa = PBXGroup;
+			children = (
+				1A2B3C4D5E6F700000000401 /* CoordinateSelectionView.swift */,
+				1A2B3C4D5E6F700000000400 /* CoordinateSelectionViewModel.swift */,
+				1A2B3C4D5E6F700000000501 /* Views */,
+				1A2B3C4D5E6F700000000502 /* Models */,
+				1A2B3C4D5E6F700000000503 /* Services */,
+			);
+			path = CoordinateSelection;
+			sourceTree = "<group>";
+		};
+		1A2B3C4D5E6F700000000501 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				1A2B3C4D5E6F700000000407 /* CoordinateSearchPanel.swift */,
+				1A2B3C4D5E6F700000000408 /* CoordinateFieldsView.swift */,
+				1A2B3C4D5E6F700000000409 /* CoordinateMapView.swift */,
+				1A2B3C4D5E6F70000000040A /* MapStyleOverlay.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		1A2B3C4D5E6F700000000502 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				1A2B3C4D5E6F700000000402 /* CoordinateSelection.swift */,
+				1A2B3C4D5E6F700000000403 /* CoordinateFieldState.swift */,
+				1A2B3C4D5E6F700000000404 /* MapPresentationStyle.swift */,
+				1A2B3C4D5E6F700000000405 /* CoordinateSearchResult.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		1A2B3C4D5E6F700000000503 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				1A2B3C4D5E6F700000000406 /* CoordinateSearchService.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 		1A2B3C4D5E6F700000000143 /* FileIntake */ = {
@@ -166,6 +237,9 @@
 				1A2B3C4D5E6F700000000103 /* FileIntakeSmokeTests.swift */,
 				1A2B3C4D5E6F700000000105 /* FileIntakeServiceTests.swift */,
 				1A2B3C4D5E6F70000000010D /* FileIntakeViewModelTests.swift */,
+				1A2B3C4D5E6F70000000040B /* CoordinateSelectionViewModelTests.swift */,
+				1A2B3C4D5E6F70000000040C /* CoordinateSearchServiceTests.swift */,
+				1A2B3C4D5E6F70000000040D /* CoordinateSelectionSmokeTests.swift */,
 			);
 			path = GPSMetadataEditorTests;
 			sourceTree = "<group>";
@@ -294,6 +368,17 @@
 				1A2B3C4D5E6F700000000012 /* FileDetailPanel.swift in Sources */,
 				1A2B3C4D5E6F700000000014 /* WarningSummaryView.swift in Sources */,
 				1A2B3C4D5E6F700000000016 /* ReservedLocationPanel.swift in Sources */,
+				1A2B3C4D5E6F700000000300 /* CoordinateSelectionViewModel.swift in Sources */,
+				1A2B3C4D5E6F700000000301 /* CoordinateSelectionView.swift in Sources */,
+				1A2B3C4D5E6F700000000302 /* CoordinateSelection.swift in Sources */,
+				1A2B3C4D5E6F700000000303 /* CoordinateFieldState.swift in Sources */,
+				1A2B3C4D5E6F700000000304 /* MapPresentationStyle.swift in Sources */,
+				1A2B3C4D5E6F700000000305 /* CoordinateSearchResult.swift in Sources */,
+				1A2B3C4D5E6F700000000306 /* CoordinateSearchService.swift in Sources */,
+				1A2B3C4D5E6F700000000307 /* CoordinateSearchPanel.swift in Sources */,
+				1A2B3C4D5E6F700000000308 /* CoordinateFieldsView.swift in Sources */,
+				1A2B3C4D5E6F700000000309 /* CoordinateMapView.swift in Sources */,
+				1A2B3C4D5E6F70000000030A /* MapStyleOverlay.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -304,6 +389,9 @@
 				1A2B3C4D5E6F700000000003 /* FileIntakeSmokeTests.swift in Sources */,
 				1A2B3C4D5E6F700000000005 /* FileIntakeServiceTests.swift in Sources */,
 				1A2B3C4D5E6F70000000000D /* FileIntakeViewModelTests.swift in Sources */,
+				1A2B3C4D5E6F70000000030B /* CoordinateSelectionViewModelTests.swift in Sources */,
+				1A2B3C4D5E6F70000000030C /* CoordinateSearchServiceTests.swift in Sources */,
+				1A2B3C4D5E6F70000000030D /* CoordinateSelectionSmokeTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

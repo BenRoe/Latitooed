@@ -87,7 +87,7 @@ private struct FileDropTargetModifier: ViewModifier {
             .overlay {
                 RoundedRectangle(cornerSize: cornerSize)
                     .strokeBorder(
-                        viewModel.isDropTargeted ? .tint : .quaternary,
+                        viewModel.isDropTargeted ? AnyShapeStyle(.tint) : AnyShapeStyle(.quaternary),
                         style: StrokeStyle(
                             lineWidth: viewModel.isDropTargeted ? 2 : 1,
                             dash: viewModel.isDropTargeted ? [] : [8, 6]

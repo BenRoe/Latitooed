@@ -8,7 +8,7 @@ gaps: []
 human_verification:
   - command: "xcodebuild -project GPSMetadataEditor.xcodeproj -scheme GPSMetadataEditor -destination 'platform=macOS' test"
     expected: "Command exits 0 on a macOS machine with full Xcode selected as the active developer directory."
-    last_result: "Blocked: xcode-select reported active developer directory '/Library/Developer/CommandLineTools', which is a Command Line Tools instance rather than full Xcode."
+    last_result: "Failed during SwiftCompile: FileDropZone.swift mixed `.tint` and `.quaternary` concrete ShapeStyle types in one ternary. Fixed by type-erasing both branches with `AnyShapeStyle`; rerun required."
 residual_risks:
   - "01-REVIEW.md records one advisory warning about duplicate detection using raw URL equality for alternate spellings or symlinked paths. It is not a blocker for the 01-05 MVP goal-format gap."
 ---
@@ -89,7 +89,7 @@ The implemented Phase 1 surface provides a native macOS SwiftUI app shell, nativ
 | `gsd-sdk query verify.key-links .planning/phases/01-app-shell-and-file-intake/01-05-PLAN.md` | `all_verified: true` |
 | Forbidden-pattern scan for legacy SwiftUI/concurrency patterns in app/test source | Passed; no matches |
 | `git diff --check` | Passed |
-| `xcodebuild -project GPSMetadataEditor.xcodeproj -scheme GPSMetadataEditor -destination 'platform=macOS' test` | Pending: latest Mac run was blocked because `xcode-select` points to `/Library/Developer/CommandLineTools` instead of full Xcode |
+| `xcodebuild -project GPSMetadataEditor.xcodeproj -scheme GPSMetadataEditor -destination 'platform=macOS' test` | Pending rerun after fixing `FileDropZone.swift` ShapeStyle type mismatch |
 
 ### Human Verification Required
 
@@ -99,13 +99,13 @@ The source checks and 01-05 MVP goal-format gap closure passed, but final Phase 
 xcodebuild -project GPSMetadataEditor.xcodeproj -scheme GPSMetadataEditor -destination 'platform=macOS' test
 ```
 
-The latest reported attempt did not reach the test suite:
+The latest reported attempt reached Swift compilation and failed in `FileDropZone.swift`:
 
 ```text
-xcode-select: error: tool 'xcodebuild' requires Xcode, but active developer directory '/Library/Developer/CommandLineTools' is a command line tools instance
+member 'quaternary' in 'TintShapeStyle' produces result of type 'some ShapeStyle', but context expects 'TintShapeStyle'
 ```
 
-This means the Mac needs full Xcode installed and selected with `xcode-select` before this verification item can pass.
+That compile error was fixed by type-erasing both branches of the drop-zone stroke style ternary with `AnyShapeStyle`. Re-run the Xcode test command to continue verification.
 
 ### Residual Risks
 

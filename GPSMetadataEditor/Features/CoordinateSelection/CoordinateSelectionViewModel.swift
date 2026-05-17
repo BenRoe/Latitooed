@@ -111,29 +111,33 @@ final class CoordinateSelectionViewModel {
         searchResults = []
         isSearchResultsExpanded = true
         searchStatus = .searching
+        let searchCenter = selectedCoordinate ?? defaultMapCenter
 
-        activeSearchTask = Task { [searchService] in
+        activeSearchTask = Task { [weak self, searchService] in
             do {
-                let results = try await searchService.search(for: query, near: selectedCoordinate ?? defaultMapCenter)
-                guard generation == searchGeneration, Task.isCancelled == false else {
+                let results = try await searchService.search(for: query, near: searchCenter)
+                guard let self, generation == self.searchGeneration, Task.isCancelled == false else {
                     return
                 }
 
-                searchResults = results
-                searchStatus = results.isEmpty ? .noResults : .idle
+                self.searchResults = results
+                self.searchStatus = results.isEmpty ? .noResults : .idle
+                self.activeSearchTask = nil
             } catch is CancellationError {
-                guard generation == searchGeneration else {
+                guard let self, generation == self.searchGeneration else {
                     return
                 }
 
-                searchStatus = .idle
+                self.searchStatus = .idle
+                self.activeSearchTask = nil
             } catch {
-                guard generation == searchGeneration else {
+                guard let self, generation == self.searchGeneration else {
                     return
                 }
 
-                searchResults = []
-                searchStatus = .failed
+                self.searchResults = []
+                self.searchStatus = .failed
+                self.activeSearchTask = nil
             }
         }
     }

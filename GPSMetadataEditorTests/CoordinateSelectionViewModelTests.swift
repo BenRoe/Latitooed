@@ -69,6 +69,31 @@ struct CoordinateSelectionViewModelTests {
         #expect(viewModel.latitudeField.validationMessage == "Latitude must be between -90 and 90.")
     }
 
+    @Test func manualFieldEditingDoesNotReformatTextWhileTyping() throws {
+        let viewModel = CoordinateSelectionViewModel(searchService: FakeCoordinateSearchService())
+        viewModel.updateLatitude("48.137154")
+        viewModel.updateLongitude("11.576124")
+
+        viewModel.updateLatitude("48.13715")
+
+        let coordinate = try #require(viewModel.selectedCoordinate)
+        #expect(coordinate.latitude == 48.13715)
+        #expect(viewModel.latitudeField.text == "48.13715")
+    }
+
+    @Test func clearingManualFieldKeepsEditableTextAndPreviousTarget() throws {
+        let viewModel = CoordinateSelectionViewModel(searchService: FakeCoordinateSearchService())
+        viewModel.updateLatitude("48.137154")
+        viewModel.updateLongitude("11.576124")
+        let original = try #require(viewModel.selectedCoordinate)
+
+        viewModel.updateLatitude("")
+
+        #expect(viewModel.latitudeField.text == "")
+        #expect(viewModel.latitudeField.validationMessage == nil)
+        #expect(viewModel.selectedCoordinate == original)
+    }
+
     @Test func validManualEditCollapsesSearchResults() {
         let viewModel = CoordinateSelectionViewModel(searchService: FakeCoordinateSearchService())
         viewModel.isSearchResultsExpanded = true

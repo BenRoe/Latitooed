@@ -158,7 +158,12 @@ final class CoordinateSelectionViewModel {
             return
         }
 
-        setCoordinate(latitude: latitude, longitude: longitude, collapseResults: true)
+        guard let coordinate = CoordinateSelection(latitude: latitude, longitude: longitude) else {
+            return
+        }
+
+        selectedCoordinate = coordinate
+        isSearchResultsExpanded = false
     }
 
     private func setCoordinate(latitude: Double, longitude: Double, collapseResults: Bool) {

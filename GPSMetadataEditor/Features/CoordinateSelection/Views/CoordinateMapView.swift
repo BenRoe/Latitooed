@@ -34,13 +34,12 @@ struct CoordinateMapView: View {
                 .padding(AppDesign.Spacing.sm)
             }
             .clipShape(.rect(cornerSize: AppDesign.Radius.mediumSize))
-            .onTapGesture(coordinateSpace: .local) { point in
-                guard let coordinate = proxy.convert(point, from: .local) else {
-                    return
-                }
-
-                viewModel.setCoordinateFromMap(latitude: coordinate.latitude, longitude: coordinate.longitude)
-            }
+            .simultaneousGesture(
+                SpatialTapGesture()
+                    .onEnded { value in
+                        setCoordinate(at: value.location, using: proxy)
+                    }
+            )
         }
         .onChange(of: viewModel.selectedCoordinate) { _, newCoordinate in
             guard let newCoordinate else {
@@ -52,6 +51,14 @@ struct CoordinateMapView: View {
                 span: MKCoordinateSpan(latitudeDelta: 0.08, longitudeDelta: 0.08)
             ))
         }
+    }
+
+    private func setCoordinate(at point: CGPoint, using proxy: MapProxy) {
+        guard let coordinate = proxy.convert(point, from: .local) else {
+            return
+        }
+
+        viewModel.setCoordinateFromMap(latitude: coordinate.latitude, longitude: coordinate.longitude)
     }
 
     private var mapStyle: MapStyle {

@@ -38,7 +38,10 @@ struct CoordinateSelection: Equatable, Sendable {
         (-180...180).contains(value)
     }
 
-    private static let displayFormat = FloatingPointFormatStyle<Double>.number.precision(.fractionLength(6))
+    static let displayFormat = FloatingPointFormatStyle<Double>
+        .number
+        .precision(.fractionLength(6))
+        .locale(Locale(identifier: "en_US_POSIX"))
 
     static let berlin = CoordinateSelection(validatedLatitude: 52.520008, longitude: 13.404954)
 }

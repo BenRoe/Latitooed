@@ -60,7 +60,7 @@ struct CoordinateFieldState: Equatable, Sendable {
     }
 
     mutating func sync(with value: Double) {
-        text = value.formatted(.number.precision(.fractionLength(6)))
+        text = value.formatted(CoordinateSelection.displayFormat)
         self.value = value
         validationMessage = nil
     }

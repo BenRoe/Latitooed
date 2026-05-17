@@ -58,7 +58,7 @@ completed: 2026-05-17
 Source implementation for all Phase 2 plans was committed together because the sequential checkout shared the view-model and Xcode project edits:
 
 1. **Task 1: Add coordinate value types and validation tests** - `4778c35` (feat)
-2. **Task 2: Add main-actor coordinate selection view model** - `4778c35` (feat)
+2. **Task 2: Add main-actor coordinate selection view model** - `4778c35` (feat), `20c653e` (fix)
 
 ## Files Created/Modified
 
@@ -80,7 +80,7 @@ Berlin is represented as a reusable valid coordinate seed, but `selectedCoordina
 - **Fix:** Added the lightweight search result and service boundary in the same source commit used by Plan 02-02.
 - **Files modified:** `CoordinateSelectionViewModel.swift`, `CoordinateSearchResult.swift`, `CoordinateSearchService.swift`
 - **Verification:** Static acceptance scans passed; host `xcodebuild` remains pending.
-- **Committed in:** `4778c35`
+- **Committed in:** `4778c35`, `20c653e`
 
 **Total deviations:** 1 auto-fixed blocking dependency.
 **Impact on plan:** Kept the state foundation testable and avoided speculative persistence or third-party code.

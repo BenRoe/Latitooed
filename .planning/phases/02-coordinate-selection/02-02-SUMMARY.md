@@ -58,7 +58,7 @@ completed: 2026-05-17
 Source implementation for all Phase 2 plans was committed together because the sequential checkout shared the view-model and Xcode project edits:
 
 1. **Task 1: Add lightweight search result and service boundary** - `4778c35` (feat)
-2. **Task 2: Integrate explicit search into the view model** - `4778c35` (feat)
+2. **Task 2: Integrate explicit search into the view model** - `4778c35` (feat), `20c653e` (fix)
 
 ## Files Created/Modified
 
@@ -74,7 +74,16 @@ Search uses `MKLocalSearch` rather than `MKLocalSearchCompleter` to preserve the
 
 ## Deviations from Plan
 
-None - plan executed as specified, with source commit grouping noted under task commits.
+**1. [Rule 1 - Concurrency] Avoided view-model retention by in-flight search task**
+- **Found during:** Final source review
+- **Issue:** The stored search task captured the view model strongly while awaiting MapKit search, which could delay deinitialization.
+- **Fix:** Captured the search center before dispatch, used `[weak self, searchService]`, and cleared `activeSearchTask` on completion paths.
+- **Files modified:** `CoordinateSelectionViewModel.swift`
+- **Verification:** Static concurrency scan passed; host `xcodebuild` remains pending.
+- **Committed in:** `20c653e`
+
+**Total deviations:** 1 auto-fixed concurrency issue.
+**Impact on plan:** Narrow correctness fix, no behavior or scope expansion.
 
 ## Issues Encountered
 

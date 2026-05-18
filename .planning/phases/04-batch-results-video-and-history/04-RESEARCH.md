@@ -434,6 +434,13 @@ Source: `docs/host-xcodebuild-verification-boundary.md`. [VERIFIED: docs/host-xc
 | Diagnostics | Swift Testing unit | `MetadataWriteResult` has diagnostics but selected detail does not expose them. [VERIFIED: codebase grep] | Add detail-selection tests for warning/failure diagnostics and success quietness. [VERIFIED: 04-CONTEXT.md] |
 | SwiftData explicit save | Swift Testing unit or host unit | No SwiftData app model exists yet. [VERIFIED: codebase grep] | Add in-memory `ModelContainer` tests for insert/prune/save behavior. [CITED: https://developer.apple.com/documentation/swiftdata/modelcontainer] |
 
+## Useful Findings for Phase 4 Planning
+
+- SwiftData `ModelContext.save()` persists pending inserts, changes, and deletes; `hasChanges` can gate unnecessary saves.
+- SwiftData autosave exists, but explicit `save()` is still the right plan requirement for correctness-sensitive Phase 4 history/recent-coordinate writes.
+- SwiftUI docs confirm `@Observable` plus `@Bindable` for editable observable state.
+- Swift concurrency docs confirm keeping references to unstructured tasks is required for explicit cancellation, but Phase 4 context still says not to expose cancellation UI/state.
+
 ## Sources
 
 ### Primary (HIGH confidence)

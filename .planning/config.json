@@ -63,7 +63,26 @@
   },
   "project_code": null,
   "phase_naming": "sequential",
-  "agent_skills": {},
+  "agent_skills": {
+    "gsd-phase-researcher": [
+      ".agents/skills/swift-concurrency-pro",
+      ".agents/skills/swiftdata-pro",
+      ".agents/skills/swiftui-pro",
+      ".agents/skills/gsd-planning-research-tools"
+    ],
+    "gsd-planner": [
+      ".agents/skills/swift-concurrency-pro",
+      ".agents/skills/swiftdata-pro",
+      ".agents/skills/swiftui-pro",
+      ".agents/skills/gsd-planning-research-tools"
+    ],
+    "gsd-plan-checker": [
+      ".agents/skills/swift-concurrency-pro",
+      ".agents/skills/swiftdata-pro",
+      ".agents/skills/swiftui-pro",
+      ".agents/skills/gsd-planning-research-tools"
+    ]
+  },
   "features": {},
   "resolve_model_ids": "omit",
   "mode": "yolo",

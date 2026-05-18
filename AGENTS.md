@@ -77,6 +77,14 @@ If SwiftData is configured to use CloudKit:
 
 - If installed, make sure SwiftLint returns no warnings or errors before committing.
 
+## Code Search
+
+- Use the `ast-grep` skill for structural code searches, especially when looking for declarations, modifiers, protocol conformances, call patterns, or other syntax-aware matches. Use `rg` for simple text searches.
+
+## Debug Communication
+
+- While fixing bugs, keep step-by-step progress updates very short. Prefer terse status notes over explanations unless a decision or blocker needs context.
+
 ## Xcode MCP
 
 If the Xcode MCP is configured, prefer its tools over generic alternatives when working on this project:

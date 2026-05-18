@@ -12,4 +12,4 @@ At the start of each GSD planning-phase task:
    - `.agents/skills/swiftui-pro/SKILL.md`
 2. Use Context7 for framework and API documentation before relying on memory.
 3. If Context7 does not have the needed information, use BX search as the fallback research path.
-4. For separable research questions, spawn dedicated research agents when the runtime permits agent spawning and the user has authorized subagents.
+4. For separable research questions, spawn dedicated research agents (gpt-5.4-mini) when the runtime permits agent spawning and the user has authorized subagents.

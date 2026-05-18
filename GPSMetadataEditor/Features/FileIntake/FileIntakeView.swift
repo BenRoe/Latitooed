@@ -4,6 +4,8 @@ import UniformTypeIdentifiers
 
 struct FileIntakeView: View {
     @State private var viewModel = FileIntakeViewModel()
+    @State private var coordinateViewModel = CoordinateSelectionViewModel()
+    @State private var isOverwriteConfirmationPresented = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -46,7 +48,7 @@ struct FileIntakeView: View {
                 .frame(minWidth: AppDesign.Layout.leftColumnMinimumWidth, idealWidth: AppDesign.Layout.leftColumnIdealWidth)
                 .padding(AppDesign.Spacing.lg)
 
-                CoordinateSelectionView()
+                CoordinateSelectionView(viewModel: coordinateViewModel)
                     .frame(minWidth: AppDesign.Layout.rightColumnMinimumWidth, maxWidth: .infinity, maxHeight: .infinity)
             }
 
@@ -54,7 +56,10 @@ struct FileIntakeView: View {
 
             FileIntakeFooter(
                 selectedFileCount: viewModel.selectedFiles.count,
-                latestNotice: viewModel.latestNotice
+                latestNotice: viewModel.latestNotice,
+                isApplyEnabled: viewModel.canApplyMetadata(selectedCoordinate: coordinateViewModel.selectedCoordinate),
+                isMetadataBatchRunning: viewModel.isMetadataBatchRunning,
+                applyAction: presentOverwriteConfirmation
             )
         }
         .frame(minWidth: AppDesign.Layout.minimumWindowWidth, minHeight: AppDesign.Layout.minimumWindowHeight)
@@ -64,6 +69,16 @@ struct FileIntakeView: View {
             allowsMultipleSelection: true,
             onCompletion: handleFileImport
         )
+        .confirmationDialog(
+            "Overwrite GPS Metadata?",
+            isPresented: $isOverwriteConfirmationPresented,
+            titleVisibility: .visible
+        ) {
+            Button("Overwrite", role: .destructive, action: confirmOverwrite)
+            Button("Abort", role: .cancel) {}
+        } message: {
+            Text("GPS metadata will be overwritten in the selected files. The original metadata cannot be restored through this app.")
+        }
         .environment(viewModel)
     }
 
@@ -73,6 +88,21 @@ struct FileIntakeView: View {
             viewModel.intake(urls: urls, source: .picker)
         case .failure(let error):
             viewModel.reportPickerFailure(error)
+        }
+    }
+
+    private func presentOverwriteConfirmation() {
+        isOverwriteConfirmationPresented = true
+    }
+
+    private func confirmOverwrite() {
+        let selectedCoordinate = coordinateViewModel.selectedCoordinate
+        Task {
+            await viewModel.applyMetadataIfConfirmed(
+                true,
+                coordinate: selectedCoordinate,
+                writer: ExifToolMetadataWriter()
+            )
         }
     }
 
@@ -87,6 +117,9 @@ struct FileIntakeView: View {
 private struct FileIntakeFooter: View {
     let selectedFileCount: Int
     let latestNotice: FileIntakeViewModel.IntakeNotice?
+    let isApplyEnabled: Bool
+    let isMetadataBatchRunning: Bool
+    let applyAction: () -> Void
 
     var body: some View {
         HStack(spacing: AppDesign.Spacing.sm) {
@@ -99,12 +132,25 @@ private struct FileIntakeFooter: View {
 
             Spacer()
 
-            Text(selectedFileCount == 0 ? "Add files to start the intake review." : "Review selected files before choosing a location.")
+            Text(statusText)
                 .font(.caption)
                 .foregroundStyle(.secondary)
+
+            Button("Apply Location", systemImage: "location.fill", action: applyAction)
+                .disabled(isApplyEnabled == false)
         }
         .frame(height: AppDesign.Layout.footerHeight)
         .padding(.horizontal, AppDesign.Spacing.lg)
+    }
+
+    private var statusText: String {
+        if isMetadataBatchRunning {
+            "Applying selected location..."
+        } else if selectedFileCount == 0 {
+            "Add files to start the intake review."
+        } else {
+            "Review selected files before applying a location."
+        }
     }
 }
 

@@ -32,10 +32,22 @@ final class FileIntakeViewModel {
         let latestMessage: String?
     }
 
+    struct MetadataBatchSummary: Equatable, Sendable {
+        let successCount: Int
+        let warningCount: Int
+        let failureCount: Int
+
+        var message: String {
+            "\(successCount) updated, \(warningCount) warning, \(failureCount) failed."
+        }
+    }
+
     var selectedFiles: [SelectedMediaFile] = []
     var selectedFileID: SelectedMediaFile.ID?
     var latestNotice: IntakeNotice?
     var latestWarningDetails: [IntakeWarning] = []
+    var latestMetadataBatchSummary: MetadataBatchSummary?
+    var isMetadataBatchRunning = false
     var isFileImporterPresented = false
     var isDropTargeted = false
 
@@ -84,6 +96,50 @@ final class FileIntakeViewModel {
         selectedFileID = id
     }
 
+    func canApplyMetadata(selectedCoordinate: CoordinateSelection?) -> Bool {
+        selectedFiles.isEmpty == false && selectedCoordinate != nil && isMetadataBatchRunning == false
+    }
+
+    func applyMetadataIfConfirmed(
+        _ isConfirmed: Bool,
+        coordinate: CoordinateSelection?,
+        writer: any MetadataWriter
+    ) async {
+        guard isConfirmed, let coordinate, canApplyMetadata(selectedCoordinate: coordinate) else {
+            return
+        }
+
+        await applyMetadata(coordinate: coordinate, writer: writer)
+    }
+
+    func applyMetadata(coordinate: CoordinateSelection, writer: any MetadataWriter) async {
+        guard isMetadataBatchRunning == false else {
+            return
+        }
+
+        isMetadataBatchRunning = true
+        latestMetadataBatchSummary = nil
+        defer {
+            isMetadataBatchRunning = false
+        }
+
+        let files = selectedFiles
+        var results: [MetadataWriteResult] = []
+
+        for file in files {
+            let result = await writer.writeGPS(coordinate, to: file)
+            results.append(result)
+            replaceSelectedFile(matching: result)
+        }
+
+        let summary = MetadataBatchSummary(results: results)
+        latestMetadataBatchSummary = summary
+        latestNotice = IntakeNotice(
+            message: summary.message,
+            style: results.contains(where: { $0.status == .failure || $0.status == .warning }) ? .warning : .success
+        )
+    }
+
     func reportPickerFailure(_ error: any Error) {
         latestWarningDetails = []
         latestNotice = IntakeNotice(
@@ -117,5 +173,28 @@ final class FileIntakeViewModel {
             message: "\(result.accepted.count) \(itemLabel) \(sourceLabel).",
             style: .success
         )
+    }
+
+    private func replaceSelectedFile(matching result: MetadataWriteResult) {
+        guard let index = selectedFiles.firstIndex(where: { $0.id == result.fileID || $0.url == result.url }) else {
+            return
+        }
+
+        let existing = selectedFiles[index]
+        selectedFiles[index] = SelectedMediaFile(
+            url: existing.url,
+            kind: existing.kind,
+            gpsStatus: result.gpsStatus ?? existing.gpsStatus,
+            latestResult: result.status,
+            latestMessage: result.message
+        )
+    }
+}
+
+private extension FileIntakeViewModel.MetadataBatchSummary {
+    init(results: [MetadataWriteResult]) {
+        successCount = results.filter { $0.status == .success }.count
+        warningCount = results.filter { $0.status == .warning }.count
+        failureCount = results.filter { $0.status == .failure }.count
     }
 }

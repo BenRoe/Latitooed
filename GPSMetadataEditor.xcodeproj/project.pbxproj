@@ -49,6 +49,7 @@
 		1A2B3C4D5E6F700000000610 /* ExifToolArgumentBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000710 /* ExifToolArgumentBuilderTests.swift */; };
 		1A2B3C4D5E6F700000000611 /* ExifToolMetadataWriterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000711 /* ExifToolMetadataWriterTests.swift */; };
 		1A2B3C4D5E6F700000000612 /* ProcessRunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000712 /* ProcessRunnerTests.swift */; };
+		1A2B3C4D5E6F700000000613 /* MetadataBatchViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000713 /* MetadataBatchViewModelTests.swift */; };
 		1A2B3C4D5E6F700000000620 /* ExifTool in Resources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000730 /* ExifTool */; };
 /* End PBXBuildFile section */
 
@@ -105,6 +106,7 @@
 		1A2B3C4D5E6F700000000710 /* ExifToolArgumentBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExifToolArgumentBuilderTests.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F700000000711 /* ExifToolMetadataWriterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExifToolMetadataWriterTests.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F700000000712 /* ProcessRunnerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessRunnerTests.swift; sourceTree = "<group>"; };
+		1A2B3C4D5E6F700000000713 /* MetadataBatchViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetadataBatchViewModelTests.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F700000000730 /* ExifTool */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ExifTool; sourceTree = "<group>"; };
 		1A2B3C4D5E6F700000000120 /* GPSMetadataEditor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GPSMetadataEditor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A2B3C4D5E6F700000000121 /* GPSMetadataEditorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GPSMetadataEditorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -286,6 +288,7 @@
 				1A2B3C4D5E6F700000000710 /* ExifToolArgumentBuilderTests.swift */,
 				1A2B3C4D5E6F700000000711 /* ExifToolMetadataWriterTests.swift */,
 				1A2B3C4D5E6F700000000712 /* ProcessRunnerTests.swift */,
+				1A2B3C4D5E6F700000000713 /* MetadataBatchViewModelTests.swift */,
 			);
 			path = GPSMetadataEditorTests;
 			sourceTree = "<group>";
@@ -448,6 +451,7 @@
 				1A2B3C4D5E6F700000000610 /* ExifToolArgumentBuilderTests.swift in Sources */,
 				1A2B3C4D5E6F700000000611 /* ExifToolMetadataWriterTests.swift in Sources */,
 				1A2B3C4D5E6F700000000612 /* ProcessRunnerTests.swift in Sources */,
+				1A2B3C4D5E6F700000000613 /* MetadataBatchViewModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

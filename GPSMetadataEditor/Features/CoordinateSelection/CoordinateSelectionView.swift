@@ -1,7 +1,11 @@
 import SwiftUI
 
 struct CoordinateSelectionView: View {
-    @State private var viewModel = CoordinateSelectionViewModel()
+    @Bindable private var viewModel: CoordinateSelectionViewModel
+
+    init(viewModel: CoordinateSelectionViewModel = CoordinateSelectionViewModel()) {
+        self.viewModel = viewModel
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: AppDesign.Spacing.md) {
@@ -19,6 +23,6 @@ struct CoordinateSelectionView: View {
 }
 
 #Preview {
-    CoordinateSelectionView()
+    CoordinateSelectionView(viewModel: CoordinateSelectionViewModel())
         .frame(width: 520, height: 620)
 }

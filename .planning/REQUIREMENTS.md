@@ -28,18 +28,18 @@
 - [ ] **BATCH-02**: User can cancel an active batch write, and cancellation stops before starting the next file and terminates any active metadata helper process.
 - [ ] **BATCH-03**: User can see batch progress while writes are running.
 - [ ] **BATCH-04**: User can see per-file success, warning, and failure results after a batch.
-- [ ] **BATCH-05**: User can keep original-file backups by default or must explicitly choose overwrite behavior before destructive writes.
-- [ ] **BATCH-06**: Batch writes run sequentially in v1 for predictable progress, file access handling, and cancellation behavior.
+- [x] **BATCH-05**: User can keep original-file backups by default or must explicitly choose overwrite behavior before destructive writes.
+- [x] **BATCH-06**: Batch writes run sequentially in v1 for predictable progress, file access handling, and cancellation behavior.
 
 ### Metadata Support
 
-- [ ] **META-01**: The app writes GPS latitude and longitude metadata to JPEG files.
-- [ ] **META-02**: The app writes GPS latitude and longitude metadata to HEIC files.
+- [x] **META-01**: The app writes GPS latitude and longitude metadata to JPEG files.
+- [x] **META-02**: The app writes GPS latitude and longitude metadata to HEIC files.
 - [ ] **META-03**: The app attempts best-effort QuickTime-compatible location metadata writes for MOV files and clearly reports warnings or failures.
 - [ ] **META-04**: The app attempts best-effort QuickTime-compatible location metadata writes for MP4 files and clearly reports warnings or failures.
-- [ ] **META-05**: The app uses a bundled ExifTool helper rather than requiring a Homebrew or system ExifTool installation.
-- [ ] **META-06**: The metadata writer invokes ExifTool through an executable URL and argument array, not through shell command strings.
-- [ ] **META-07**: The metadata writer returns structured per-file results including status, user-facing message, and diagnostic detail when available.
+- [x] **META-05**: The app uses a bundled ExifTool helper rather than requiring a Homebrew or system ExifTool installation.
+- [x] **META-06**: The metadata writer invokes ExifTool through an executable URL and argument array, not through shell command strings.
+- [x] **META-07**: The metadata writer returns structured per-file results including status, user-facing message, and diagnostic detail when available.
 
 ### Persistence
 
@@ -103,15 +103,15 @@
 | BATCH-02 | Phase 4 | Pending |
 | BATCH-03 | Phase 4 | Pending |
 | BATCH-04 | Phase 4 | Pending |
-| BATCH-05 | Phase 3 | Pending |
-| BATCH-06 | Phase 3 | Pending |
-| META-01 | Phase 3 | Pending |
-| META-02 | Phase 3 | Pending |
+| BATCH-05 | Phase 3 | Complete |
+| BATCH-06 | Phase 3 | Complete |
+| META-01 | Phase 3 | Complete |
+| META-02 | Phase 3 | Complete |
 | META-03 | Phase 4 | Pending |
 | META-04 | Phase 4 | Pending |
-| META-05 | Phase 3 | Pending |
-| META-06 | Phase 3 | Pending |
-| META-07 | Phase 3 | Pending |
+| META-05 | Phase 3 | Complete |
+| META-06 | Phase 3 | Complete |
+| META-07 | Phase 3 | Complete |
 | PERSIST-01 | Phase 4 | Pending |
 | PERSIST-02 | Phase 4 | Pending |
 | PERSIST-03 | Phase 4 | Pending |

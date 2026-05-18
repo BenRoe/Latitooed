@@ -11,7 +11,7 @@
 |-------|------|------|--------------|
 | 1 | App Shell and File Intake | As a Mac user, I want to select and review supported local media files, so that I can prepare them for GPS metadata editing. | FILE-01, FILE-02, FILE-03, FILE-04, FILE-05 |
 | 2 | Coordinate Selection | Let users choose an exact target coordinate through MapKit or manual entry. | LOC-01, LOC-02, LOC-03, LOC-04, LOC-05, LOC-06 |
-| 3 | Core Metadata Writing | Write GPS metadata to eligible still images using bundled ExifTool through a safe service boundary. | BATCH-01, BATCH-05, BATCH-06, META-01, META-02, META-05, META-06, META-07 |
+| 3 | 2/3 | In Progress|  |
 | 4 | Batch Results, Video, and History | Make the batch workflow cancellable, transparent, and persistent enough for daily use. | BATCH-02, BATCH-03, BATCH-04, META-03, META-04, PERSIST-01, PERSIST-02, PERSIST-03, PERSIST-04 |
 | 5 | Packaging and Release Verification | Prove the signed packaged app works without external command-line dependencies. | PKG-01, PKG-02, PKG-03, PKG-04 |
 

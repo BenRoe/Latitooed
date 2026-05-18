@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in_progress
-last_updated: "2026-05-18T12:52:32.193Z"
+last_updated: "2026-05-18T14:18:53.471Z"
 progress:
   total_phases: 5
   completed_phases: 2
   total_plans: 11
-  completed_plans: 8
+  completed_plans: 10
   percent: 40
 ---
 
@@ -19,7 +19,7 @@ progress:
 See: `.planning/PROJECT.md` (updated 2026-05-15)
 
 **Core value:** Users can reliably apply a chosen GPS coordinate to many local media files without installing command-line dependencies.
-**Current focus:** Phase 03 — Core Metadata Writing
+**Current focus:** Phase 03 — core-metadata-writing
 
 ## Workflow
 

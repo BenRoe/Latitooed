@@ -60,7 +60,7 @@
 ### Phase 3: Core Metadata Writing
 
 **Goal:** Write GPS metadata to eligible still images using bundled ExifTool through a safe service boundary.
-**Progress:** 3/3 plans complete. Source/static verification passed in the VM; host-side `xcodebuild`, Xcode launch, and real JPEG/HEIC sample-write smoke checks remain pending because `xcodebuild` is unavailable in the VM.
+**Progress:** 3/3 plans complete and approved. VM static checks passed, host-side verification was accepted by the user, and follow-up bug findings were documented under `docs/`.
 **Mode:** mvp
 **UI hint:** yes
 **Requirements:** BATCH-01, BATCH-05, BATCH-06, META-01, META-02, META-05, META-06, META-07

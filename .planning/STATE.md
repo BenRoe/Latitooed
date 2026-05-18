@@ -57,11 +57,11 @@ See: `.planning/PROJECT.md` (updated 2026-05-15)
 - Phase 2 source implementation added coordinate validation state, explicit MapKit search, manual coordinate entry, map-click targeting, map style overlays, and right-panel integration.
 - Phase 2 was accepted without host-side verification at the user's request. The implementation remains source-complete, with MapKit UI behavior manually spot-checked during debugging, but host `xcodebuild` and full MapKit smoke verification were deliberately skipped.
 - Phase 3 added a bundled ExifTool 13.58 runtime, bundle-only helper resolution, argument-array GPS writes for JPEG/HEIC, structured metadata write results, and a confirmed Apply Location batch flow.
-- Phase 3 source/static checks passed in the VM, but host-side `xcodebuild` and real macOS app/sample-file verification remain pending because `xcodebuild` is unavailable in the VM.
+- Phase 3 is approved. VM static checks passed, host-side Xcode/app verification was accepted by the user, and follow-up findings were documented in `docs/swift-default-mainactor-nonisolated-values.md` and `docs/swiftui-table-selection-behavior.md`.
 
 ## Next Action
 
-Run host-side Phase 3 verification, then proceed to Phase 4 planning for Batch Results, Video, and History.
+Proceed to Phase 4 planning for Batch Results, Video, and History.
 
 ---
 *State initialized: 2026-05-15*

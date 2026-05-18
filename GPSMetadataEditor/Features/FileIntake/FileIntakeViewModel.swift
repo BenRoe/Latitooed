@@ -43,7 +43,7 @@ final class FileIntakeViewModel {
     }
 
     var selectedFiles: [SelectedMediaFile] = []
-    var selectedFileID: SelectedMediaFile.ID?
+    var selectedFileIDs: Set<SelectedMediaFile.ID> = []
     var latestNotice: IntakeNotice?
     var latestWarningDetails: [IntakeWarning] = []
     var latestMetadataBatchSummary: MetadataBatchSummary?
@@ -52,8 +52,7 @@ final class FileIntakeViewModel {
     var isDropTargeted = false
 
     var selectedFileDetail: SelectedFileDetail? {
-        guard let selectedFileID,
-              let selectedFile = selectedFiles.first(where: { $0.id == selectedFileID }) else {
+        guard let selectedFile = selectedFiles.first(where: { selectedFileIDs.contains($0.id) }) else {
             return nil
         }
 
@@ -87,13 +86,20 @@ final class FileIntakeViewModel {
         latestWarningDetails = result.warnings
         latestNotice = notice(for: result, source: source)
 
-        if let selectedFileID, selectedFiles.contains(where: { $0.id == selectedFileID }) == false {
-            self.selectedFileID = nil
-        }
+        let currentFileIDs = Set(selectedFiles.map(\.id))
+        selectedFileIDs.formIntersection(currentFileIDs)
     }
 
     func selectFile(id: SelectedMediaFile.ID?) {
-        selectedFileID = id
+        if let id {
+            selectedFileIDs = [id]
+        } else {
+            selectedFileIDs = []
+        }
+    }
+
+    func selectFiles(ids: Set<SelectedMediaFile.ID>) {
+        selectedFileIDs = ids
     }
 
     func canApplyMetadata(selectedCoordinate: CoordinateSelection?) -> Bool {

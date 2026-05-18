@@ -32,7 +32,7 @@ struct FileIntakeView: View {
 
                         SelectedFilesTable(
                             files: viewModel.selectedFiles,
-                            selection: $viewModel.selectedFileID
+                            selection: $viewModel.selectedFileIDs
                         )
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(AppDesign.Spacing.md)

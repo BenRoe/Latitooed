@@ -76,6 +76,19 @@ struct FileIntakeViewModelTests {
         #expect(detail.latestMessage == "Video metadata support will be checked during writing.")
     }
 
+    @Test func selectedFileIDsSupportMultipleTableRows() throws {
+        let viewModel = FileIntakeViewModel()
+        let first = SelectedMediaFile(url: URL(filePath: "/Volumes/Photos/Trip/IMG 001.HEIC"), kind: .heic)
+        let second = SelectedMediaFile(url: URL(filePath: "/Volumes/Photos/Trip/IMG 002.JPG"), kind: .jpeg)
+
+        viewModel.apply(FileIntakeResult(accepted: [first, second], warnings: []), source: .picker)
+        viewModel.selectFiles(ids: [first.id, second.id])
+
+        #expect(viewModel.selectedFileIDs == [first.id, second.id])
+        let detail = try #require(viewModel.selectedFileDetail)
+        #expect(detail.filename == "IMG 001.HEIC")
+    }
+
     @Test func latestWarningsExposeEveryRejectedItemForWarningSummary() {
         let viewModel = FileIntakeViewModel()
         let unsupported = IntakeWarning(filename: "notes.txt", url: URL(filePath: "/tmp/notes.txt"), reason: .unsupported)

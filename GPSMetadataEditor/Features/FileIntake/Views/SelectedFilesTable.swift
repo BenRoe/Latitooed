@@ -1,8 +1,9 @@
+import AppKit
 import SwiftUI
 
 struct SelectedFilesTable: View {
     let files: [SelectedMediaFile]
-    @Binding var selection: SelectedMediaFile.ID?
+    @Binding var selection: Set<SelectedMediaFile.ID>
 
     var body: some View {
         if files.isEmpty {
@@ -34,7 +35,105 @@ struct SelectedFilesTable: View {
                 .width(min: 120, ideal: 136, max: 160)
             }
             .frame(minHeight: 220)
+            .background(TableSelectionNormalizer(files: files, selection: $selection))
         }
+    }
+}
+
+private struct TableSelectionNormalizer: NSViewRepresentable {
+    let files: [SelectedMediaFile]
+    @Binding var selection: Set<SelectedMediaFile.ID>
+
+    func makeNSView(context: Context) -> NSView {
+        let view = NSView()
+        context.coordinator.view = view
+        context.coordinator.installMonitor()
+        return view
+    }
+
+    func updateNSView(_ nsView: NSView, context: Context) {
+        context.coordinator.view = nsView
+        context.coordinator.files = files
+        context.coordinator.selection = $selection
+    }
+
+    static func dismantleNSView(_ nsView: NSView, coordinator: Coordinator) {
+        coordinator.removeMonitor()
+    }
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(files: files, selection: $selection)
+    }
+
+    final class Coordinator {
+        var files: [SelectedMediaFile]
+        var selection: Binding<Set<SelectedMediaFile.ID>>
+        weak var view: NSView?
+        private var monitor: Any?
+
+        init(files: [SelectedMediaFile], selection: Binding<Set<SelectedMediaFile.ID>>) {
+            self.files = files
+            self.selection = selection
+        }
+
+        func installMonitor() {
+            guard monitor == nil else {
+                return
+            }
+
+            monitor = NSEvent.addLocalMonitorForEvents(matching: .leftMouseDown) { [weak self] event in
+                self?.handleMouseDown(event)
+                return event
+            }
+        }
+
+        func removeMonitor() {
+            guard let monitor else {
+                return
+            }
+
+            NSEvent.removeMonitor(monitor)
+            self.monitor = nil
+        }
+
+        private func handleMouseDown(_ event: NSEvent) {
+            let modifierFlags = event.modifierFlags
+            guard modifierFlags.contains(.command) == false,
+                  modifierFlags.contains(.shift) == false,
+                  let view,
+                  let window = view.window,
+                  event.window === window,
+                  let contentView = window.contentView else {
+                return
+            }
+
+            let contentPoint = contentView.convert(event.locationInWindow, from: nil)
+            guard let tableView = contentView.hitTest(contentPoint)?.enclosingTableView else {
+                return
+            }
+
+            let tablePoint = tableView.convert(event.locationInWindow, from: nil)
+            let row = tableView.row(at: tablePoint)
+            guard files.indices.contains(row) else {
+                return
+            }
+
+            let selectedID = files[row].id
+            Task { @MainActor in
+                await Task.yield()
+                selection.wrappedValue = [selectedID]
+            }
+        }
+    }
+}
+
+private extension NSView {
+    var enclosingTableView: NSTableView? {
+        if let tableView = self as? NSTableView {
+            return tableView
+        }
+
+        return superview?.enclosingTableView
     }
 }
 

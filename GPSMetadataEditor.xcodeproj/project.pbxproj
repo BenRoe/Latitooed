@@ -40,6 +40,10 @@
 		1A2B3C4D5E6F70000000030B /* CoordinateSelectionViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70000000040B /* CoordinateSelectionViewModelTests.swift */; };
 		1A2B3C4D5E6F70000000030C /* CoordinateSearchServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70000000040C /* CoordinateSearchServiceTests.swift */; };
 		1A2B3C4D5E6F70000000030D /* CoordinateSelectionSmokeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70000000040D /* CoordinateSelectionSmokeTests.swift */; };
+		1A2B3C4D5E6F700000000600 /* MetadataWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000700 /* MetadataWriter.swift */; };
+		1A2B3C4D5E6F700000000601 /* MetadataWriteResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000701 /* MetadataWriteResult.swift */; };
+		1A2B3C4D5E6F700000000602 /* ExifToolArgumentBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000702 /* ExifToolArgumentBuilder.swift */; };
+		1A2B3C4D5E6F700000000610 /* ExifToolArgumentBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000710 /* ExifToolArgumentBuilderTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -86,6 +90,10 @@
 		1A2B3C4D5E6F70000000040B /* CoordinateSelectionViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateSelectionViewModelTests.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F70000000040C /* CoordinateSearchServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateSearchServiceTests.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F70000000040D /* CoordinateSelectionSmokeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateSelectionSmokeTests.swift; sourceTree = "<group>"; };
+		1A2B3C4D5E6F700000000700 /* MetadataWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetadataWriter.swift; sourceTree = "<group>"; };
+		1A2B3C4D5E6F700000000701 /* MetadataWriteResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetadataWriteResult.swift; sourceTree = "<group>"; };
+		1A2B3C4D5E6F700000000702 /* ExifToolArgumentBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExifToolArgumentBuilder.swift; sourceTree = "<group>"; };
+		1A2B3C4D5E6F700000000710 /* ExifToolArgumentBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExifToolArgumentBuilderTests.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F700000000120 /* GPSMetadataEditor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GPSMetadataEditor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A2B3C4D5E6F700000000121 /* GPSMetadataEditorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GPSMetadataEditorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -132,8 +140,19 @@
 			children = (
 				1A2B3C4D5E6F700000000143 /* FileIntake */,
 				1A2B3C4D5E6F700000000500 /* CoordinateSelection */,
+				1A2B3C4D5E6F700000000720 /* MetadataWriting */,
 			);
 			path = Features;
+			sourceTree = "<group>";
+		};
+		1A2B3C4D5E6F700000000720 /* MetadataWriting */ = {
+			isa = PBXGroup;
+			children = (
+				1A2B3C4D5E6F700000000700 /* MetadataWriter.swift */,
+				1A2B3C4D5E6F700000000701 /* MetadataWriteResult.swift */,
+				1A2B3C4D5E6F700000000702 /* ExifToolArgumentBuilder.swift */,
+			);
+			path = MetadataWriting;
 			sourceTree = "<group>";
 		};
 		1A2B3C4D5E6F700000000500 /* CoordinateSelection */ = {
@@ -240,6 +259,7 @@
 				1A2B3C4D5E6F70000000040B /* CoordinateSelectionViewModelTests.swift */,
 				1A2B3C4D5E6F70000000040C /* CoordinateSearchServiceTests.swift */,
 				1A2B3C4D5E6F70000000040D /* CoordinateSelectionSmokeTests.swift */,
+				1A2B3C4D5E6F700000000710 /* ExifToolArgumentBuilderTests.swift */,
 			);
 			path = GPSMetadataEditorTests;
 			sourceTree = "<group>";
@@ -379,6 +399,9 @@
 				1A2B3C4D5E6F700000000308 /* CoordinateFieldsView.swift in Sources */,
 				1A2B3C4D5E6F700000000309 /* CoordinateMapView.swift in Sources */,
 				1A2B3C4D5E6F70000000030A /* MapStyleOverlay.swift in Sources */,
+				1A2B3C4D5E6F700000000600 /* MetadataWriter.swift in Sources */,
+				1A2B3C4D5E6F700000000601 /* MetadataWriteResult.swift in Sources */,
+				1A2B3C4D5E6F700000000602 /* ExifToolArgumentBuilder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -392,6 +415,7 @@
 				1A2B3C4D5E6F70000000030B /* CoordinateSelectionViewModelTests.swift in Sources */,
 				1A2B3C4D5E6F70000000030C /* CoordinateSearchServiceTests.swift in Sources */,
 				1A2B3C4D5E6F70000000030D /* CoordinateSelectionSmokeTests.swift in Sources */,
+				1A2B3C4D5E6F700000000610 /* ExifToolArgumentBuilderTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -3,7 +3,7 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in_progress
-last_updated: "2026-05-17T19:04:20.372Z"
+last_updated: "2026-05-18T11:45:00.000Z"
 progress:
   total_phases: 5
   completed_phases: 2
@@ -19,7 +19,7 @@ progress:
 See: `.planning/PROJECT.md` (updated 2026-05-15)
 
 **Core value:** Users can reliably apply a chosen GPS coordinate to many local media files without installing command-line dependencies.
-**Current focus:** Phase 02 — Coordinate Selection
+**Current focus:** Phase 03 — Core Metadata Writing
 
 ## Workflow
 
@@ -37,7 +37,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-15)
 | Phase | Status | Progress |
 |-------|--------|----------|
 | 1 - App Shell and File Intake | Complete | 100% |
-| 2 - Coordinate Selection | Source Complete, Host Verification Pending | 100% source |
+| 2 - Coordinate Selection | Complete, Verification Waived By User | 100% |
 | 3 - Core Metadata Writing | Pending | 0% |
 | 4 - Batch Results, Video, and History | Pending | 0% |
 | 5 - Packaging and Release Verification | Pending | 0% |
@@ -55,11 +55,11 @@ See: `.planning/PROJECT.md` (updated 2026-05-15)
 - Plan 01-04 completed the Phase 1 intake review UI by extracting file drop, selected-files table, bottom-left detail, warning summary, and quiet reserved-location surfaces.
 - Plan 01-05 converted the Phase 1 MVP goal to a valid user story and closed the verification format gap.
 - Phase 2 source implementation added coordinate validation state, explicit MapKit search, manual coordinate entry, map-click targeting, map style overlays, and right-panel integration.
-- Phase 2 still requires host-side `xcodebuild -project GPSMetadataEditor.xcodeproj -scheme GPSMetadataEditor -destination 'platform=macOS' test` plus MapKit UI smoke verification before it is fully verified.
+- Phase 2 was accepted without host-side verification at the user's request. The implementation remains source-complete, with MapKit UI behavior manually spot-checked during debugging, but host `xcodebuild` and full MapKit smoke verification were deliberately skipped.
 
 ## Next Action
 
-Run Phase 2 host verification on macOS/Xcode, then proceed to Phase 3 planning if it passes.
+Proceed to Phase 3 planning for Core Metadata Writing.
 
 ---
 *State initialized: 2026-05-15*

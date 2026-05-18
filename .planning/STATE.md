@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in_progress
-last_updated: "2026-05-18T14:18:53.471Z"
+last_updated: "2026-05-18T15:30:00.000Z"
 progress:
   total_phases: 5
-  completed_phases: 2
+  completed_phases: 3
   total_plans: 11
-  completed_plans: 10
-  percent: 40
+  completed_plans: 11
+  percent: 60
 ---
 
 # Project State: GPS Metadata Editor
@@ -19,7 +19,7 @@ progress:
 See: `.planning/PROJECT.md` (updated 2026-05-15)
 
 **Core value:** Users can reliably apply a chosen GPS coordinate to many local media files without installing command-line dependencies.
-**Current focus:** Phase 03 — core-metadata-writing
+**Current focus:** Phase 04 — Batch Results, Video, and History
 
 ## Workflow
 
@@ -38,7 +38,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-15)
 |-------|--------|----------|
 | 1 - App Shell and File Intake | Complete | 100% |
 | 2 - Coordinate Selection | Complete, Verification Waived By User | 100% |
-| 3 - Core Metadata Writing | Pending | 0% |
+| 3 - Core Metadata Writing | Complete, Host Verification Pending | 100% |
 | 4 - Batch Results, Video, and History | Pending | 0% |
 | 5 - Packaging and Release Verification | Pending | 0% |
 
@@ -56,10 +56,12 @@ See: `.planning/PROJECT.md` (updated 2026-05-15)
 - Plan 01-05 converted the Phase 1 MVP goal to a valid user story and closed the verification format gap.
 - Phase 2 source implementation added coordinate validation state, explicit MapKit search, manual coordinate entry, map-click targeting, map style overlays, and right-panel integration.
 - Phase 2 was accepted without host-side verification at the user's request. The implementation remains source-complete, with MapKit UI behavior manually spot-checked during debugging, but host `xcodebuild` and full MapKit smoke verification were deliberately skipped.
+- Phase 3 added a bundled ExifTool 13.58 runtime, bundle-only helper resolution, argument-array GPS writes for JPEG/HEIC, structured metadata write results, and a confirmed Apply Location batch flow.
+- Phase 3 source/static checks passed in the VM, but host-side `xcodebuild` and real macOS app/sample-file verification remain pending because `xcodebuild` is unavailable in the VM.
 
 ## Next Action
 
-Proceed to Phase 3 planning for Core Metadata Writing.
+Run host-side Phase 3 verification, then proceed to Phase 4 planning for Batch Results, Video, and History.
 
 ---
 *State initialized: 2026-05-15*

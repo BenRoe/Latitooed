@@ -24,7 +24,7 @@
 
 ### Batch Writing
 
-- [ ] **BATCH-01**: User can apply one selected coordinate to all eligible selected files in a single batch.
+- [x] **BATCH-01**: User can apply one selected coordinate to all eligible selected files in a single batch.
 - [ ] **BATCH-02**: User can cancel an active batch write, and cancellation stops before starting the next file and terminates any active metadata helper process.
 - [ ] **BATCH-03**: User can see batch progress while writes are running.
 - [ ] **BATCH-04**: User can see per-file success, warning, and failure results after a batch.
@@ -99,7 +99,7 @@
 | LOC-04 | Phase 2 | Complete |
 | LOC-05 | Phase 2 | Complete |
 | LOC-06 | Phase 2 | Complete |
-| BATCH-01 | Phase 3 | Pending |
+| BATCH-01 | Phase 3 | Complete |
 | BATCH-02 | Phase 4 | Pending |
 | BATCH-03 | Phase 4 | Pending |
 | BATCH-04 | Phase 4 | Pending |

@@ -10,7 +10,8 @@ struct CoordinateSelectionView: View {
             CoordinateFieldsView(viewModel: viewModel)
 
             CoordinateMapView(viewModel: viewModel)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .frame(maxWidth: .infinity, minHeight: AppDesign.Layout.mapMinimumHeight, maxHeight: .infinity)
+                .layoutPriority(1)
         }
         .padding(AppDesign.Spacing.lg)
         .background(.background)

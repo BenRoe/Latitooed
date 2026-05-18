@@ -24,6 +24,8 @@ enum AppDesign {
         static let leftColumnIdealWidth: CGFloat = 540
         static let rightColumnMinimumWidth: CGFloat = 320
         static let dropZoneMinimumHeight: CGFloat = 320
+        static let mapMinimumWidth: CGFloat = 280
+        static let mapMinimumHeight: CGFloat = 260
         static let footerHeight: CGFloat = 44
         static let minimumControlHeight: CGFloat = 44
     }

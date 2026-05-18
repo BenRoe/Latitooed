@@ -24,16 +24,19 @@ struct MapKitCoordinateSearchService: CoordinateSearchServicing {
         try Task.checkCancellation()
 
         return response.mapItems.compactMap { item in
+            let mapCoordinate = item.location.coordinate
+            let subtitle = item.addressRepresentations?.fullAddress(includingRegion: true, singleLine: true)
+
             guard let coordinate = CoordinateSelection(
-                latitude: item.placemark.coordinate.latitude,
-                longitude: item.placemark.coordinate.longitude
+                latitude: mapCoordinate.latitude,
+                longitude: mapCoordinate.longitude
             ) else {
                 return nil
             }
 
             return CoordinateSearchResult(
-                title: item.name ?? item.placemark.title ?? trimmedQuery,
-                subtitle: item.placemark.title,
+                title: item.name ?? subtitle ?? trimmedQuery,
+                subtitle: subtitle,
                 coordinate: coordinate
             )
         }

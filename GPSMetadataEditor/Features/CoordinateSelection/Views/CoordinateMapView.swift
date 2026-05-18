@@ -14,13 +14,21 @@ struct CoordinateMapView: View {
         MapReader { proxy in
             Map(position: $position) {
                 if let coordinate = viewModel.selectedCoordinate {
-                    Marker(
-                        "Target",
-                        coordinate: CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)
-                    )
+                    Annotation("Target", coordinate: Self.markerCoordinate(for: coordinate), anchor: .bottom) {
+                        Image(systemName: "mappin.circle.fill")
+                            .font(.title)
+                            .foregroundStyle(.tint)
+                            .background(.background, in: .circle)
+                    }
                 }
             }
             .mapStyle(mapStyle)
+            .frame(
+                minWidth: AppDesign.Layout.mapMinimumWidth,
+                maxWidth: .infinity,
+                minHeight: AppDesign.Layout.mapMinimumHeight,
+                maxHeight: .infinity
+            )
             .overlay(alignment: .topTrailing) {
                 MapStyleOverlay(selectedStyle: viewModel.selectedMapStyle) { style in
                     viewModel.changeMapStyle(style)
@@ -46,9 +54,15 @@ struct CoordinateMapView: View {
 
     static func cameraCenter(for coordinate: CoordinateSelection, span: MKCoordinateSpan) -> CLLocationCoordinate2D {
         let halfLatitudeDelta = min(abs(span.latitudeDelta) / 2, 90)
-        let minimumLatitude = -90 + halfLatitudeDelta
-        let maximumLatitude = 90 - halfLatitudeDelta
+        let minimumLatitude = max(-90 + halfLatitudeDelta, -Self.maximumVisibleMapLatitude)
+        let maximumLatitude = min(90 - halfLatitudeDelta, Self.maximumVisibleMapLatitude)
         let latitude = min(max(coordinate.latitude, minimumLatitude), maximumLatitude)
+
+        return CLLocationCoordinate2D(latitude: latitude, longitude: coordinate.longitude)
+    }
+
+    static func markerCoordinate(for coordinate: CoordinateSelection) -> CLLocationCoordinate2D {
+        let latitude = min(max(coordinate.latitude, -Self.maximumVisibleMapLatitude), Self.maximumVisibleMapLatitude)
 
         return CLLocationCoordinate2D(latitude: latitude, longitude: coordinate.longitude)
     }
@@ -78,4 +92,5 @@ struct CoordinateMapView: View {
 
     private static let initialSpan = MKCoordinateSpan(latitudeDelta: 0.2, longitudeDelta: 0.2)
     private static let selectionSpan = MKCoordinateSpan(latitudeDelta: 0.08, longitudeDelta: 0.08)
+    private static let maximumVisibleMapLatitude = 85.0
 }

@@ -1,6 +1,6 @@
 import Foundation
 
-struct CoordinateSearchResult: Identifiable, Equatable, Sendable {
+nonisolated struct CoordinateSearchResult: Identifiable, Equatable, Sendable {
     let id: UUID
     let title: String
     let subtitle: String?

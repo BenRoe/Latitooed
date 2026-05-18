@@ -52,7 +52,7 @@ struct CoordinateMapView: View {
         }
     }
 
-    static func cameraCenter(for coordinate: CoordinateSelection, span: MKCoordinateSpan) -> CLLocationCoordinate2D {
+    nonisolated static func cameraCenter(for coordinate: CoordinateSelection, span: MKCoordinateSpan) -> CLLocationCoordinate2D {
         let halfLatitudeDelta = min(abs(span.latitudeDelta) / 2, 90)
         let minimumLatitude = max(-90 + halfLatitudeDelta, -Self.maximumVisibleMapLatitude)
         let maximumLatitude = min(90 - halfLatitudeDelta, Self.maximumVisibleMapLatitude)
@@ -61,7 +61,7 @@ struct CoordinateMapView: View {
         return CLLocationCoordinate2D(latitude: latitude, longitude: coordinate.longitude)
     }
 
-    static func markerCoordinate(for coordinate: CoordinateSelection) -> CLLocationCoordinate2D {
+    nonisolated static func markerCoordinate(for coordinate: CoordinateSelection) -> CLLocationCoordinate2D {
         let latitude = min(max(coordinate.latitude, -Self.maximumVisibleMapLatitude), Self.maximumVisibleMapLatitude)
 
         return CLLocationCoordinate2D(latitude: latitude, longitude: coordinate.longitude)
@@ -86,11 +86,11 @@ struct CoordinateMapView: View {
         }
     }
 
-    private static func cameraRegion(for coordinate: CoordinateSelection, span: MKCoordinateSpan) -> MKCoordinateRegion {
+    nonisolated private static func cameraRegion(for coordinate: CoordinateSelection, span: MKCoordinateSpan) -> MKCoordinateRegion {
         MKCoordinateRegion(center: cameraCenter(for: coordinate, span: span), span: span)
     }
 
-    private static let initialSpan = MKCoordinateSpan(latitudeDelta: 0.2, longitudeDelta: 0.2)
-    private static let selectionSpan = MKCoordinateSpan(latitudeDelta: 0.08, longitudeDelta: 0.08)
-    private static let maximumVisibleMapLatitude = 85.0
+    nonisolated private static let initialSpan = MKCoordinateSpan(latitudeDelta: 0.2, longitudeDelta: 0.2)
+    nonisolated private static let selectionSpan = MKCoordinateSpan(latitudeDelta: 0.08, longitudeDelta: 0.08)
+    nonisolated private static let maximumVisibleMapLatitude = 85.0
 }

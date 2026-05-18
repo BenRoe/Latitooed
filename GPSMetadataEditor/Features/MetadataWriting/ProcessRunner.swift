@@ -1,16 +1,16 @@
 import Foundation
 
-struct ProcessResult: Equatable, Sendable {
+nonisolated struct ProcessResult: Equatable, Sendable {
     let terminationStatus: Int32
     let standardOutput: String
     let standardError: String
 }
 
-protocol ProcessRunning: Sendable {
+nonisolated protocol ProcessRunning: Sendable {
     func run(executableURL: URL, arguments: [String]) async throws -> ProcessResult
 }
 
-struct FoundationProcessRunner: ProcessRunning {
+nonisolated struct FoundationProcessRunner: ProcessRunning {
     func run(executableURL: URL, arguments: [String]) async throws -> ProcessResult {
         let process = Process()
         let standardOutput = Pipe()

@@ -1,12 +1,12 @@
 import Foundation
 
-struct ExifToolMetadataWriter: MetadataWriter {
+nonisolated struct ExifToolMetadataWriter: MetadataWriter {
     private let resolver: BundledExifToolResolver
     private let argumentBuilder: ExifToolArgumentBuilder
     private let processRunner: any ProcessRunning
 
     init(
-        resolver: BundledExifToolResolver = BundledExifToolResolver(),
+        resolver: BundledExifToolResolver = BundledExifToolResolver.mainBundle(),
         argumentBuilder: ExifToolArgumentBuilder = ExifToolArgumentBuilder(),
         processRunner: any ProcessRunning = FoundationProcessRunner()
     ) {

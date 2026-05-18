@@ -1,6 +1,6 @@
 import Foundation
 
-struct SelectedMediaFile: Identifiable, Hashable, Sendable {
+nonisolated struct SelectedMediaFile: Identifiable, Hashable, Sendable {
     let id: URL
     let url: URL
     let displayName: String

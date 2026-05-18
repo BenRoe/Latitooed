@@ -1,6 +1,6 @@
 import Foundation
 
-enum CoordinateFieldKind: Sendable {
+nonisolated enum CoordinateFieldKind: Sendable {
     case latitude
     case longitude
 
@@ -23,7 +23,7 @@ enum CoordinateFieldKind: Sendable {
     }
 }
 
-struct CoordinateFieldState: Equatable, Sendable {
+nonisolated struct CoordinateFieldState: Equatable, Sendable {
     var text: String
     var value: Double?
     var validationMessage: String?

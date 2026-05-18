@@ -1,15 +1,19 @@
 import Foundation
 
-struct BundledExifToolResolver: Sendable {
-    enum ResolverError: Error, Equatable, Sendable {
+nonisolated struct BundledExifToolResolver: Sendable {
+    nonisolated enum ResolverError: Error, Equatable, Sendable {
         case missingHelper
         case helperNotExecutable(URL)
     }
 
     private let bundle: Bundle
 
-    init(bundle: Bundle = Bundle.main) {
+    init(bundle: Bundle) {
         self.bundle = bundle
+    }
+
+    static func mainBundle() -> BundledExifToolResolver {
+        BundledExifToolResolver(bundle: Bundle.main)
     }
 
     func executableURL() throws -> URL {

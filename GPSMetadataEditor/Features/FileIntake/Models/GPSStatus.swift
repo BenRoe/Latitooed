@@ -1,4 +1,4 @@
-enum GPSStatus: String, CaseIterable, Sendable {
+nonisolated enum GPSStatus: String, CaseIterable, Sendable {
     case notChecked
     case notPresent
     case present

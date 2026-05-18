@@ -1,4 +1,4 @@
-struct FileIntakeResult: Equatable, Sendable {
+nonisolated struct FileIntakeResult: Equatable, Sendable {
     let accepted: [SelectedMediaFile]
     let warnings: [IntakeWarning]
 

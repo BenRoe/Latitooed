@@ -1,6 +1,6 @@
 import UniformTypeIdentifiers
 
-enum MediaFileKind: String, CaseIterable, Sendable {
+nonisolated enum MediaFileKind: String, CaseIterable, Sendable {
     case jpeg
     case heic
     case mov

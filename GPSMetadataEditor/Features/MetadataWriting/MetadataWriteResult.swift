@@ -1,6 +1,6 @@
 import Foundation
 
-struct MetadataWriteResult: Equatable, Sendable {
+nonisolated struct MetadataWriteResult: Equatable, Sendable {
     let fileID: SelectedMediaFile.ID
     let url: URL
     let status: FileResultStatus

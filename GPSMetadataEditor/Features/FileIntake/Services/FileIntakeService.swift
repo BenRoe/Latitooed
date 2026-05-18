@@ -1,7 +1,7 @@
 import Foundation
 import UniformTypeIdentifiers
 
-struct FileIntakeService: Sendable {
+nonisolated struct FileIntakeService: Sendable {
     func intake(urls: [URL], currentSelection: [SelectedMediaFile]) -> FileIntakeResult {
         var accepted: [SelectedMediaFile] = []
         var warnings: [IntakeWarning] = []
@@ -97,7 +97,7 @@ struct FileIntakeService: Sendable {
     ]
 }
 
-private enum Classification {
+nonisolated private enum Classification {
     case accepted(MediaFileKind)
     case rejected(IntakeWarning.Reason)
 }

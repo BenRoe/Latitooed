@@ -1,7 +1,7 @@
 import Foundation
 
-struct IntakeWarning: Identifiable, Hashable, Sendable {
-    enum Reason: String, CaseIterable, Sendable {
+nonisolated struct IntakeWarning: Identifiable, Hashable, Sendable {
+    nonisolated enum Reason: String, CaseIterable, Sendable {
         case unsupported
         case directory
         case missing

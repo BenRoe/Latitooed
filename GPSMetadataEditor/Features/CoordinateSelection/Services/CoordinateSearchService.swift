@@ -1,11 +1,11 @@
 import Foundation
 import MapKit
 
-protocol CoordinateSearchServicing: Sendable {
+nonisolated protocol CoordinateSearchServicing: Sendable {
     func search(for query: String, near center: CoordinateSelection) async throws -> [CoordinateSearchResult]
 }
 
-struct MapKitCoordinateSearchService: CoordinateSearchServicing {
+nonisolated struct MapKitCoordinateSearchService: CoordinateSearchServicing {
     func search(for query: String, near center: CoordinateSelection) async throws -> [CoordinateSearchResult] {
         let trimmedQuery = query.trimmingCharacters(in: .whitespacesAndNewlines)
         guard trimmedQuery.isEmpty == false else {
@@ -43,6 +43,6 @@ struct MapKitCoordinateSearchService: CoordinateSearchServicing {
     }
 }
 
-enum CoordinateSearchError: Error, Equatable, Sendable {
+nonisolated enum CoordinateSearchError: Error, Equatable, Sendable {
     case emptyQuery
 }

@@ -1,6 +1,6 @@
 import Foundation
 
-enum MapPresentationStyle: CaseIterable, Equatable, Sendable {
+nonisolated enum MapPresentationStyle: CaseIterable, Equatable, Sendable {
     case standard
     case satellite
     case hybrid

@@ -1,4 +1,4 @@
-enum FileResultStatus: String, CaseIterable, Sendable {
+nonisolated enum FileResultStatus: String, CaseIterable, Sendable {
     case pending
     case success
     case warning

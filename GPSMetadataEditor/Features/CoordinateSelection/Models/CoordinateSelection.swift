@@ -1,6 +1,6 @@
 import Foundation
 
-struct CoordinateSelection: Equatable, Sendable {
+nonisolated struct CoordinateSelection: Equatable, Sendable {
     let latitude: Double
     let longitude: Double
 

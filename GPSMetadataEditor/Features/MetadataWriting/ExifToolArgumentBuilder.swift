@@ -1,7 +1,7 @@
 import Foundation
 
-struct ExifToolArgumentBuilder: Sendable {
-    enum BuildError: Error, Equatable, Sendable {
+nonisolated struct ExifToolArgumentBuilder: Sendable {
+    nonisolated enum BuildError: Error, Equatable, Sendable {
         case unsupportedMediaKind(MediaFileKind)
     }
 

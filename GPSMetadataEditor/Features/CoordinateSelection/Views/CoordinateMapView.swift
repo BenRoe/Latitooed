@@ -7,13 +7,7 @@ struct CoordinateMapView: View {
 
     init(viewModel: CoordinateSelectionViewModel) {
         self.viewModel = viewModel
-        _position = State(initialValue: .region(MKCoordinateRegion(
-            center: CLLocationCoordinate2D(
-                latitude: viewModel.defaultMapCenter.latitude,
-                longitude: viewModel.defaultMapCenter.longitude
-            ),
-            span: MKCoordinateSpan(latitudeDelta: 0.2, longitudeDelta: 0.2)
-        )))
+        _position = State(initialValue: .region(Self.cameraRegion(for: viewModel.defaultMapCenter, span: Self.initialSpan)))
     }
 
     var body: some View {
@@ -46,11 +40,17 @@ struct CoordinateMapView: View {
                 return
             }
 
-            position = .region(MKCoordinateRegion(
-                center: CLLocationCoordinate2D(latitude: newCoordinate.latitude, longitude: newCoordinate.longitude),
-                span: MKCoordinateSpan(latitudeDelta: 0.08, longitudeDelta: 0.08)
-            ))
+            position = .region(Self.cameraRegion(for: newCoordinate, span: Self.selectionSpan))
         }
+    }
+
+    static func cameraCenter(for coordinate: CoordinateSelection, span: MKCoordinateSpan) -> CLLocationCoordinate2D {
+        let halfLatitudeDelta = min(abs(span.latitudeDelta) / 2, 90)
+        let minimumLatitude = -90 + halfLatitudeDelta
+        let maximumLatitude = 90 - halfLatitudeDelta
+        let latitude = min(max(coordinate.latitude, minimumLatitude), maximumLatitude)
+
+        return CLLocationCoordinate2D(latitude: latitude, longitude: coordinate.longitude)
     }
 
     private func setCoordinate(at point: CGPoint, using proxy: MapProxy) {
@@ -71,4 +71,11 @@ struct CoordinateMapView: View {
             .hybrid
         }
     }
+
+    private static func cameraRegion(for coordinate: CoordinateSelection, span: MKCoordinateSpan) -> MKCoordinateRegion {
+        MKCoordinateRegion(center: cameraCenter(for: coordinate, span: span), span: span)
+    }
+
+    private static let initialSpan = MKCoordinateSpan(latitudeDelta: 0.2, longitudeDelta: 0.2)
+    private static let selectionSpan = MKCoordinateSpan(latitudeDelta: 0.08, longitudeDelta: 0.08)
 }

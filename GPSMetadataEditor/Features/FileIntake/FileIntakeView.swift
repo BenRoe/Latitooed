@@ -1,4 +1,5 @@
 import Observation
+import SwiftData
 import SwiftUI
 import UniformTypeIdentifiers
 
@@ -160,4 +161,5 @@ private struct FileIntakeFooter: View {
 
 #Preview {
     FileIntakeView()
+        .modelContainer(for: [RecentCoordinate.self], inMemory: true)
 }

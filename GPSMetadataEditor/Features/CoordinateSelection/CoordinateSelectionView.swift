@@ -1,3 +1,4 @@
+import SwiftData
 import SwiftUI
 
 struct CoordinateSelectionView: View {
@@ -13,6 +14,8 @@ struct CoordinateSelectionView: View {
 
             CoordinateFieldsView(viewModel: viewModel)
 
+            RecentCoordinatesView(onSelect: viewModel.selectRecentCoordinate)
+
             CoordinateMapView(viewModel: viewModel)
                 .frame(maxWidth: .infinity, minHeight: AppDesign.Layout.mapMinimumHeight, maxHeight: .infinity)
                 .layoutPriority(1)
@@ -25,4 +28,5 @@ struct CoordinateSelectionView: View {
 #Preview {
     CoordinateSelectionView(viewModel: CoordinateSelectionViewModel())
         .frame(width: 520, height: 620)
+        .modelContainer(for: [RecentCoordinate.self], inMemory: true)
 }

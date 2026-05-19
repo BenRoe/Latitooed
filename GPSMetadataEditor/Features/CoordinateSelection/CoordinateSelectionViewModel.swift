@@ -13,6 +13,7 @@ final class CoordinateSelectionViewModel {
     }
 
     var selectedCoordinate: CoordinateSelection?
+    var selectedCoordinateLabel: String?
     var latitudeField = CoordinateFieldState(kind: .latitude)
     var longitudeField = CoordinateFieldState(kind: .longitude)
     var selectedMapStyle: MapPresentationStyle = .standard
@@ -84,7 +85,11 @@ final class CoordinateSelectionViewModel {
     }
 
     func selectSearchResult(_ result: CoordinateSearchResult) {
-        setCoordinate(result.coordinate, collapseResults: true)
+        setCoordinate(result.coordinate, label: result.title, collapseResults: true)
+    }
+
+    func selectRecentCoordinate(_ recentCoordinate: RecentCoordinateSnapshot) {
+        setCoordinate(recentCoordinate.coordinate, label: recentCoordinate.label, collapseResults: true)
     }
 
     func collapseSearchResults() {
@@ -163,6 +168,7 @@ final class CoordinateSelectionViewModel {
         }
 
         selectedCoordinate = coordinate
+        selectedCoordinateLabel = nil
         isSearchResultsExpanded = false
     }
 
@@ -171,11 +177,12 @@ final class CoordinateSelectionViewModel {
             return
         }
 
-        setCoordinate(coordinate, collapseResults: collapseResults)
+        setCoordinate(coordinate, label: nil, collapseResults: collapseResults)
     }
 
-    private func setCoordinate(_ coordinate: CoordinateSelection, collapseResults: Bool) {
+    private func setCoordinate(_ coordinate: CoordinateSelection, label: String?, collapseResults: Bool) {
         selectedCoordinate = coordinate
+        selectedCoordinateLabel = label
         latitudeField.sync(with: coordinate.latitude)
         longitudeField.sync(with: coordinate.longitude)
 

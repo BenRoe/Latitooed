@@ -1,4 +1,5 @@
 import Foundation
+import SwiftData
 import Testing
 @testable import GPSMetadataEditor
 
@@ -158,8 +159,46 @@ struct CoordinateSelectionViewModelTests {
         viewModel.selectSearchResult(result)
 
         #expect(viewModel.selectedCoordinate == coordinate)
+        #expect(viewModel.selectedCoordinateLabel == "Berlin")
         #expect(viewModel.isSearchResultsExpanded == false)
         #expect(viewModel.searchQuery == "Berlin")
+    }
+
+    @Test func selectingRecentCoordinateUpdatesSelectionAndCoordinateFields() throws {
+        let coordinate = try #require(CoordinateSelection(latitude: 48.137154, longitude: 11.576124))
+        let recentCoordinate = RecentCoordinate(
+            label: "Munich",
+            latitude: coordinate.latitude,
+            longitude: coordinate.longitude,
+            lastUsedAt: Date(timeIntervalSinceReferenceDate: 0)
+        )
+        let snapshot = RecentCoordinateSnapshot(
+            id: recentCoordinate.persistentModelID,
+            label: recentCoordinate.label,
+            coordinate: coordinate,
+            lastUsedAt: recentCoordinate.lastUsedAt
+        )
+        let viewModel = CoordinateSelectionViewModel(searchService: FakeCoordinateSearchService())
+        viewModel.isSearchResultsExpanded = true
+
+        viewModel.selectRecentCoordinate(snapshot)
+
+        #expect(viewModel.selectedCoordinate == coordinate)
+        #expect(viewModel.selectedCoordinateLabel == "Munich")
+        #expect(viewModel.latitudeField.text == "48.137154")
+        #expect(viewModel.longitudeField.text == "11.576124")
+        #expect(viewModel.isSearchResultsExpanded == false)
+    }
+
+    @Test func manualCoordinateUsesDisplayTextAsFallbackLabel() throws {
+        let viewModel = CoordinateSelectionViewModel(searchService: FakeCoordinateSearchService())
+
+        viewModel.updateLatitude("52.520008")
+        viewModel.updateLongitude("13.404954")
+
+        let coordinate = try #require(viewModel.selectedCoordinate)
+        #expect(viewModel.selectedCoordinateLabel == nil)
+        #expect(coordinate.displayText == "52.520008, 13.404954")
     }
 
     @Test func noResultSearchSetsQuietInlineStatus() async {

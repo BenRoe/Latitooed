@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in_progress
-last_updated: "2026-05-19T10:18:43.000Z"
+last_updated: "2026-05-19T10:23:50.000Z"
 progress:
   total_phases: 5
-  completed_phases: 3
+  completed_phases: 4
   total_plans: 15
-  completed_plans: 14
-  percent: 93
+  completed_plans: 15
+  percent: 100
 ---
 
 # Project State: GPS Metadata Editor
@@ -39,7 +39,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-15)
 | 1 - App Shell and File Intake | Complete | 100% |
 | 2 - Coordinate Selection | Complete, Verification Waived By User | 100% |
 | 3 - Core Metadata Writing | Complete, Host Verification Pending | 100% |
-| 4 - Batch Results, Video, and History | In Progress | 3/4 plans complete |
+| 4 - Batch Results, Video, and History | Complete, Host Verification Pending | 100% |
 | 5 - Packaging and Release Verification | Pending | 0% |
 
 ## Decisions To Carry Forward
@@ -61,10 +61,11 @@ See: `.planning/PROJECT.md` (updated 2026-05-15)
 - Plan 04-01 added filename-first footer progress and selected-row diagnostics for warning/failure results while keeping cancellation intentionally absent per the Phase 4 context override.
 - Plan 04-02 added best-effort MOV/MP4 GPS writes through the bundled ExifTool path using `Keys:GPSCoordinates`, with clean helper exits mapped to `GPS metadata updated.`.
 - Plan 04-03 added SwiftData-backed recent coordinate reuse with compact label/value/timestamp storage, explicit saves, and value snapshots for UI reuse.
+- Plan 04-04 added counts-only recent batch history with coordinate reuse, explicit saves, and no previous-file restore surface.
 
 ## Next Action
 
-Execute remaining Phase 4 plans for Batch Results, Video, and History.
+Host-verify Phase 4, then plan Phase 5 packaging and release verification.
 
 ---
 *State initialized: 2026-05-15*

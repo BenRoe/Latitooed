@@ -12,7 +12,7 @@
 | 1 | App Shell and File Intake | As a Mac user, I want to select and review supported local media files, so that I can prepare them for GPS metadata editing. | FILE-01, FILE-02, FILE-03, FILE-04, FILE-05 |
 | 2 | Coordinate Selection | Let users choose an exact target coordinate through MapKit or manual entry. | LOC-01, LOC-02, LOC-03, LOC-04, LOC-05, LOC-06 |
 | 3 | Core Metadata Writing | Complete | BATCH-01, BATCH-05, BATCH-06, META-01, META-02, META-05, META-06, META-07 |
-| 4 | Batch Results, Video, and History | Make the batch workflow cancellable, transparent, and persistent enough for daily use. | BATCH-02, BATCH-03, BATCH-04, META-03, META-04, PERSIST-01, PERSIST-02, PERSIST-03, PERSIST-04 |
+| 4 | Batch Results, Video, and History | Complete | BATCH-02, BATCH-03, BATCH-04, META-03, META-04, PERSIST-01, PERSIST-02, PERSIST-03, PERSIST-04 |
 | 5 | Packaging and Release Verification | Prove the signed packaged app works without external command-line dependencies. | PKG-01, PKG-02, PKG-03, PKG-04 |
 
 ## Phases
@@ -81,7 +81,7 @@
 ### Phase 4: Batch Results, Video, and History
 
 **Goal:** Make the batch workflow cancellable, transparent, and persistent enough for daily use.
-**Progress:** 3/4 plans complete. Plan 04-01 added filename-first footer progress and selected-row warning/failure diagnostics while keeping cancellation intentionally absent per the Phase 4 context override. Plan 04-02 added best-effort MOV/MP4 GPS writes through bundled ExifTool using QuickTime Keys coordinates. Plan 04-03 added SwiftData-backed recent coordinate reuse with compact storage and explicit saves.
+**Progress:** 4/4 plans complete. Plan 04-01 added filename-first footer progress and selected-row warning/failure diagnostics while keeping cancellation intentionally absent per the Phase 4 context override. Plan 04-02 added best-effort MOV/MP4 GPS writes through bundled ExifTool using QuickTime Keys coordinates. Plan 04-03 added SwiftData-backed recent coordinate reuse with compact storage and explicit saves. Plan 04-04 added counts-only recent batch history with coordinate reuse and no previous-file restore surface.
 **Mode:** mvp
 **UI hint:** yes
 **Requirements:** BATCH-02, BATCH-03, BATCH-04, META-03, META-04, PERSIST-01, PERSIST-02, PERSIST-03, PERSIST-04

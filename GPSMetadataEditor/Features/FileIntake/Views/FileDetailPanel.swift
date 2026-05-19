@@ -43,11 +43,34 @@ private struct SelectedFileDetailContent: View {
                         .foregroundStyle(.secondary)
                         .textSelection(.enabled)
                 }
+
+                if detail.latestResult.supportsDiagnosticReview,
+                   let latestDiagnosticDetail = detail.latestDiagnosticDetail,
+                   latestDiagnosticDetail.isEmpty == false {
+                    DisclosureGroup("Diagnostics") {
+                        Text(latestDiagnosticDetail)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .textSelection(.enabled)
+                    }
+                    .font(.caption)
+                }
             }
         } else {
             Label("Select a row to review file details", systemImage: "sidebar.left")
                 .font(.body)
                 .foregroundStyle(.secondary)
+        }
+    }
+}
+
+private extension FileResultStatus {
+    var supportsDiagnosticReview: Bool {
+        switch self {
+        case .warning, .failure:
+            true
+        case .pending, .success:
+            false
         }
     }
 }

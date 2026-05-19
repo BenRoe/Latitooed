@@ -81,7 +81,7 @@
 ### Phase 4: Batch Results, Video, and History
 
 **Goal:** Make the batch workflow cancellable, transparent, and persistent enough for daily use.
-**Progress:** 2/4 plans complete. Plan 04-01 added filename-first footer progress and selected-row warning/failure diagnostics while keeping cancellation intentionally absent per the Phase 4 context override. Plan 04-02 added best-effort MOV/MP4 GPS writes through bundled ExifTool using QuickTime Keys coordinates.
+**Progress:** 3/4 plans complete. Plan 04-01 added filename-first footer progress and selected-row warning/failure diagnostics while keeping cancellation intentionally absent per the Phase 4 context override. Plan 04-02 added best-effort MOV/MP4 GPS writes through bundled ExifTool using QuickTime Keys coordinates. Plan 04-03 added SwiftData-backed recent coordinate reuse with compact storage and explicit saves.
 **Mode:** mvp
 **UI hint:** yes
 **Requirements:** BATCH-02, BATCH-03, BATCH-04, META-03, META-04, PERSIST-01, PERSIST-02, PERSIST-03, PERSIST-04

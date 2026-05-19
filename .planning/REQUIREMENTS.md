@@ -43,10 +43,10 @@
 
 ### Persistence
 
-- [ ] **PERSIST-01**: User can reuse recent coordinates saved by the app.
+- [x] **PERSIST-01**: User can reuse recent coordinates saved by the app.
 - [ ] **PERSIST-02**: User can view a simple history of recent batch runs with timestamp, coordinate, and success/warning/failure counts.
-- [ ] **PERSIST-03**: SwiftData persistence stores recent coordinates, batch summaries, preferences, and result metadata only; it does not store media file contents.
-- [ ] **PERSIST-04**: SwiftData writes that affect correctness are explicitly saved rather than relying on autosave timing.
+- [x] **PERSIST-03**: SwiftData persistence stores recent coordinates, batch summaries, preferences, and result metadata only; it does not store media file contents.
+- [x] **PERSIST-04**: SwiftData writes that affect correctness are explicitly saved rather than relying on autosave timing.
 
 ### Packaging
 
@@ -112,10 +112,10 @@
 | META-05 | Phase 3 | Complete |
 | META-06 | Phase 3 | Complete |
 | META-07 | Phase 3 | Complete |
-| PERSIST-01 | Phase 4 | Pending |
+| PERSIST-01 | Phase 4 | Complete |
 | PERSIST-02 | Phase 4 | Pending |
-| PERSIST-03 | Phase 4 | Pending |
-| PERSIST-04 | Phase 4 | Pending |
+| PERSIST-03 | Phase 4 | Complete |
+| PERSIST-04 | Phase 4 | Complete |
 | PKG-01 | Phase 5 | Pending |
 | PKG-02 | Phase 5 | Pending |
 | PKG-03 | Phase 5 | Pending |

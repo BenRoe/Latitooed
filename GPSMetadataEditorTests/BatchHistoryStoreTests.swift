@@ -35,6 +35,63 @@ struct BatchHistoryStoreTests {
         let results = try context.fetch(FetchDescriptor<RecentCoordinate>())
         #expect(results.map(\.label) == ["Berlin"])
     }
+
+    @Test func recordingRecentCoordinateSavesValueSnapshot() throws {
+        let container = try makeInMemoryContainer()
+        let context = ModelContext(container)
+        let store = BatchHistoryStore(modelContext: context)
+        let usedAt = Date(timeIntervalSinceReferenceDate: 10)
+
+        try store.recordRecentCoordinate(label: "Berlin", coordinate: .berlin, lastUsedAt: usedAt)
+
+        let snapshots = try store.recentCoordinates()
+        #expect(snapshots.count == 1)
+        #expect(snapshots.first?.label == "Berlin")
+        #expect(snapshots.first?.coordinate == .berlin)
+        #expect(snapshots.first?.lastUsedAt == usedAt)
+        #expect(context.hasChanges == false)
+    }
+
+    @Test func recordingSameCoordinateUpdatesExistingRow() throws {
+        let container = try makeInMemoryContainer()
+        let context = ModelContext(container)
+        let store = BatchHistoryStore(modelContext: context)
+
+        try store.recordRecentCoordinate(
+            label: "Berlin",
+            coordinate: .berlin,
+            lastUsedAt: Date(timeIntervalSinceReferenceDate: 10)
+        )
+        try store.recordRecentCoordinate(
+            label: "Berlin Mitte",
+            coordinate: .berlin,
+            lastUsedAt: Date(timeIntervalSinceReferenceDate: 20)
+        )
+
+        let snapshots = try store.recentCoordinates()
+        #expect(snapshots.count == 1)
+        #expect(snapshots.first?.label == "Berlin Mitte")
+        #expect(snapshots.first?.lastUsedAt == Date(timeIntervalSinceReferenceDate: 20))
+    }
+
+    @Test func recordingMoreThanTenCoordinatesPrunesOldestRows() throws {
+        let container = try makeInMemoryContainer()
+        let context = ModelContext(container)
+        let store = BatchHistoryStore(modelContext: context)
+
+        for index in 0..<12 {
+            let coordinate = try #require(CoordinateSelection(latitude: Double(index), longitude: Double(index)))
+            try store.recordRecentCoordinate(
+                label: "Coordinate \(index)",
+                coordinate: coordinate,
+                lastUsedAt: Date(timeIntervalSinceReferenceDate: TimeInterval(index))
+            )
+        }
+
+        let snapshots = try store.recentCoordinates()
+        #expect(snapshots.count == 10)
+        #expect(snapshots.map(\.label) == (2..<12).reversed().map { "Coordinate \($0)" })
+    }
 }
 
 @MainActor

@@ -110,6 +110,55 @@ struct BatchHistoryStoreTests {
         #expect(snapshots.count == 10)
         #expect(snapshots.map(\.label) == (2..<12).reversed().map { "Coordinate \($0)" })
     }
+
+    @Test func recordingBatchRunInsertsSummaryAndRecentCoordinate() throws {
+        let container = try makeInMemoryContainer()
+        let context = ModelContext(container)
+        let store = BatchHistoryStore(modelContext: context)
+        let summary = FileIntakeViewModel.MetadataBatchSummary(successCount: 9, warningCount: 2, failureCount: 1)
+        let timestamp = Date(timeIntervalSinceReferenceDate: 30)
+
+        try store.recordBatchRun(
+            coordinateLabel: "Berlin",
+            coordinate: .berlin,
+            summary: summary,
+            totalFileCount: 12,
+            timestamp: timestamp
+        )
+
+        let summaries = try store.batchRunSummaries()
+        #expect(summaries.count == 1)
+        #expect(summaries.first?.coordinateLabel == "Berlin")
+        #expect(summaries.first?.coordinate == .berlin)
+        #expect(summaries.first?.totalFileCount == 12)
+        #expect(summaries.first?.successCount == 9)
+        #expect(summaries.first?.warningCount == 2)
+        #expect(summaries.first?.failureCount == 1)
+        #expect(try store.recentCoordinates().map(\.label) == ["Berlin"])
+        #expect(context.hasChanges == false)
+    }
+
+    @Test func recordingMoreThanTenBatchRunsPrunesOldestRows() throws {
+        let container = try makeInMemoryContainer()
+        let context = ModelContext(container)
+        let store = BatchHistoryStore(modelContext: context)
+        let summary = FileIntakeViewModel.MetadataBatchSummary(successCount: 1, warningCount: 0, failureCount: 0)
+
+        for index in 0..<12 {
+            let coordinate = try #require(CoordinateSelection(latitude: Double(index), longitude: Double(index)))
+            try store.recordBatchRun(
+                coordinateLabel: "Run \(index)",
+                coordinate: coordinate,
+                summary: summary,
+                totalFileCount: 1,
+                timestamp: Date(timeIntervalSinceReferenceDate: TimeInterval(index))
+            )
+        }
+
+        let summaries = try store.batchRunSummaries()
+        #expect(summaries.count == 10)
+        #expect(summaries.map(\.coordinateLabel) == (2..<12).reversed().map { "Run \($0)" })
+    }
 }
 
 @MainActor

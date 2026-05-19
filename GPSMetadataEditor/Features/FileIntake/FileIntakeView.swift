@@ -4,6 +4,7 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct FileIntakeView: View {
+    @Environment(\.modelContext) private var modelContext
     @State private var viewModel = FileIntakeViewModel()
     @State private var coordinateViewModel = CoordinateSelectionViewModel()
     @State private var isOverwriteConfirmationPresented = false
@@ -99,12 +100,31 @@ struct FileIntakeView: View {
 
     private func confirmOverwrite() {
         let selectedCoordinate = coordinateViewModel.selectedCoordinate
+        let coordinateLabel = coordinateViewModel.selectedCoordinateLabel ?? selectedCoordinate?.displayText
+        let totalFileCount = viewModel.selectedFiles.count
         Task {
             await viewModel.applyMetadataIfConfirmed(
                 true,
                 coordinate: selectedCoordinate,
                 writer: ExifToolMetadataWriter()
             )
+
+            guard let selectedCoordinate,
+                  let coordinateLabel,
+                  let summary = viewModel.latestMetadataBatchSummary else {
+                return
+            }
+
+            do {
+                try BatchHistoryStore(modelContext: modelContext).recordBatchRun(
+                    coordinateLabel: coordinateLabel,
+                    coordinate: selectedCoordinate,
+                    summary: summary,
+                    totalFileCount: totalFileCount
+                )
+            } catch {
+                viewModel.reportBatchHistoryFailure(error)
+            }
         }
     }
 

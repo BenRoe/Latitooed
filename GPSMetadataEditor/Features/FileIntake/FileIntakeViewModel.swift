@@ -173,6 +173,13 @@ final class FileIntakeViewModel {
         )
     }
 
+    func reportBatchHistoryFailure(_ error: any Error) {
+        latestNotice = IntakeNotice(
+            message: "Batch finished, but recent history could not be saved. \(error.localizedDescription)",
+            style: .warning
+        )
+    }
+
     private func notice(for result: FileIntakeResult, source: IntakeSource) -> IntakeNotice? {
         if result.warnings.isEmpty == false {
             let itemLabel = result.warnings.count == 1 ? "item" : "items"

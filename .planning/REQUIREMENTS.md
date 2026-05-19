@@ -35,8 +35,8 @@
 
 - [x] **META-01**: The app writes GPS latitude and longitude metadata to JPEG files.
 - [x] **META-02**: The app writes GPS latitude and longitude metadata to HEIC files.
-- [ ] **META-03**: The app attempts best-effort QuickTime-compatible location metadata writes for MOV files and clearly reports warnings or failures.
-- [ ] **META-04**: The app attempts best-effort QuickTime-compatible location metadata writes for MP4 files and clearly reports warnings or failures.
+- [x] **META-03**: The app attempts best-effort QuickTime-compatible location metadata writes for MOV files and clearly reports warnings or failures.
+- [x] **META-04**: The app attempts best-effort QuickTime-compatible location metadata writes for MP4 files and clearly reports warnings or failures.
 - [x] **META-05**: The app uses a bundled ExifTool helper rather than requiring a Homebrew or system ExifTool installation.
 - [x] **META-06**: The metadata writer invokes ExifTool through an executable URL and argument array, not through shell command strings.
 - [x] **META-07**: The metadata writer returns structured per-file results including status, user-facing message, and diagnostic detail when available.
@@ -107,8 +107,8 @@
 | BATCH-06 | Phase 3 | Complete |
 | META-01 | Phase 3 | Complete |
 | META-02 | Phase 3 | Complete |
-| META-03 | Phase 4 | Pending |
-| META-04 | Phase 4 | Pending |
+| META-03 | Phase 4 | Complete |
+| META-04 | Phase 4 | Complete |
 | META-05 | Phase 3 | Complete |
 | META-06 | Phase 3 | Complete |
 | META-07 | Phase 3 | Complete |

@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in_progress
-last_updated: "2026-05-19T10:08:09.035Z"
+last_updated: "2026-05-19T10:11:54.000Z"
 progress:
   total_phases: 5
   completed_phases: 3
   total_plans: 15
-  completed_plans: 12
-  percent: 80
+  completed_plans: 13
+  percent: 87
 ---
 
 # Project State: GPS Metadata Editor
@@ -39,7 +39,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-15)
 | 1 - App Shell and File Intake | Complete | 100% |
 | 2 - Coordinate Selection | Complete, Verification Waived By User | 100% |
 | 3 - Core Metadata Writing | Complete, Host Verification Pending | 100% |
-| 4 - Batch Results, Video, and History | In Progress | 1/4 plans complete |
+| 4 - Batch Results, Video, and History | In Progress | 2/4 plans complete |
 | 5 - Packaging and Release Verification | Pending | 0% |
 
 ## Decisions To Carry Forward
@@ -59,6 +59,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-15)
 - Phase 3 added a bundled ExifTool 13.58 runtime, bundle-only helper resolution, argument-array GPS writes for JPEG/HEIC, structured metadata write results, and a confirmed Apply Location batch flow.
 - Phase 3 is approved. VM static checks passed, host-side Xcode/app verification was accepted by the user, and follow-up findings were documented in `docs/swift-default-mainactor-nonisolated-values.md` and `docs/swiftui-table-selection-behavior.md`.
 - Plan 04-01 added filename-first footer progress and selected-row diagnostics for warning/failure results while keeping cancellation intentionally absent per the Phase 4 context override.
+- Plan 04-02 added best-effort MOV/MP4 GPS writes through the bundled ExifTool path using `Keys:GPSCoordinates`, with clean helper exits mapped to `GPS metadata updated.`.
 
 ## Next Action
 

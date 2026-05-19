@@ -1,4 +1,5 @@
 import Foundation
+import SwiftData
 import Testing
 @testable import GPSMetadataEditor
 
@@ -187,6 +188,39 @@ struct MetadataBatchViewModelTests {
         viewModel.isMetadataBatchRunning = true
 
         #expect(viewModel.canApplyMetadata(selectedCoordinate: .berlin) == false)
+    }
+
+    @Test func historyCoordinateReuseDoesNotRestorePreviousSelectedFiles() throws {
+        let fileIntakeViewModel = FileIntakeViewModel()
+        let currentFile = jpegFile("current.jpg")
+        fileIntakeViewModel.apply(FileIntakeResult(accepted: [currentFile], warnings: []), source: .picker)
+        let coordinateViewModel = CoordinateSelectionViewModel(searchService: FakeCoordinateSearchService())
+        let batchSummary = BatchRunSummary(
+            timestamp: Date(timeIntervalSinceReferenceDate: 0),
+            coordinateLabel: "Berlin",
+            latitude: CoordinateSelection.berlin.latitude,
+            longitude: CoordinateSelection.berlin.longitude,
+            totalFileCount: 12,
+            successCount: 9,
+            warningCount: 2,
+            failureCount: 1
+        )
+        let snapshot = BatchRunSummarySnapshot(
+            id: batchSummary.persistentModelID,
+            timestamp: batchSummary.timestamp,
+            coordinateLabel: batchSummary.coordinateLabel,
+            coordinate: batchSummary.coordinate ?? .berlin,
+            totalFileCount: batchSummary.totalFileCount,
+            successCount: batchSummary.successCount,
+            warningCount: batchSummary.warningCount,
+            failureCount: batchSummary.failureCount
+        )
+
+        coordinateViewModel.selectBatchRunSummary(snapshot)
+
+        #expect(coordinateViewModel.selectedCoordinate == .berlin)
+        #expect(coordinateViewModel.selectedCoordinateLabel == "Berlin")
+        #expect(fileIntakeViewModel.selectedFiles == [currentFile])
     }
 }
 

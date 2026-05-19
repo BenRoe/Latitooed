@@ -92,6 +92,10 @@ final class CoordinateSelectionViewModel {
         setCoordinate(recentCoordinate.coordinate, label: recentCoordinate.label, collapseResults: true)
     }
 
+    func selectBatchRunSummary(_ batchRunSummary: BatchRunSummarySnapshot) {
+        setCoordinate(batchRunSummary.coordinate, label: batchRunSummary.coordinateLabel, collapseResults: true)
+    }
+
     func collapseSearchResults() {
         isSearchResultsExpanded = false
     }

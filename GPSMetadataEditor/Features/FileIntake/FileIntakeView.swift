@@ -45,6 +45,8 @@ struct FileIntakeView: View {
                             detail: viewModel.selectedFileDetail,
                             latestWarnings: viewModel.latestWarningDetails
                         )
+
+                        BatchHistorySection(onUseCoordinate: coordinateViewModel.selectBatchRunSummary)
                     }
                 }
                 .frame(minWidth: AppDesign.Layout.leftColumnMinimumWidth, idealWidth: AppDesign.Layout.leftColumnIdealWidth)

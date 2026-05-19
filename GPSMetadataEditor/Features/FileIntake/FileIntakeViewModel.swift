@@ -30,6 +30,7 @@ final class FileIntakeViewModel {
         let containingFolderURL: URL
         let latestResult: FileResultStatus
         let latestMessage: String?
+        let latestDiagnosticDetail: String?
     }
 
     struct MetadataBatchProgress: Equatable, Sendable {
@@ -72,7 +73,8 @@ final class FileIntakeViewModel {
             containingFolderName: selectedFile.containingFolderName,
             containingFolderURL: selectedFile.containingFolderURL,
             latestResult: selectedFile.latestResult,
-            latestMessage: selectedFile.latestMessage
+            latestMessage: selectedFile.latestMessage,
+            latestDiagnosticDetail: selectedFile.latestDiagnosticDetail
         )
     }
 
@@ -209,7 +211,8 @@ final class FileIntakeViewModel {
             kind: existing.kind,
             gpsStatus: result.gpsStatus ?? existing.gpsStatus,
             latestResult: result.status,
-            latestMessage: result.message
+            latestMessage: result.message,
+            latestDiagnosticDetail: result.detailForReview
         )
     }
 }
@@ -219,5 +222,16 @@ private extension FileIntakeViewModel.MetadataBatchSummary {
         successCount = results.filter { $0.status == .success }.count
         warningCount = results.filter { $0.status == .warning }.count
         failureCount = results.filter { $0.status == .failure }.count
+    }
+}
+
+private extension MetadataWriteResult {
+    var detailForReview: String? {
+        switch status {
+        case .warning, .failure:
+            diagnosticDetail
+        case .pending, .success:
+            nil
+        }
     }
 }

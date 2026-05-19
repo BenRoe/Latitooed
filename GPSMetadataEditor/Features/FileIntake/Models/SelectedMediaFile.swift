@@ -10,13 +10,15 @@ nonisolated struct SelectedMediaFile: Identifiable, Hashable, Sendable {
     let gpsStatus: GPSStatus
     let latestResult: FileResultStatus
     let latestMessage: String?
+    let latestDiagnosticDetail: String?
 
     init(
         url: URL,
         kind: MediaFileKind,
         gpsStatus: GPSStatus = .notChecked,
         latestResult: FileResultStatus = .pending,
-        latestMessage: String? = nil
+        latestMessage: String? = nil,
+        latestDiagnosticDetail: String? = nil
     ) {
         self.id = url
         self.url = url
@@ -27,5 +29,6 @@ nonisolated struct SelectedMediaFile: Identifiable, Hashable, Sendable {
         self.gpsStatus = gpsStatus
         self.latestResult = latestResult
         self.latestMessage = latestMessage
+        self.latestDiagnosticDetail = latestDiagnosticDetail
     }
 }

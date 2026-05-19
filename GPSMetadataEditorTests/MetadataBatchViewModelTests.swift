@@ -121,6 +121,43 @@ struct MetadataBatchViewModelTests {
         #expect(viewModel.selectedFiles.map(\.latestResult) == [.failure, .success])
     }
 
+    @Test func warningAndFailureDetailsExposeDiagnosticDetail() async throws {
+        let warningFile = movFile("warning.mov")
+        let failureFile = heicFile("failure.heic")
+        let writer = RecordingMetadataWriter(results: [
+            .warning(for: warningFile, message: "Warning", diagnosticDetail: "warning stderr"),
+            .failure(for: failureFile, message: "Failure", diagnosticDetail: "failure stderr"),
+        ])
+        let viewModel = FileIntakeViewModel()
+        viewModel.apply(FileIntakeResult(accepted: [warningFile, failureFile], warnings: []), source: .picker)
+
+        await viewModel.applyMetadata(coordinate: .berlin, writer: writer)
+
+        viewModel.selectFile(id: warningFile.id)
+        let warningDetail = try #require(viewModel.selectedFileDetail)
+        #expect(warningDetail.latestDiagnosticDetail == "warning stderr")
+
+        viewModel.selectFile(id: failureFile.id)
+        let failureDetail = try #require(viewModel.selectedFileDetail)
+        #expect(failureDetail.latestDiagnosticDetail == "failure stderr")
+    }
+
+    @Test func successDetailsDoNotExposeDiagnosticDetail() async throws {
+        let file = jpegFile("success.jpg")
+        let writer = RecordingMetadataWriter(results: [
+            .success(for: file, message: "Updated", diagnosticDetail: "stdout details"),
+        ])
+        let viewModel = FileIntakeViewModel()
+        viewModel.apply(FileIntakeResult(accepted: [file], warnings: []), source: .picker)
+
+        await viewModel.applyMetadata(coordinate: .berlin, writer: writer)
+        viewModel.selectFile(id: file.id)
+
+        let detail = try #require(viewModel.selectedFileDetail)
+        #expect(detail.latestResult == .success)
+        #expect(detail.latestDiagnosticDetail == nil)
+    }
+
     @Test func abortConfirmationPathDoesNotInvokeWriter() async {
         let file = jpegFile("first.jpg")
         let writer = RecordingMetadataWriter(results: [.success(for: file, message: "Updated")])

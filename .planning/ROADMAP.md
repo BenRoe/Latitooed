@@ -81,6 +81,7 @@
 ### Phase 4: Batch Results, Video, and History
 
 **Goal:** Make the batch workflow cancellable, transparent, and persistent enough for daily use.
+**Progress:** 1/4 plans complete. Plan 04-01 added filename-first footer progress, selected-row warning/failure diagnostics, and kept cancellation intentionally absent per the Phase 4 context override.
 **Mode:** mvp
 **UI hint:** yes
 **Requirements:** BATCH-02, BATCH-03, BATCH-04, META-03, META-04, PERSIST-01, PERSIST-02, PERSIST-03, PERSIST-04

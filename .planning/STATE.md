@@ -62,6 +62,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-15)
 - Plan 04-02 added best-effort MOV/MP4 GPS writes through the bundled ExifTool path using `Keys:GPSCoordinates`, with clean helper exits mapped to `GPS metadata updated.`.
 - Plan 04-03 added SwiftData-backed recent coordinate reuse with compact label/value/timestamp storage, explicit saves, and value snapshots for UI reuse.
 - Plan 04-04 added counts-only recent batch history with coordinate reuse, explicit saves, and no previous-file restore surface.
+- Phase 4 source verification passed, but host-side Xcode tests and app smoke checks are tracked in `04-HUMAN-UAT.md`.
 
 ## Next Action
 

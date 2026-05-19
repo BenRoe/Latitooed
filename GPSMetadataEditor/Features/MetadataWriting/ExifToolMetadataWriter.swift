@@ -16,18 +16,10 @@ nonisolated struct ExifToolMetadataWriter: MetadataWriter {
     }
 
     func writeGPS(_ coordinate: CoordinateSelection, to file: SelectedMediaFile) async -> MetadataWriteResult {
-        switch file.kind {
-        case .jpeg, .heic:
-            await writeStillImageGPS(coordinate, to: file)
-        case .mov, .mp4:
-            .warning(
-                for: file,
-                message: "Video metadata writing is deferred to Phase 4."
-            )
-        }
+        await writeMetadataGPS(coordinate, to: file)
     }
 
-    private func writeStillImageGPS(_ coordinate: CoordinateSelection, to file: SelectedMediaFile) async -> MetadataWriteResult {
+    private func writeMetadataGPS(_ coordinate: CoordinateSelection, to file: SelectedMediaFile) async -> MetadataWriteResult {
         do {
             let executableURL = try resolver.executableURL()
             let arguments = try argumentBuilder.gpsWriteArguments(for: file, coordinate: coordinate)

@@ -62,13 +62,13 @@ struct ExifToolMetadataWriterTests {
     }
 
     @Test(
-        "Videos return warnings without invoking the runner",
+        "Videos invoke runner and map clean exit to success",
         arguments: [
             MediaFileKind.mov,
             .mp4,
         ]
     )
-    func videoWarningsDoNotInvokeRunner(kind: MediaFileKind) async throws {
+    func videoSuccessInvokesRunner(kind: MediaFileKind) async throws {
         let bundle = try bundleWithHelper(isExecutable: true)
         let file = SelectedMediaFile(url: URL(filePath: "/Volumes/Photos/video.\(kind.rawValue)"), kind: kind)
         let runner = RecordingRunner()
@@ -76,9 +76,11 @@ struct ExifToolMetadataWriterTests {
 
         let result = await writer.writeGPS(.berlin, to: file)
 
-        #expect(result.status == .warning)
-        #expect(result.message == "Video metadata writing is deferred to Phase 4.")
-        #expect(await runner.calls.isEmpty)
+        #expect(result.status == .success)
+        #expect(result.gpsStatus == .updated)
+        #expect(result.message == "GPS metadata updated.")
+        #expect(await runner.calls.count == 1)
+        #expect(await runner.calls.first?.arguments.contains("-Keys:GPSCoordinates=52.520008, 13.404954") == true)
     }
 
     @Test func nonzeroExitMapsToFailureWithDiagnostics() async throws {
@@ -92,6 +94,42 @@ struct ExifToolMetadataWriterTests {
         #expect(result.status == .failure)
         #expect(result.diagnosticDetail?.contains("bad gps") == true)
         #expect(result.diagnosticDetail?.contains("Exit status: 1") == true)
+    }
+
+    @Test(
+        "Video nonzero exit maps to failure with diagnostics",
+        arguments: [
+            MediaFileKind.mov,
+            .mp4,
+        ]
+    )
+    func videoNonzeroExitMapsToFailureWithDiagnostics(kind: MediaFileKind) async throws {
+        let bundle = try bundleWithHelper(isExecutable: true)
+        let file = SelectedMediaFile(url: URL(filePath: "/Volumes/Photos/video.\(kind.rawValue)"), kind: kind)
+        let runner = RecordingRunner(result: ProcessResult(terminationStatus: 1, standardOutput: "out", standardError: "bad gps"))
+        let writer = ExifToolMetadataWriter(resolver: BundledExifToolResolver(bundle: bundle), processRunner: runner)
+
+        let result = await writer.writeGPS(.berlin, to: file)
+
+        #expect(result.status == .failure)
+        #expect(result.message == "GPS metadata could not be written.")
+        #expect(result.diagnosticDetail?.contains("Exit status: 1") == true)
+        #expect(result.diagnosticDetail?.contains("bad gps") == true)
+    }
+
+    @Test func runnerThrowMapsToStructuredFailure() async throws {
+        let bundle = try bundleWithHelper(isExecutable: true)
+        let file = SelectedMediaFile(url: URL(filePath: "/Volumes/Photos/video.mov"), kind: .mov)
+        let writer = ExifToolMetadataWriter(
+            resolver: BundledExifToolResolver(bundle: bundle),
+            processRunner: ThrowingRunner()
+        )
+
+        let result = await writer.writeGPS(.berlin, to: file)
+
+        #expect(result.status == .failure)
+        #expect(result.message == "GPS metadata could not be written.")
+        #expect(result.diagnosticDetail == "Fake runner failed.")
     }
 
     private func emptyBundle() throws -> Bundle {
@@ -132,5 +170,17 @@ private actor RecordingRunner: ProcessRunning {
     func run(executableURL: URL, arguments: [String]) async throws -> ProcessResult {
         calls.append(Call(executableURL: executableURL, arguments: arguments))
         return result
+    }
+}
+
+private struct ThrowingRunner: ProcessRunning {
+    func run(executableURL: URL, arguments: [String]) async throws -> ProcessResult {
+        throw FakeRunnerError()
+    }
+}
+
+private struct FakeRunnerError: LocalizedError {
+    var errorDescription: String? {
+        "Fake runner failed."
     }
 }

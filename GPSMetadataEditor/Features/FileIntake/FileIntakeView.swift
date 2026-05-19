@@ -161,5 +161,5 @@ private struct FileIntakeFooter: View {
 
 #Preview {
     FileIntakeView()
-        .modelContainer(for: [RecentCoordinate.self], inMemory: true)
+        .modelContainer(for: [RecentCoordinate.self, BatchRunSummary.self], inMemory: true)
 }

@@ -53,6 +53,7 @@
 		1A2B3C4D5E6F700000000800 /* RecentCoordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000900 /* RecentCoordinate.swift */; };
 		1A2B3C4D5E6F700000000801 /* BatchHistoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000901 /* BatchHistoryStore.swift */; };
 		1A2B3C4D5E6F700000000802 /* RecentCoordinatesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000902 /* RecentCoordinatesView.swift */; };
+		1A2B3C4D5E6F700000000803 /* BatchRunSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000903 /* BatchRunSummary.swift */; };
 		1A2B3C4D5E6F700000000810 /* BatchHistoryStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000910 /* BatchHistoryStoreTests.swift */; };
 		1A2B3C4D5E6F700000000620 /* ExifTool in Resources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000730 /* ExifTool */; };
 /* End PBXBuildFile section */
@@ -115,6 +116,7 @@
 		1A2B3C4D5E6F700000000900 /* RecentCoordinate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentCoordinate.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F700000000901 /* BatchHistoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchHistoryStore.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F700000000902 /* RecentCoordinatesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentCoordinatesView.swift; sourceTree = "<group>"; };
+		1A2B3C4D5E6F700000000903 /* BatchRunSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchRunSummary.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F700000000910 /* BatchHistoryStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchHistoryStoreTests.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F700000000120 /* GPSMetadataEditor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GPSMetadataEditor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A2B3C4D5E6F700000000121 /* GPSMetadataEditorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GPSMetadataEditorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -183,6 +185,7 @@
 			isa = PBXGroup;
 			children = (
 				1A2B3C4D5E6F700000000900 /* RecentCoordinate.swift */,
+				1A2B3C4D5E6F700000000903 /* BatchRunSummary.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -482,6 +485,7 @@
 				1A2B3C4D5E6F700000000800 /* RecentCoordinate.swift in Sources */,
 				1A2B3C4D5E6F700000000801 /* BatchHistoryStore.swift in Sources */,
 				1A2B3C4D5E6F700000000802 /* RecentCoordinatesView.swift in Sources */,
+				1A2B3C4D5E6F700000000803 /* BatchRunSummary.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -7,6 +7,6 @@ struct GPSMetadataEditorApp: App {
         WindowGroup {
             FileIntakeView()
         }
-        .modelContainer(for: [RecentCoordinate.self])
+        .modelContainer(for: [RecentCoordinate.self, BatchRunSummary.self])
     }
 }

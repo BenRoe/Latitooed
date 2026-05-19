@@ -28,5 +28,5 @@ struct CoordinateSelectionView: View {
 #Preview {
     CoordinateSelectionView(viewModel: CoordinateSelectionViewModel())
         .frame(width: 520, height: 620)
-        .modelContainer(for: [RecentCoordinate.self], inMemory: true)
+        .modelContainer(for: [RecentCoordinate.self, BatchRunSummary.self], inMemory: true)
 }

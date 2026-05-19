@@ -36,6 +36,24 @@ struct BatchHistoryStoreTests {
         #expect(results.map(\.label) == ["Berlin"])
     }
 
+    @Test func batchRunSummaryStoresOnlyCompactCountsAndCoordinate() throws {
+        let summary = BatchRunSummary(
+            timestamp: Date(timeIntervalSinceReferenceDate: 30),
+            coordinateLabel: "Berlin",
+            latitude: CoordinateSelection.berlin.latitude,
+            longitude: CoordinateSelection.berlin.longitude,
+            totalFileCount: 12,
+            successCount: 9,
+            warningCount: 2,
+            failureCount: 1
+        )
+
+        #expect(summary.coordinateLabel == "Berlin")
+        #expect(summary.coordinate == .berlin)
+        #expect(summary.totalFileCount == 12)
+        #expect(summary.countsText == "9 updated, 2 warnings, 1 failed.")
+    }
+
     @Test func recordingRecentCoordinateSavesValueSnapshot() throws {
         let container = try makeInMemoryContainer()
         let context = ModelContext(container)
@@ -97,5 +115,5 @@ struct BatchHistoryStoreTests {
 @MainActor
 private func makeInMemoryContainer() throws -> ModelContainer {
     let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
-    return try ModelContainer(for: RecentCoordinate.self, configurations: configuration)
+    return try ModelContainer(for: RecentCoordinate.self, BatchRunSummary.self, configurations: configuration)
 }

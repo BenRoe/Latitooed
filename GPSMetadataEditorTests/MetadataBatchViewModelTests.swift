@@ -60,6 +60,51 @@ struct MetadataBatchViewModelTests {
         #expect(summary.message == "1 updated, 1 warning, 1 failed.")
     }
 
+    @Test func batchPublishesFilenameFirstProgressBeforeWriterReturns() async throws {
+        let first = heicFile("IMG_001.HEIC")
+        let second = jpegFile("IMG_002.JPG")
+        let writer = SuspendedMetadataWriter()
+        let viewModel = FileIntakeViewModel()
+        viewModel.apply(FileIntakeResult(accepted: [first, second], warnings: []), source: .picker)
+
+        let batchTask = Task {
+            await viewModel.applyMetadata(coordinate: .berlin, writer: writer)
+        }
+
+        try await waitUntil {
+            viewModel.currentMetadataBatchProgress?.displayString == "Writing IMG_001.HEIC (1 of 2)"
+        }
+        #expect(viewModel.selectedFiles.first?.latestResult == .pending)
+
+        await writer.resumeNext(with: .success(for: first, message: "Updated"))
+        try await waitUntil {
+            viewModel.currentMetadataBatchProgress?.displayString == "Writing IMG_002.JPG (2 of 2)"
+        }
+        await writer.resumeNext(with: .success(for: second, message: "Updated"))
+        await batchTask.value
+
+        #expect(viewModel.currentMetadataBatchProgress == nil)
+    }
+
+    @Test func selectedRowRemainsPendingWhileWriterIsSuspended() async throws {
+        let file = heicFile("IMG_001.HEIC")
+        let writer = SuspendedMetadataWriter()
+        let viewModel = FileIntakeViewModel()
+        viewModel.apply(FileIntakeResult(accepted: [file], warnings: []), source: .picker)
+
+        let batchTask = Task {
+            await viewModel.applyMetadata(coordinate: .berlin, writer: writer)
+        }
+
+        try await waitUntil { viewModel.currentMetadataBatchProgress != nil }
+        #expect(viewModel.selectedFiles.first?.latestResult == .pending)
+
+        await writer.resumeNext(with: .success(for: file, message: "Updated"))
+        await batchTask.value
+
+        #expect(viewModel.selectedFiles.first?.latestResult == .success)
+    }
+
     @Test func oneFailureDoesNotStopLaterFiles() async {
         let first = jpegFile("first.jpg")
         let second = heicFile("second.heic")
@@ -127,6 +172,44 @@ private actor RecordingMetadataWriter: MetadataWriter {
 
         return results.removeFirst()
     }
+}
+
+private actor SuspendedMetadataWriter: MetadataWriter {
+    private var continuations: [CheckedContinuation<MetadataWriteResult, Never>] = []
+
+    func writeGPS(_ coordinate: CoordinateSelection, to file: SelectedMediaFile) async -> MetadataWriteResult {
+        await withCheckedContinuation { continuation in
+            continuations.append(continuation)
+        }
+    }
+
+    func resumeNext(with result: MetadataWriteResult) {
+        guard continuations.isEmpty == false else {
+            return
+        }
+
+        continuations.removeFirst().resume(returning: result)
+    }
+}
+
+private func waitUntil(
+    _ condition: @MainActor @escaping () -> Bool,
+    fileID: String = #fileID,
+    filePath: String = #filePath,
+    line: Int = #line,
+    column: Int = #column
+) async throws {
+    for _ in 0..<20 {
+        if await condition() {
+            return
+        }
+        await Task.yield()
+    }
+
+    Issue.record(
+        "Condition was not met",
+        sourceLocation: SourceLocation(fileID: fileID, filePath: filePath, line: line, column: column)
+    )
 }
 
 private func jpegFile(_ filename: String) -> SelectedMediaFile {

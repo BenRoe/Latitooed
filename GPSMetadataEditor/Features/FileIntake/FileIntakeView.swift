@@ -57,6 +57,7 @@ struct FileIntakeView: View {
             FileIntakeFooter(
                 selectedFileCount: viewModel.selectedFiles.count,
                 latestNotice: viewModel.latestNotice,
+                metadataBatchProgress: viewModel.currentMetadataBatchProgress,
                 isApplyEnabled: viewModel.canApplyMetadata(selectedCoordinate: coordinateViewModel.selectedCoordinate),
                 isMetadataBatchRunning: viewModel.isMetadataBatchRunning,
                 applyAction: presentOverwriteConfirmation
@@ -117,6 +118,7 @@ struct FileIntakeView: View {
 private struct FileIntakeFooter: View {
     let selectedFileCount: Int
     let latestNotice: FileIntakeViewModel.IntakeNotice?
+    let metadataBatchProgress: FileIntakeViewModel.MetadataBatchProgress?
     let isApplyEnabled: Bool
     let isMetadataBatchRunning: Bool
     let applyAction: () -> Void
@@ -144,7 +146,9 @@ private struct FileIntakeFooter: View {
     }
 
     private var statusText: String {
-        if isMetadataBatchRunning {
+        if let metadataBatchProgress {
+            metadataBatchProgress.displayString
+        } else if isMetadataBatchRunning {
             "Applying selected location..."
         } else if selectedFileCount == 0 {
             "Add files to start the intake review."

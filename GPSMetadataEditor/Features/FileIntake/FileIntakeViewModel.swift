@@ -32,6 +32,16 @@ final class FileIntakeViewModel {
         let latestMessage: String?
     }
 
+    struct MetadataBatchProgress: Equatable, Sendable {
+        let filename: String
+        let currentIndex: Int
+        let totalCount: Int
+
+        var displayString: String {
+            "Writing \(filename) (\(currentIndex) of \(totalCount))"
+        }
+    }
+
     struct MetadataBatchSummary: Equatable, Sendable {
         let successCount: Int
         let warningCount: Int
@@ -47,6 +57,7 @@ final class FileIntakeViewModel {
     var latestNotice: IntakeNotice?
     var latestWarningDetails: [IntakeWarning] = []
     var latestMetadataBatchSummary: MetadataBatchSummary?
+    var currentMetadataBatchProgress: MetadataBatchProgress?
     var isMetadataBatchRunning = false
     var isFileImporterPresented = false
     var isDropTargeted = false
@@ -126,13 +137,19 @@ final class FileIntakeViewModel {
         isMetadataBatchRunning = true
         latestMetadataBatchSummary = nil
         defer {
+            currentMetadataBatchProgress = nil
             isMetadataBatchRunning = false
         }
 
         let files = selectedFiles
         var results: [MetadataWriteResult] = []
 
-        for file in files {
+        for (index, file) in files.enumerated() {
+            currentMetadataBatchProgress = MetadataBatchProgress(
+                filename: file.displayName,
+                currentIndex: index + 1,
+                totalCount: files.count
+            )
             let result = await writer.writeGPS(coordinate, to: file)
             results.append(result)
             replaceSelectedFile(matching: result)

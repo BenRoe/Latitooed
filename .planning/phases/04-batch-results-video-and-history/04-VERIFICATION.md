@@ -1,14 +1,14 @@
 ---
 phase: 04-batch-results-video-and-history
-status: human_needed
-verified_at: 2026-05-19T10:23:50Z
+status: passed
+verified_at: 2026-05-20T08:21:06Z
 ---
 
 # Phase 04 Verification: Batch Results, Video, and History
 
 ## Status
 
-human_needed
+passed
 
 ## Automated/Source Checks
 
@@ -22,24 +22,28 @@ PASS - Source checks found no `Cancel`, `cancelBatch`, or `cancelled` batch-faci
 
 PASS - Metadata-writing sources do not import SwiftData.
 
-## Blocked Automated Check
+## Host Verification
 
-`xcodebuild -project GPSMetadataEditor.xcodeproj -scheme GPSMetadataEditor -destination 'platform=macOS' test` could not run in the VM because `xcodebuild` is unavailable.
+Phase 4 host verification was approved by the user on 2026-05-20. VM-side `xcodebuild` was unavailable, so the host result is recorded through `04-HUMAN-UAT.md`.
 
-## Human Verification Required
+## Human Verification
 
-1. Run the Xcode test suite on the macOS host:
+1. Xcode test suite on the macOS host:
    `xcodebuild -project GPSMetadataEditor.xcodeproj -scheme GPSMetadataEditor -destination 'platform=macOS' test`
+   Result: passed - approved by user on 2026-05-20
 
-2. Launch the app and complete a small JPEG/HEIC batch. Confirm footer progress uses filename-first copy, rows update after each file completes, and warning/failure diagnostics are collapsed in the selected-file detail panel.
+2. Small JPEG/HEIC batch with filename-first footer progress, per-file row updates, and collapsed warning/failure diagnostics.
+   Result: passed - approved by user on 2026-05-20
 
-3. Apply Berlin GPS to one sample MOV and one sample MP4. Read back with the bundled ExifTool using GPS tags and confirm the app shows success or a helper-derived failure/warning.
+3. Sample MOV and MP4 best-effort metadata behavior.
+   Result: passed - approved by user on 2026-05-20
 
-4. Complete a batch and confirm Recent Coordinates and Recent Batches appear. Use a coordinate from each surface and confirm the active coordinate panel updates.
+4. Recent Coordinates and Recent Batches coordinate reuse.
+   Result: passed - approved by user on 2026-05-20
 
-5. Confirm Recent Batches remains counts-only: no prior filenames, file paths, thumbnails, diagnostics, restore, reopen, or previous per-file results are shown.
+5. Counts-only Recent Batches privacy boundary.
+   Result: passed - approved by user on 2026-05-20
 
 ## Gaps
 
-None found in source verification. Host build/test and UI smoke verification are pending.
-
+None.

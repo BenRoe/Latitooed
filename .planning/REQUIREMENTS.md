@@ -50,10 +50,10 @@
 
 ### Packaging
 
-- [ ] **PKG-01**: The packaged app includes the ExifTool helper in its bundle resources.
-- [ ] **PKG-02**: The signed app can locate and execute the bundled helper from the app bundle.
-- [ ] **PKG-03**: The app reports a clear user-facing error if the bundled helper is missing, not executable, or fails to launch.
-- [ ] **PKG-04**: The app can complete the core JPEG/HEIC metadata write flow on a machine without Homebrew or system ExifTool installed.
+- [x] **PKG-01**: The packaged app includes the ExifTool helper in its bundle resources.
+- [x] **PKG-02**: The signed app can locate and execute the bundled helper from the app bundle.
+- [x] **PKG-03**: The app reports a clear user-facing error if the bundled helper is missing, not executable, or fails to launch.
+- [x] **PKG-04**: The app can complete the core JPEG/HEIC metadata write flow on a machine without Homebrew or system ExifTool installed.
 
 ## v2 Requirements
 
@@ -116,10 +116,10 @@
 | PERSIST-02 | Phase 4 | Complete |
 | PERSIST-03 | Phase 4 | Complete |
 | PERSIST-04 | Phase 4 | Complete |
-| PKG-01 | Phase 5 | Pending |
-| PKG-02 | Phase 5 | Pending |
-| PKG-03 | Phase 5 | Pending |
-| PKG-04 | Phase 5 | Pending |
+| PKG-01 | Phase 5 | Complete |
+| PKG-02 | Phase 5 | Complete |
+| PKG-03 | Phase 5 | Complete |
+| PKG-04 | Phase 5 | Complete |
 
 **Coverage:**
 - v1 requirements: 32 total

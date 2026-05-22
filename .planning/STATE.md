@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: in_progress
+status: complete
 last_updated: "2026-05-22T12:55:14.332Z"
 progress:
   total_phases: 5
-  completed_phases: 4
+  completed_phases: 5
   total_plans: 18
-  completed_plans: 15
-  percent: 80
+  completed_plans: 18
+  percent: 100
 ---
 
 # Project State: GPS Metadata Editor
@@ -40,7 +40,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-15)
 | 2 - Coordinate Selection | Complete, Verification Waived By User | 100% |
 | 3 - Core Metadata Writing | Complete, Host Verification Pending | 100% |
 | 4 - Batch Results, Video, and History | Complete, Approved | 100% |
-| 5 - Packaging and Release Verification | Source Complete, Host UAT Pending | 100% |
+| 5 - Packaging and Release Verification | Complete, Host Verified | 100% |
 
 ## Decisions To Carry Forward
 
@@ -63,10 +63,11 @@ See: `.planning/PROJECT.md` (updated 2026-05-15)
 - Plan 04-03 added SwiftData-backed recent coordinate reuse with compact label/value/timestamp storage, explicit saves, and value snapshots for UI reuse.
 - Plan 04-04 added counts-only recent batch history with coordinate reuse, explicit saves, and no previous-file restore surface.
 - Phase 4 host verification was approved by the user on 2026-05-20; `04-HUMAN-UAT.md` is passed.
+- Phase 5 completed signed `.app` package verification on 2026-05-22: host `xcodebuild test` passed, bundled ExifTool version `13.58` executed from the signed app after codesign verification, stripped-PATH JPEG/HEIC smoke wrote Berlin GPS metadata to copied fixtures, and `05-HUMAN-UAT.md` is passed.
 
 ## Next Action
 
-Run the Phase 5 host checklist in `docs/release-verification.md`, then record results in `.planning/phases/05-packaging-and-release-verification/05-HUMAN-UAT.md`.
+All planned v1 phases are complete and host verified. Next action: archive milestone or plan follow-up release hardening such as notarization, stapling, DMG/ZIP packaging, updater, installer, public hosting, or Mac App Store readiness.
 
 ---
 *State initialized: 2026-05-15*

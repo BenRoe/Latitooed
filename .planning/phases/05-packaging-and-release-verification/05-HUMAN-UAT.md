@@ -1,16 +1,16 @@
 ---
-status: partial
+status: passed
 phase: 05-packaging-and-release-verification
 source: [05-VERIFICATION.md, docs/release-verification.md]
 started: 2026-05-22T19:20:00Z
-updated: 2026-05-22T19:52:00Z
+updated: 2026-05-22T20:08:00Z
 ---
 
 # Phase 05 Human UAT
 
 ## Current Test
 
-Host-side signed app package verification and JPEG/HEIC smoke passed on 2026-05-22. Host `xcodebuild test` remains pending after the `BatchHistoryStoreTests.swift` import fix.
+Host-side tests, signed app package verification, and JPEG/HEIC smoke passed on 2026-05-22.
 
 ## Tests
 
@@ -24,7 +24,7 @@ result: passed - verifier executed the bundled helper after signature verificati
 
 ### 3. PKG-03 Helper Failure Coverage
 expected: Host `xcodebuild test -project GPSMetadataEditor.xcodeproj -scheme GPSMetadataEditor -destination 'platform=macOS'` passes, including missing-helper, non-executable-helper, and process-runner failure tests.
-result: [pending]
+result: passed - host `xcodebuild test -project GPSMetadataEditor.xcodeproj -scheme GPSMetadataEditor -destination 'platform=macOS'` reported `** TEST SUCCEEDED **`.
 
 ### 4. PKG-04 Negative-PATH JPEG/HEIC Write Smoke
 expected: Launching the signed app with `PATH=/usr/bin:/bin:/usr/sbin:/sbin` can write Berlin coordinate `52.520008, 13.404954` to copied `sample.jpg` and `sample.heic` files.
@@ -45,9 +45,9 @@ result: passed - release notes preserve signed `.app` scope and defer notarizati
 ## Summary
 
 total: 7
-passed: 6
+passed: 7
 issues: 0
-pending: 1
+pending: 0
 skipped: 0
 blocked: 0
 

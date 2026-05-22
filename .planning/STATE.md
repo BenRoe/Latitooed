@@ -3,7 +3,7 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in_progress
-last_updated: "2026-05-22T12:47:37.204Z"
+last_updated: "2026-05-22T12:55:14.332Z"
 progress:
   total_phases: 5
   completed_phases: 4
@@ -19,7 +19,7 @@ progress:
 See: `.planning/PROJECT.md` (updated 2026-05-15)
 
 **Core value:** Users can reliably apply a chosen GPS coordinate to many local media files without installing command-line dependencies.
-**Current focus:** Phase 04 — Batch Results, Video, and History
+**Current focus:** Phase 05 — packaging-and-release-verification
 
 ## Workflow
 
@@ -40,7 +40,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-15)
 | 2 - Coordinate Selection | Complete, Verification Waived By User | 100% |
 | 3 - Core Metadata Writing | Complete, Host Verification Pending | 100% |
 | 4 - Batch Results, Video, and History | Complete, Approved | 100% |
-| 5 - Packaging and Release Verification | Pending | 0% |
+| 5 - Packaging and Release Verification | In Progress | 33% |
 
 ## Decisions To Carry Forward
 
@@ -66,7 +66,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-15)
 
 ## Next Action
 
-Plan Phase 5 packaging and release verification.
+Continue Phase 5 packaging and release verification. Plan 05-02 is source-complete; Plan 05-01 is blocked until a valid small HEIC release-smoke fixture is available.
 
 ---
 *State initialized: 2026-05-15*

@@ -64,9 +64,9 @@ The script verifies:
 - `GPSMetadataEditor.app` exists.
 - `Contents/Resources/ExifTool/exiftool` exists inside the app bundle.
 - The bundled helper is executable.
-- The bundled helper runs and prints its version.
 - `codesign --verify --deep --strict --verbose=2 "$APP_PATH"` succeeds.
 - `codesign -dv --verbose=4 "$APP_PATH"` prints signature details for release evidence.
+- The bundled helper runs and prints its version after signature verification succeeds.
 
 Static package checks are necessary but not sufficient. The signed packaged app still needs the host manual smoke to prove the app can execute the bundled helper and write GPS metadata to copied JPEG and HEIC files.
 
@@ -89,6 +89,16 @@ cp GPSMetadataEditorTests/Fixtures/ReleaseSmoke/sample.heic "$SMOKE_DIR/sample.h
 
 file "$SMOKE_DIR/sample.jpg" "$SMOKE_DIR/sample.heic"
 ```
+
+Record the pre-write GPS baseline for the copied files:
+
+```bash
+"$APP_PATH/Contents/Resources/ExifTool/exiftool" \
+  -gpslatitude -gpslongitude -gpsposition \
+  "$SMOKE_DIR/sample.jpg" "$SMOKE_DIR/sample.heic"
+```
+
+Expected baseline: the copied fixtures should have no GPS tags, or at least should not already report Berlin `52.520008, 13.404954`.
 
 Launch the signed app with external helper lookup stripped from `PATH`:
 
@@ -113,6 +123,7 @@ Inspect the copied files with the bundled helper path from the signed app:
 
 Expected evidence:
 
+- The pre-write baseline does not already match Berlin GPS values.
 - The app launches and writes metadata while `PATH=/usr/bin:/bin:/usr/sbin:/sbin`.
 - The copied JPEG and HEIC files show GPS values for `52.520008, 13.404954` or equivalent north/east formatted output.
 - The tracked fixtures under `GPSMetadataEditorTests/Fixtures/ReleaseSmoke/` remain unchanged; only the temporary copies are mutated.

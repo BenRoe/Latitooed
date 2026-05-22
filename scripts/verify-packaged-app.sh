@@ -28,13 +28,13 @@ echo "Bundled ExifTool helper:"
 echo "  $HELPER_PATH"
 echo
 
-echo "Bundled ExifTool version:"
-"$HELPER_PATH" -ver
-echo
-
 echo "Code signature verification:"
 codesign --verify --deep --strict --verbose=2 "$APP_PATH"
 echo
 
 echo "Code signature details:"
 codesign -dv --verbose=4 "$APP_PATH"
+echo
+
+echo "Bundled ExifTool version:"
+"$HELPER_PATH" -ver

@@ -30,20 +30,24 @@ result: [pending]
 expected: Launching the signed app with `PATH=/usr/bin:/bin:/usr/sbin:/sbin` can write Berlin coordinate `52.520008, 13.404954` to copied `sample.jpg` and `sample.heic` files.
 result: [pending]
 
-### 5. Metadata Inspection
+### 5. Pre-Write Metadata Baseline
+expected: Before launching the app, bundled-helper inspection of copied `sample.jpg` and `sample.heic` shows no GPS tags or values that do not already match Berlin.
+result: [pending]
+
+### 6. Metadata Inspection
 expected: `"$APP_PATH/Contents/Resources/ExifTool/exiftool" -gpslatitude -gpslongitude -gpsposition "$SMOKE_DIR/sample.jpg" "$SMOKE_DIR/sample.heic"` reports GPS values matching Berlin for both copied files.
 result: [pending]
 
-### 6. Packaging Notes
+### 7. Packaging Notes
 expected: `docs/release-verification.md` states that Phase 5 verifies a signed `.app` only and defers notarization, stapling, DMG/ZIP packaging, updater, installer, public hosting, and Mac App Store packaging.
 result: [pending]
 
 ## Summary
 
-total: 6
+total: 7
 passed: 0
 issues: 0
-pending: 6
+pending: 7
 skipped: 0
 blocked: 0
 

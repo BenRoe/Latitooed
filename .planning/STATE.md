@@ -40,7 +40,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-15)
 | 2 - Coordinate Selection | Complete, Verification Waived By User | 100% |
 | 3 - Core Metadata Writing | Complete, Host Verification Pending | 100% |
 | 4 - Batch Results, Video, and History | Complete, Approved | 100% |
-| 5 - Packaging and Release Verification | In Progress | 67% |
+| 5 - Packaging and Release Verification | Source Complete, Host UAT Pending | 100% |
 
 ## Decisions To Carry Forward
 
@@ -66,7 +66,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-15)
 
 ## Next Action
 
-Continue Phase 5 packaging and release verification with Plan 05-03: host release checklist and human UAT evidence artifact.
+Run the Phase 5 host checklist in `docs/release-verification.md`, then record results in `.planning/phases/05-packaging-and-release-verification/05-HUMAN-UAT.md`.
 
 ---
 *State initialized: 2026-05-15*

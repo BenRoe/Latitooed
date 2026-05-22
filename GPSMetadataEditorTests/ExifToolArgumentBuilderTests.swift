@@ -14,6 +14,7 @@ struct ExifToolArgumentBuilderTests {
             "-gpsposition=52.52, 13.405",
             "/Volumes/Photos/IMG_0001.jpg",
         ])
+        #expect(argumentsContainForbiddenExecutableTokens(arguments) == false)
     }
 
     @Test func heicArgumentsUseSameGPSPositionStrategy() throws {
@@ -27,6 +28,7 @@ struct ExifToolArgumentBuilderTests {
             "-gpsposition=48.137154, 11.576124",
             "/Volumes/Photos/IMG_0002.heic",
         ])
+        #expect(argumentsContainForbiddenExecutableTokens(arguments) == false)
     }
 
     @Test func signedCoordinatesRemainSignedInGPSPosition() throws {
@@ -47,6 +49,7 @@ struct ExifToolArgumentBuilderTests {
 
         #expect(arguments.count == 3)
         #expect(arguments.last == path)
+        #expect(argumentsContainForbiddenExecutableTokens(arguments) == false)
     }
 
     @Test(
@@ -67,6 +70,7 @@ struct ExifToolArgumentBuilderTests {
             "-Keys:GPSCoordinates=52.520008, 13.404954",
             "/Volumes/Photos/video.\(kind.rawValue)",
         ])
+        #expect(argumentsContainForbiddenExecutableTokens(arguments) == false)
     }
 
     @Test func videoPathWithSpacesUnicodeAndShellCharactersStaysOneArgument() throws {
@@ -79,5 +83,24 @@ struct ExifToolArgumentBuilderTests {
         #expect(arguments.count == 3)
         #expect(arguments[1] == "-Keys:GPSCoordinates=-33.8688, -151.2093")
         #expect(arguments.last == path)
+        #expect(argumentsContainForbiddenExecutableTokens(arguments) == false)
+    }
+
+    private func argumentsContainForbiddenExecutableTokens(_ arguments: [String]) -> Bool {
+        let forbiddenTokens = [
+            "exiftool",
+            "/opt/homebrew/bin/exiftool",
+            "/usr/local/bin/exiftool",
+            "/bin/sh",
+            "zsh",
+            "/usr/bin/env",
+            "PATH",
+        ]
+
+        return arguments.contains { argument in
+            forbiddenTokens.contains { token in
+                argument.localizedStandardContains(token)
+            }
+        }
     }
 }

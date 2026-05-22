@@ -82,12 +82,15 @@ Copy the committed fixtures to a temporary working directory before writing meta
 
 ```bash
 cd /Users/ben/Git/image-exif-gps
-SMOKE_DIR="$(mktemp -d "${TMPDIR:-/tmp}/gps-metadata-editor-smoke.XXXXXX")"
+SMOKE_DIR="$HOME/Desktop/gps-metadata-editor-smoke"
+rm -rf "$SMOKE_DIR"
+mkdir -p "$SMOKE_DIR"
 
 cp GPSMetadataEditorTests/Fixtures/ReleaseSmoke/sample.jpg "$SMOKE_DIR/sample.jpg"
 cp GPSMetadataEditorTests/Fixtures/ReleaseSmoke/sample.heic "$SMOKE_DIR/sample.heic"
 
 file "$SMOKE_DIR/sample.jpg" "$SMOKE_DIR/sample.heic"
+open "$SMOKE_DIR"
 ```
 
 Record the pre-write GPS baseline for the copied files:

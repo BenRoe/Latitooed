@@ -29,8 +29,13 @@ struct ExifToolMetadataWriterTests {
     @Test func resolverUsesOnlyBundleResourceHelper() async throws {
         let bundle = try bundleWithHelper(isExecutable: true)
         let resolvedURL = try BundledExifToolResolver(bundle: bundle).executableURL()
+        let resolvedPath = resolvedURL.path(percentEncoded: false)
 
-        #expect(resolvedURL.path(percentEncoded: false).hasSuffix("/ExifTool/exiftool"))
+        #expect(resolvedPath.hasSuffix("/ExifTool/exiftool"))
+        #expect(resolvedPath.contains("/opt/homebrew") == false)
+        #expect(resolvedPath.contains("/usr/local/bin") == false)
+        #expect(resolvedPath.contains("/usr/bin") == false)
+        #expect(resolvedPath.contains("/usr/bin/env") == false)
     }
 
     @Test func jpegSuccessMapsToSuccessUpdatedGPSAndPreservesDiagnostics() async throws {
@@ -117,9 +122,9 @@ struct ExifToolMetadataWriterTests {
         #expect(result.diagnosticDetail?.contains("bad gps") == true)
     }
 
-    @Test func runnerThrowMapsToStructuredFailure() async throws {
+    @Test func stillImageRunnerThrowMapsToStructuredFailure() async throws {
         let bundle = try bundleWithHelper(isExecutable: true)
-        let file = SelectedMediaFile(url: URL(filePath: "/Volumes/Photos/video.mov"), kind: .mov)
+        let file = SelectedMediaFile(url: URL(filePath: "/Volumes/Photos/IMG_0001.jpg"), kind: .jpeg)
         let writer = ExifToolMetadataWriter(
             resolver: BundledExifToolResolver(bundle: bundle),
             processRunner: ThrowingRunner()

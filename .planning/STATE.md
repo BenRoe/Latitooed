@@ -40,7 +40,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-15)
 | 2 - Coordinate Selection | Complete, Verification Waived By User | 100% |
 | 3 - Core Metadata Writing | Complete, Host Verification Pending | 100% |
 | 4 - Batch Results, Video, and History | Complete, Approved | 100% |
-| 5 - Packaging and Release Verification | In Progress | 33% |
+| 5 - Packaging and Release Verification | In Progress | 67% |
 
 ## Decisions To Carry Forward
 
@@ -66,7 +66,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-15)
 
 ## Next Action
 
-Continue Phase 5 packaging and release verification. Plan 05-02 is source-complete; Plan 05-01 is blocked until a valid small HEIC release-smoke fixture is available.
+Continue Phase 5 packaging and release verification with Plan 05-03: host release checklist and human UAT evidence artifact.
 
 ---
 *State initialized: 2026-05-15*

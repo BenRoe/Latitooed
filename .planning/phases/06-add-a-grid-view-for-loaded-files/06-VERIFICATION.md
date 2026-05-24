@@ -1,24 +1,24 @@
 ---
 phase: 06-add-a-grid-view-for-loaded-files
-verified: 2026-05-24T14:54:44Z
-status: human_needed
-score: 5/5 must-haves verified
+verified: 2026-05-24T20:52:49Z
+status: passed
+score: 5/5 must-haves verified, host UAT passed
 overrides_applied: 0
 human_verification:
   - test: "Run host Xcode test suite"
     expected: "xcodebuild completes on macOS with the GPSMetadataEditor scheme and platform=macOS destination."
-    why_human: "The Linux VM cannot run xcodebuild; command fails with 'zsh:1: command not found: xcodebuild'."
+    result: "passed by user approval on 2026-05-24"
   - test: "Run Phase 6 host app UAT checklist"
     expected: "Mixed media loading, default grid mode, Table/Grid switching, table and grid selection, diagnostics, warnings, and Apply Location pass."
-    why_human: "SwiftUI/AppKit modifier-key behavior and visual grid usability require macOS host interaction."
+    result: "passed by user approval on 2026-05-24"
 ---
 
 # Phase 6: Loaded Files Grid View Verification Report
 
 **Phase Goal:** Let users browse loaded media in a visual grid while preserving the existing table-oriented review workflow.
-**Verified:** 2026-05-24T14:54:44Z
-**Status:** human_needed
-**Re-verification:** No - initial verification
+**Verified:** 2026-05-24T20:52:49Z
+**Status:** passed
+**Re-verification:** Yes - host UAT approved
 
 ## Goal Achievement
 
@@ -29,7 +29,7 @@ human_verification:
 | 1 | User can switch loaded files between the existing table/list review and a grid view. | VERIFIED | `FileIntakeView.swift:35-45` shows `Picker("Loaded files view", selection: $viewModel.selectedLoadedFilesViewMode)` with segmented style, and `FileIntakeView.swift:45-64` switches between `SelectedFilesTable` and `SelectedFilesGrid`. |
 | 2 | Grid cells show enough file identity and status information to support batch review: thumbnail or type fallback, filename, file type, GPS status, and latest write result. | VERIFIED | `SelectedFilesGrid.swift:48-63` renders fallback preview, `file.displayName`, `file.kind.displayName`, `file.gpsStatus.displayName`, and `file.latestResult.displayName`; `SelectedFilesGrid.swift:116-124` provides image/video fallback SF Symbols. |
 | 3 | Selecting a file in the grid updates the same details/diagnostics surface used by the existing selected-file workflow. | VERIFIED | Grid activation flows through `FileIntakeView.swift:56-59` to `FileIntakeViewModel.activateGridSelection`; `FileIntakeViewModel.swift:170-216` updates shared `selectedFileIDs`; `FileIntakeView.swift:66-69` passes `selectedFileReview` into `FileDetailPanel`. |
-| 4 | Grid layout remains usable for small and large batches without breaking file selection, warning visibility, or batch actions. | VERIFIED | `SelectedFilesGrid.swift:14-27` uses `ScrollView` plus `LazyVGrid` with adaptive columns; table remains present at `FileIntakeView.swift:47-50`; `WarningSummaryView` remains in `FileDetailPanel.swift:8-10`; `BatchHistorySection` remains at `FileIntakeView.swift:71`; `FileIntakeFooter` and Apply Location remain at `FileIntakeView.swift:84-90`. Host usability still needs UAT. |
+| 4 | Grid layout remains usable for small and large batches without breaking file selection, warning visibility, or batch actions. | VERIFIED | `SelectedFilesGrid.swift:14-27` uses `ScrollView` plus `LazyVGrid` with adaptive columns; table remains present at `FileIntakeView.swift:47-50`; `WarningSummaryView` remains in `FileDetailPanel.swift:8-10`; `BatchHistorySection` remains at `FileIntakeView.swift:71`; `FileIntakeFooter` and Apply Location remain at `FileIntakeView.swift:84-90`. Host UAT passed on 2026-05-24. |
 | 5 | Unsupported, inaccessible, warning, success, and failure states remain visually distinguishable in grid mode. | VERIFIED | Grid cards expose type fallbacks and text-backed status labels at `SelectedFilesGrid.swift:61-68`, plus accessibility state at `SelectedFilesGrid.swift:78-84`; pending/success/warning/failure symbols are mapped at `SelectedFilesGrid.swift:142-154`. Intake warnings remain visible through `WarningSummaryView`. |
 
 **Score:** 5/5 truths verified at source level
@@ -46,7 +46,7 @@ human_verification:
 | `GPSMetadataEditor.xcodeproj/project.pbxproj` | New grid file in app target | VERIFIED | `SelectedFilesGrid.swift` file reference and source build file appear in project lines reported by `rg`: 29, 93, 294, and 471. |
 | `GPSMetadataEditorTests/FileIntakeViewModelTests.swift` | Swift Testing coverage for mode, review state, and selection helpers | VERIFIED | Tests cover grid default/session state, no/single/multiple review, replace selection, toggle add/remove, range selection, and stale range fallback. |
 | `GPSMetadataEditorTests/FileIntakeSmokeTests.swift` | Lightweight grid construction smoke | VERIFIED | `selectedFilesGridCanBeCreated` constructs `SelectedFilesGrid`. |
-| `.planning/phases/06-add-a-grid-view-for-loaded-files/06-HUMAN-UAT.md` | Pending host-side UAT checklist | VERIFIED | Contains host `xcodebuild` command and pending rows for grid default, switching, selection, diagnostics, warnings, and Apply Location. |
+| `.planning/phases/06-add-a-grid-view-for-loaded-files/06-HUMAN-UAT.md` | Host-side UAT checklist | VERIFIED | Host checklist passed on 2026-05-24 for grid default, switching, selection, diagnostics, warnings, and Apply Location. |
 
 ### Key Link Verification
 
@@ -71,7 +71,7 @@ human_verification:
 | Behavior | Command | Result | Status |
 |----------|---------|--------|--------|
 | Host Xcode build/test | `xcodebuild -project GPSMetadataEditor.xcodeproj -scheme GPSMetadataEditor -destination 'platform=macOS' test` | `zsh:1: command not found: xcodebuild` | SKIP - host required |
-| UAT checklist contains required pending checks | `rg -n "xcodebuild|grid is default|Command-click|Shift-click|Apply Location|\[pending\]" .planning/phases/06-add-a-grid-view-for-loaded-files/06-HUMAN-UAT.md` | Found host command and pending rows | PASS |
+| UAT checklist contains required checks | `rg -n "xcodebuild|grid is default|Command-click|Shift-click|Apply Location|result: pass" .planning/phases/06-add-a-grid-view-for-loaded-files/06-HUMAN-UAT.md` | Found host command and passed rows | PASS |
 | Banned SwiftUI grid/detail patterns absent | `rg -n "foregroundColor|cornerRadius\(|AnyView|font\(\.system|onTapGesture|Task \{" ...` | No matches in grid/detail files | PASS |
 | Grid/table wiring evidence present | `rg -n "selectedLoadedFilesViewMode|SelectedFilesGrid|SelectedFilesTable|selectedFileIDs|selectedFileReview" GPSMetadataEditor/Features/FileIntake GPSMetadataEditorTests` | Expected wiring and tests found | PASS |
 
@@ -88,8 +88,8 @@ human_verification:
 | GRID-01 | 06-01, 06-02 | Table/Grid switch for loaded files | SATISFIED | Roadmap SC 1; `FileIntakeView` segmented picker and content switch. |
 | GRID-02 | 06-02 | Grid card identity/status information | SATISFIED | Roadmap SC 2; `SelectedFilesGrid` renders fallback, filename, type, GPS, and latest result. |
 | GRID-03 | 06-01, 06-03 | Grid selection updates shared detail/diagnostics state | SATISFIED | Roadmap SC 3; grid helpers update shared selection and detail panel consumes `selectedFileReview`. |
-| GRID-04 | 06-01, 06-02, 06-03 | Preserve table workflow, warning visibility, and batch actions at scale | SATISFIED SOURCE / HOST PENDING | Roadmap SC 4; source wiring preserves table, warning summary, batch history, footer, and Apply Location. Host UAT remains pending for real interaction. |
-| GRID-05 | 06-02, 06-03 | Distinguishable grid states for unsupported/fallback and result states | SATISFIED SOURCE / HOST PENDING | Roadmap SC 5; text/icon status labels and accessibility labels exist. Host visual confirmation remains pending. |
+| GRID-04 | 06-01, 06-02, 06-03 | Preserve table workflow, warning visibility, and batch actions at scale | SATISFIED | Roadmap SC 4; source wiring preserves table, warning summary, batch history, footer, and Apply Location. Host UAT passed on 2026-05-24. |
+| GRID-05 | 06-02, 06-03 | Distinguishable grid states for unsupported/fallback and result states | SATISFIED | Roadmap SC 5; text/icon status labels and accessibility labels exist. Host visual confirmation passed on 2026-05-24. |
 
 Traceability note: `GRID-01` through `GRID-05` are declared in `.planning/ROADMAP.md` and Phase 6 plan frontmatter, but `.planning/REQUIREMENTS.md` does not define those IDs. Because the implementation evidence satisfies the roadmap success criteria, this is a planning traceability warning, not an implementation gap.
 
@@ -100,23 +100,23 @@ Traceability note: `GRID-01` through `GRID-05` are declared in `.planning/ROADMA
 | `FileIntakeViewModel.swift` | 90-94, 162, 183, 247, 269 | Empty arrays/sets | INFO | These are mutable state defaults or reset paths populated by intake/selection operations, not hardcoded rendered stubs. |
 | Phase 6 files | - | `TBD`, `FIXME`, `XXX`, placeholder copy, banned SwiftUI patterns | NONE | No blocker debt markers or stub patterns found in modified source files. |
 
-### Human Verification Required
+### Human Verification Results
 
 ### 1. Host Xcode Test Suite
 
 **Test:** On the macOS host, run `xcodebuild -project GPSMetadataEditor.xcodeproj -scheme GPSMetadataEditor -destination 'platform=macOS' test`.
 **Expected:** The project compiles and the test suite passes.
-**Why human:** The Codex Linux VM does not have `xcodebuild`; this was verified by command failure and is documented in `docs/host-xcodebuild-verification-boundary.md`.
+**Result:** Passed by user approval on 2026-05-24. The Codex Linux VM cannot independently run `xcodebuild`.
 
 ### 2. Phase 6 App UAT
 
 **Test:** Run `.planning/phases/06-add-a-grid-view-for-loaded-files/06-HUMAN-UAT.md` on the macOS host.
 **Expected:** Mixed media loading, default grid mode, Table/Grid switching, table Command-click, grid plain-click, grid Command-click, grid Shift-click, multi-selection summary, single warning/failure diagnostics, Apply Location availability, and warning visibility pass.
-**Why human:** SwiftUI/AppKit visual behavior and modifier-key interaction cannot be proven from Linux source inspection alone.
+**Result:** Passed by user approval on 2026-05-24.
 
 ### Gaps Summary
 
-No implementation gaps were found. Source verification supports all five Phase 6 success criteria. The phase cannot be marked `passed` because host `xcodebuild` and manual app UAT remain pending by project policy.
+No implementation gaps were found. Source verification supports all five Phase 6 success criteria, and host UAT passed by user approval on 2026-05-24.
 
 Process note: Phase 6 is marked `mode: mvp` in `.planning/ROADMAP.md`, but the phase goal is not in the canonical GSD user-story form. Verification therefore used the roadmap success criteria and plan must-haves as the observable contract.
 

@@ -126,7 +126,7 @@
 **UI hint:** yes
 **Requirements:** GRID-01, GRID-02, GRID-03, GRID-04, GRID-05
 **Depends on:** Phase 5
-**Plans:** 3/3 plans complete. Host UAT remains pending in `06-HUMAN-UAT.md`.
+**Plans:** 3/3 plans complete. Host UAT passed in `06-HUMAN-UAT.md`.
 
 **Success Criteria:**
 1. User can switch loaded files between the existing table/list review and a grid view.

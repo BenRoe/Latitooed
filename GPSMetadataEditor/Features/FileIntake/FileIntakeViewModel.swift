@@ -48,6 +48,7 @@ final class FileIntakeViewModel {
 
     struct SelectedFileDetail: Equatable, Sendable {
         let filename: String
+        let fileURL: URL
         let containingFolderName: String
         let containingFolderURL: URL
         let gpsStatus: GPSStatus
@@ -380,6 +381,7 @@ final class FileIntakeViewModel {
     private static func detail(for selectedFile: SelectedMediaFile) -> SelectedFileDetail {
         SelectedFileDetail(
             filename: selectedFile.displayName,
+            fileURL: selectedFile.url,
             containingFolderName: selectedFile.containingFolderName,
             containingFolderURL: selectedFile.containingFolderURL,
             gpsStatus: selectedFile.gpsStatus,

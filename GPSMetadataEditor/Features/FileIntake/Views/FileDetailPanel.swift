@@ -32,11 +32,11 @@ private struct SelectedFileReviewContent: View {
                     .lineLimit(1)
                     .help(detail.filename)
 
-                Text("Folder: \(detail.containingFolderName)")
+                Text("Path: \(detail.fileURL.path())")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .lineLimit(1)
-                    .help(detail.containingFolderURL.path())
+                    .help(detail.fileURL.path())
 
                 Label("GPS: \(detail.gpsStatus.displayName)", systemImage: detail.gpsStatus.systemImage)
                     .font(.caption)

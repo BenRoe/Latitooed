@@ -68,7 +68,7 @@ struct FileIntakeViewModelTests {
         #expect(viewModel.selectedFileReview == .none)
     }
 
-    @Test func selectingRowExposesFilenameAndContainingFolderDetails() throws {
+    @Test func selectingRowExposesFilenameAndFullPathDetails() throws {
         let viewModel = FileIntakeViewModel()
         let file = SelectedMediaFile(
             url: URL(filePath: "/Volumes/Photos/Trip/IMG 001.HEIC"),
@@ -83,6 +83,7 @@ struct FileIntakeViewModelTests {
 
         let detail = try #require(viewModel.selectedFileDetail)
         #expect(detail.filename == "IMG 001.HEIC")
+        #expect(detail.fileURL == URL(filePath: "/Volumes/Photos/Trip/IMG 001.HEIC"))
         #expect(detail.containingFolderName == "Trip")
         #expect(detail.containingFolderURL == URL(filePath: "/Volumes/Photos/Trip", directoryHint: .isDirectory))
         #expect(detail.gpsStatus == .notChecked)

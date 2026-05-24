@@ -1,4 +1,5 @@
 import AppKit
+import AVFoundation
 import SwiftUI
 
 struct SelectedFilesGrid: View {
@@ -7,7 +8,7 @@ struct SelectedFilesGrid: View {
     let activateFile: (SelectedMediaFile.ID, FileIntakeViewModel.GridSelectionIntent) -> Void
 
     private let columns = [
-        GridItem(.adaptive(minimum: 160, maximum: 220), spacing: AppDesign.Spacing.md)
+        GridItem(.adaptive(minimum: GridCardMetrics.width, maximum: GridCardMetrics.width), spacing: AppDesign.Spacing.md)
     ]
 
     var body: some View {
@@ -20,6 +21,7 @@ struct SelectedFilesGrid: View {
                         SelectedFileGridCard(file: file, isSelected: selection.contains(file.id))
                     }
                     .buttonStyle(.plain)
+                    .frame(width: GridCardMetrics.width, height: GridCardMetrics.height)
                 }
             }
             .padding(AppDesign.Spacing.md)
@@ -31,11 +33,11 @@ struct SelectedFilesGrid: View {
         let modifierFlags = NSApp.currentEvent?.modifierFlags ?? []
 
         if modifierFlags.contains(.shift) {
-            .range
+            return FileIntakeViewModel.GridSelectionIntent.range
         } else if modifierFlags.contains(.command) {
-            .toggle
+            return FileIntakeViewModel.GridSelectionIntent.toggle
         } else {
-            .replace
+            return FileIntakeViewModel.GridSelectionIntent.replace
         }
     }
 }
@@ -46,33 +48,41 @@ private struct SelectedFileGridCard: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: AppDesign.Spacing.sm) {
-            FilePreviewFallback(kind: file.kind)
+            FilePreview(file: file)
 
             Text(file.displayName)
                 .font(.body)
                 .lineLimit(2)
+                .frame(height: 48, alignment: .topLeading)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .help(file.displayName)
-
-            Text(file.kind.displayName)
-                .font(.caption)
-                .foregroundStyle(.secondary)
 
             StatusLabel(title: file.gpsStatus.displayName, systemImage: file.gpsStatus.systemImage)
             StatusLabel(title: file.latestResult.displayName, systemImage: file.latestResult.systemImage)
 
-            if isSelected {
-                Label("Selected", systemImage: "checkmark.circle.fill")
-                    .font(.caption)
-                    .foregroundStyle(.tint)
-            }
+            Label("Selected", systemImage: "checkmark.circle.fill")
+                .font(.caption)
+                .foregroundStyle(.tint)
+                .opacity(isSelected ? 1 : 0)
         }
         .padding(AppDesign.Spacing.md)
-        .frame(maxWidth: .infinity, minHeight: 210, alignment: .topLeading)
-        .background(isSelected ? .tint.opacity(0.12) : .regularMaterial)
+        .frame(width: GridCardMetrics.width, height: GridCardMetrics.height, alignment: .topLeading)
+        .background {
+            if isSelected {
+                Color.accentColor.opacity(0.12)
+            } else {
+                Rectangle()
+                    .fill(.regularMaterial)
+            }
+        }
         .overlay {
-            RoundedRectangle(cornerSize: AppDesign.Radius.smallSize)
-                .stroke(isSelected ? .tint : .quaternary, lineWidth: isSelected ? 2 : 1)
+            if isSelected {
+                RoundedRectangle(cornerSize: AppDesign.Radius.smallSize)
+                    .stroke(.tint, lineWidth: 2)
+            } else {
+                RoundedRectangle(cornerSize: AppDesign.Radius.smallSize)
+                    .stroke(.quaternary, lineWidth: 1)
+            }
         }
         .clipShape(.rect(cornerSize: AppDesign.Radius.smallSize))
         .accessibilityElement(children: .combine)
@@ -81,6 +91,29 @@ private struct SelectedFileGridCard: View {
 
     private var accessibilityLabel: String {
         "\(file.displayName), file type \(file.kind.displayName), GPS status \(file.gpsStatus.displayName), latest result \(file.latestResult.displayName), \(isSelected ? "selected" : "not selected")"
+    }
+}
+
+private struct FilePreview: View {
+    let file: SelectedMediaFile
+    @State private var previewImage: NSImage?
+
+    var body: some View {
+        ZStack {
+            FilePreviewFallback(kind: file.kind)
+
+            if let previewImage {
+                Image(nsImage: previewImage)
+                    .resizable()
+                    .scaledToFill()
+            }
+        }
+        .frame(height: GridCardMetrics.previewHeight)
+        .frame(maxWidth: .infinity)
+        .clipShape(.rect(cornerSize: AppDesign.Radius.smallSize))
+        .task(id: file.url) {
+            previewImage = file.previewImage
+        }
     }
 }
 
@@ -96,9 +129,13 @@ private struct FilePreviewFallback: View {
                 .font(.largeTitle)
                 .foregroundStyle(.secondary)
         }
-        .aspectRatio(4.0 / 3.0, contentMode: .fit)
-        .clipShape(.rect(cornerSize: AppDesign.Radius.smallSize))
     }
+}
+
+private enum GridCardMetrics {
+    static let width: CGFloat = 220
+    static let height: CGFloat = 300
+    static let previewHeight: CGFloat = 150
 }
 
 private struct StatusLabel: View {
@@ -120,6 +157,30 @@ private extension MediaFileKind {
             "photo"
         case .mov, .mp4:
             "film"
+        }
+    }
+}
+
+private extension SelectedMediaFile {
+    var previewImage: NSImage? {
+        switch kind {
+        case .jpeg, .heic:
+            NSImage(contentsOf: url)
+        case .mov, .mp4:
+            videoPreviewImage
+        }
+    }
+
+    var videoPreviewImage: NSImage? {
+        let asset = AVURLAsset(url: url)
+        let generator = AVAssetImageGenerator(asset: asset)
+        generator.appliesPreferredTrackTransform = true
+
+        do {
+            let image = try generator.copyCGImage(at: CMTime(seconds: 0, preferredTimescale: 600), actualTime: nil)
+            return NSImage(cgImage: image, size: .zero)
+        } catch {
+            return nil
         }
     }
 }

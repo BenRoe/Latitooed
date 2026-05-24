@@ -25,7 +25,7 @@ final class BatchHistoryStore {
     private let recentCoordinateLimit: Int
     private let batchSummaryLimit: Int
 
-    init(modelContext: ModelContext, recentCoordinateLimit: Int = 10, batchSummaryLimit: Int = 10) {
+    init(modelContext: ModelContext, recentCoordinateLimit: Int = 30, batchSummaryLimit: Int = 10) {
         self.modelContext = modelContext
         self.recentCoordinateLimit = recentCoordinateLimit
         self.batchSummaryLimit = batchSummaryLimit

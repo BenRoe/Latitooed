@@ -18,15 +18,20 @@ struct RecentCoordinatesView: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
             } else {
-                ForEach(snapshots) { snapshot in
-                    Button {
-                        onSelect(snapshot)
-                    } label: {
-                        RecentCoordinateRow(snapshot: snapshot)
+                ScrollView {
+                    LazyVStack(alignment: .leading, spacing: 0) {
+                        ForEach(snapshots) { snapshot in
+                            Button {
+                                onSelect(snapshot)
+                            } label: {
+                                RecentCoordinateRow(snapshot: snapshot)
+                            }
+                            .buttonStyle(.plain)
+                            .accessibilityLabel("Use Coordinate, \(snapshot.label)")
+                        }
                     }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel("Use Coordinate, \(snapshot.label)")
                 }
+                .frame(height: RecentCoordinateMetrics.listHeight(for: snapshots.count))
             }
         }
     }
@@ -47,6 +52,16 @@ struct RecentCoordinatesView: View {
     }
 }
 
+private enum RecentCoordinateMetrics {
+    static let rowHeight: CGFloat = 38
+
+    static func listHeight(for rowCount: Int) -> CGFloat {
+        let visibleRowCount = min(rowCount, 3)
+        let spacingCount = max(visibleRowCount - 1, 0)
+        return rowHeight * CGFloat(visibleRowCount) + CGFloat(spacingCount)
+    }
+}
+
 private struct RecentCoordinateRow: View {
     let snapshot: RecentCoordinateSnapshot
 
@@ -61,10 +76,6 @@ private struct RecentCoordinateRow: View {
                     .foregroundStyle(.primary)
                     .lineLimit(1)
                     .help(snapshot.label)
-
-                Text(snapshot.coordinate.displayText)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
             }
 
             Spacer()
@@ -72,7 +83,9 @@ private struct RecentCoordinateRow: View {
             Label("Use Coordinate", systemImage: "mappin.and.ellipse")
                 .font(.caption)
         }
-        .padding(AppDesign.Spacing.sm)
+        .padding(.horizontal, AppDesign.Spacing.sm)
+        .padding(.vertical, 2)
+        .frame(height: RecentCoordinateMetrics.rowHeight)
         .contentShape(.rect)
     }
 }

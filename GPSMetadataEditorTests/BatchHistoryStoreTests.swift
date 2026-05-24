@@ -93,12 +93,12 @@ struct BatchHistoryStoreTests {
         #expect(snapshots.first?.lastUsedAt == Date(timeIntervalSinceReferenceDate: 20))
     }
 
-    @Test func recordingMoreThanTenCoordinatesPrunesOldestRows() throws {
+    @Test func recordingMoreThanThirtyCoordinatesPrunesOldestRows() throws {
         let container = try makeInMemoryContainer()
         let context = ModelContext(container)
         let store = BatchHistoryStore(modelContext: context)
 
-        for index in 0..<12 {
+        for index in 0..<32 {
             let coordinate = try #require(CoordinateSelection(latitude: Double(index), longitude: Double(index)))
             try store.recordRecentCoordinate(
                 label: "Coordinate \(index)",
@@ -108,8 +108,8 @@ struct BatchHistoryStoreTests {
         }
 
         let snapshots = try store.recentCoordinates()
-        #expect(snapshots.count == 10)
-        #expect(snapshots.map(\.label) == (2..<12).reversed().map { "Coordinate \($0)" })
+        #expect(snapshots.count == 30)
+        #expect(snapshots.map(\.label) == (2..<32).reversed().map { "Coordinate \($0)" })
     }
 
     @Test func recordingBatchRunInsertsSummaryAndRecentCoordinate() throws {

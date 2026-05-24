@@ -67,8 +67,6 @@ struct FileIntakeView: View {
                                 review: viewModel.selectedFileReview,
                                 latestWarnings: viewModel.latestWarningDetails
                             )
-
-                            BatchHistorySection(onUseCoordinate: coordinateViewModel.selectBatchRunSummary)
                         }
                     }
                 }

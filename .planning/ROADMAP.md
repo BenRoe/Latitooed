@@ -153,6 +153,7 @@ Plans:
 **UI hint:** yes
 **Requirements:** LOC-02
 **Depends on:** Phase 2
+**Plans:** 1 plan
 
 **Success Criteria:**
 1. Search results appear automatically as the user types, with no submit button required.
@@ -166,6 +167,9 @@ Plans:
 - Debounce via `onChange` + `Task.sleep` or Combine — whichever fits existing async patterns.
 - Existing `searchGeneration` guard and task cancellation infrastructure already present.
 - Remove the Search button and `performSearchOnSubmit` from `CoordinateSearchPanel`.
+
+Plans:
+- [ ] 07-01-PLAN.md — Live search panel: ViewModel cleanup, onChange debounce, floating dropdown overlay
 
 ## Coverage
 

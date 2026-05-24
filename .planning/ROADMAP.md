@@ -14,7 +14,7 @@
 | 3 | Core Metadata Writing | Complete | BATCH-01, BATCH-05, BATCH-06, META-01, META-02, META-05, META-06, META-07 |
 | 4 | Batch Results, Video, and History | Complete | BATCH-02, BATCH-03, BATCH-04, META-03, META-04, PERSIST-01, PERSIST-02, PERSIST-03, PERSIST-04 |
 | 5 | Packaging and Release Verification | Complete | PKG-01, PKG-02, PKG-03, PKG-04 |
-| 6 | 1/3 | In Progress|  |
+| 6 | Loaded Files Grid View | Complete | GRID-01, GRID-02, GRID-03, GRID-04, GRID-05 |
 
 ## Phases
 
@@ -126,7 +126,7 @@
 **UI hint:** yes
 **Requirements:** GRID-01, GRID-02, GRID-03, GRID-04, GRID-05
 **Depends on:** Phase 5
-**Plans:** 1/3 plans executed
+**Plans:** 3/3 plans complete. Host UAT remains pending in `06-HUMAN-UAT.md`.
 
 **Success Criteria:**
 1. User can switch loaded files between the existing table/list review and a grid view.
@@ -141,7 +141,9 @@
 - Prefer native SwiftUI grid APIs and avoid third-party UI frameworks.
 
 Plans:
-- [ ] TBD (run /gsd-plan-phase 6 to break down)
+- [x] 06-01 Loaded-files mode and review state
+- [x] 06-02 Selected-files grid and Table/Grid switch
+- [x] 06-03 Grid selection hardening and host UAT checklist
 
 ## Coverage
 

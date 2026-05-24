@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: active
-last_updated: "2026-05-24T11:03:20.332Z"
+last_updated: "2026-05-24T11:11:16.016Z"
 progress:
   total_phases: 6
-  completed_phases: 5
+  completed_phases: 6
   total_plans: 21
-  completed_plans: 19
-  percent: 83
+  completed_plans: 21
+  percent: 100
 ---
 
 # Project State: GPS Metadata Editor
@@ -19,7 +19,7 @@ progress:
 See: `.planning/PROJECT.md` (updated 2026-05-15)
 
 **Core value:** Users can reliably apply a chosen GPS coordinate to many local media files without installing command-line dependencies.
-**Current focus:** Phase 06 — add-a-grid-view-for-loaded-files
+**Current focus:** Phase 06 — loaded-files grid host verification
 
 ## Workflow
 
@@ -41,7 +41,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-15)
 | 3 - Core Metadata Writing | Complete, Host Verification Pending | 100% |
 | 4 - Batch Results, Video, and History | Complete, Approved | 100% |
 | 5 - Packaging and Release Verification | Complete, Host Verified | 100% |
-| 6 - Loaded Files Grid View | Not Planned | 0% |
+| 6 - Loaded Files Grid View | Complete, Host Verification Pending | 100% |
 
 ## Accumulated Context
 
@@ -71,10 +71,11 @@ See: `.planning/PROJECT.md` (updated 2026-05-15)
 - Plan 04-04 added counts-only recent batch history with coordinate reuse, explicit saves, and no previous-file restore surface.
 - Phase 4 host verification was approved by the user on 2026-05-20; `04-HUMAN-UAT.md` is passed.
 - Phase 5 completed signed `.app` package verification on 2026-05-22: host `xcodebuild test` passed, bundled ExifTool version `13.58` executed from the signed app after codesign verification, stripped-PATH JPEG/HEIC smoke wrote Berlin GPS metadata to copied fixtures, and `05-HUMAN-UAT.md` is passed.
+- Phase 6 added session-only Table/Grid mode, an adaptive loaded-files grid, aggregate multi-selection detail summaries, modifier-aware grid selection helpers, and a pending host UAT checklist.
 
 ## Next Action
 
-Phase 6 is added but not planned yet. Next action: gather context and plan the loaded-files grid view.
+Run host-side `xcodebuild -project GPSMetadataEditor.xcodeproj -scheme GPSMetadataEditor -destination 'platform=macOS' test` and complete `.planning/phases/06-add-a-grid-view-for-loaded-files/06-HUMAN-UAT.md`.
 
 ---
 *State initialized: 2026-05-15*

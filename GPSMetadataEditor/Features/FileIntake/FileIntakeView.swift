@@ -42,7 +42,7 @@ struct FileIntakeView: View {
                         .clipShape(.rect(cornerSize: AppDesign.Radius.mediumSize))
 
                         FileDetailPanel(
-                            detail: viewModel.selectedFileDetail,
+                            review: viewModel.selectedFileReview,
                             latestWarnings: viewModel.latestWarningDetails
                         )
 

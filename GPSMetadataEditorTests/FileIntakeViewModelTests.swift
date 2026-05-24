@@ -4,6 +4,22 @@ import Testing
 
 @MainActor
 struct FileIntakeViewModelTests {
+    @Test func loadedFilesViewModeDefaultsToGrid() {
+        let viewModel = FileIntakeViewModel()
+
+        #expect(viewModel.selectedLoadedFilesViewMode == .grid)
+    }
+
+    @Test func loadedFilesViewModeIsSessionOnlyInstanceState() {
+        let firstViewModel = FileIntakeViewModel()
+        let secondViewModel = FileIntakeViewModel()
+
+        firstViewModel.selectedLoadedFilesViewMode = .table
+
+        #expect(firstViewModel.selectedLoadedFilesViewMode == .table)
+        #expect(secondViewModel.selectedLoadedFilesViewMode == .grid)
+    }
+
     @Test func successfulIntakeResultAppendsAcceptedSnapshots() {
         let viewModel = FileIntakeViewModel()
         let first = SelectedMediaFile(url: URL(filePath: "/Volumes/Photos/Trip/IMG 001.HEIC"), kind: .heic)
@@ -43,9 +59,24 @@ struct FileIntakeViewModelTests {
         #expect(viewModel.latestWarningDetails.contains(firstWarning) == false)
     }
 
-    @Test func selectingRowExposesFilenameAndContainingFolderDetails() throws {
+    @Test func noSelectedFileProducesNoReviewState() {
         let viewModel = FileIntakeViewModel()
         let file = SelectedMediaFile(url: URL(filePath: "/Volumes/Photos/Trip/IMG 001.HEIC"), kind: .heic)
+
+        viewModel.apply(FileIntakeResult(accepted: [file], warnings: []), source: .picker)
+
+        #expect(viewModel.selectedFileReview == .none)
+    }
+
+    @Test func selectingRowExposesFilenameAndContainingFolderDetails() throws {
+        let viewModel = FileIntakeViewModel()
+        let file = SelectedMediaFile(
+            url: URL(filePath: "/Volumes/Photos/Trip/IMG 001.HEIC"),
+            kind: .heic,
+            latestResult: .warning,
+            latestMessage: "GPS write completed with warnings.",
+            latestDiagnosticDetail: "ExifTool warning"
+        )
 
         viewModel.apply(FileIntakeResult(accepted: [file], warnings: []), source: .picker)
         viewModel.selectFile(id: file.id)
@@ -54,8 +85,12 @@ struct FileIntakeViewModelTests {
         #expect(detail.filename == "IMG 001.HEIC")
         #expect(detail.containingFolderName == "Trip")
         #expect(detail.containingFolderURL == URL(filePath: "/Volumes/Photos/Trip", directoryHint: .isDirectory))
-        #expect(detail.latestResult == .pending)
-        #expect(detail.latestMessage == nil)
+        #expect(detail.latestResult == .warning)
+        #expect(detail.latestMessage == "GPS write completed with warnings.")
+        #expect(detail.latestDiagnosticDetail == "ExifTool warning")
+
+        let reviewDetail = try #require(viewModel.singleFileReviewDetail)
+        #expect(reviewDetail == detail)
     }
 
     @Test func selectedDetailIncludesLatestResultMessageForDetailPanel() throws {
@@ -78,15 +113,29 @@ struct FileIntakeViewModelTests {
 
     @Test func selectedFileIDsSupportMultipleTableRows() throws {
         let viewModel = FileIntakeViewModel()
-        let first = SelectedMediaFile(url: URL(filePath: "/Volumes/Photos/Trip/IMG 001.HEIC"), kind: .heic)
-        let second = SelectedMediaFile(url: URL(filePath: "/Volumes/Photos/Trip/IMG 002.JPG"), kind: .jpeg)
+        let first = SelectedMediaFile(
+            url: URL(filePath: "/Volumes/Photos/Trip/IMG 001.HEIC"),
+            kind: .heic,
+            latestResult: .warning
+        )
+        let second = SelectedMediaFile(
+            url: URL(filePath: "/Volumes/Photos/Trip/IMG 002.JPG"),
+            kind: .jpeg,
+            latestResult: .success
+        )
 
         viewModel.apply(FileIntakeResult(accepted: [first, second], warnings: []), source: .picker)
         viewModel.selectFiles(ids: [first.id, second.id])
 
         #expect(viewModel.selectedFileIDs == [first.id, second.id])
-        let detail = try #require(viewModel.selectedFileDetail)
-        #expect(detail.filename == "IMG 001.HEIC")
+        #expect(viewModel.selectedFileDetail == nil)
+
+        let summary = try #require(viewModel.multipleFileReviewSummary)
+        #expect(summary.selectedCount == 2)
+        #expect(summary.fileTypeCounts[.heic] == 1)
+        #expect(summary.fileTypeCounts[.jpeg] == 1)
+        #expect(summary.latestResultCounts[.warning] == 1)
+        #expect(summary.latestResultCounts[.success] == 1)
     }
 
     @Test func latestWarningsExposeEveryRejectedItemForWarningSummary() {
@@ -121,5 +170,23 @@ struct FileIntakeViewModelTests {
         let url = URL.temporaryDirectory.appending(path: UUID().uuidString, directoryHint: .isDirectory)
         try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
         return url
+    }
+}
+
+private extension FileIntakeViewModel {
+    var singleFileReviewDetail: FileIntakeViewModel.SelectedFileDetail? {
+        if case .single(let detail) = selectedFileReview {
+            detail
+        } else {
+            nil
+        }
+    }
+
+    var multipleFileReviewSummary: FileIntakeViewModel.SelectedFilesSummary? {
+        if case .multiple(let summary) = selectedFileReview {
+            summary
+        } else {
+            nil
+        }
     }
 }

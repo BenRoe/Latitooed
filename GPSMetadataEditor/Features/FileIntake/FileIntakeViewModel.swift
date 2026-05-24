@@ -14,6 +14,22 @@ final class FileIntakeViewModel {
         case warning
     }
 
+    enum LoadedFilesViewMode: String, CaseIterable, Identifiable, Sendable {
+        case table
+        case grid
+
+        var id: Self { self }
+
+        var displayName: String {
+            switch self {
+            case .table:
+                "Table"
+            case .grid:
+                "Grid"
+            }
+        }
+    }
+
     struct IntakeNotice: Equatable, Identifiable, Sendable {
         let id = UUID()
         let message: String
@@ -31,6 +47,18 @@ final class FileIntakeViewModel {
         let latestResult: FileResultStatus
         let latestMessage: String?
         let latestDiagnosticDetail: String?
+    }
+
+    enum SelectedFileReview: Equatable, Sendable {
+        case none
+        case single(SelectedFileDetail)
+        case multiple(SelectedFilesSummary)
+    }
+
+    struct SelectedFilesSummary: Equatable, Sendable {
+        let selectedCount: Int
+        let fileTypeCounts: [MediaFileKind: Int]
+        let latestResultCounts: [FileResultStatus: Int]
     }
 
     struct MetadataBatchProgress: Equatable, Sendable {
@@ -55,6 +83,7 @@ final class FileIntakeViewModel {
 
     var selectedFiles: [SelectedMediaFile] = []
     var selectedFileIDs: Set<SelectedMediaFile.ID> = []
+    var selectedLoadedFilesViewMode: LoadedFilesViewMode = .grid
     var latestNotice: IntakeNotice?
     var latestWarningDetails: [IntakeWarning] = []
     var latestMetadataBatchSummary: MetadataBatchSummary?
@@ -63,19 +92,35 @@ final class FileIntakeViewModel {
     var isFileImporterPresented = false
     var isDropTargeted = false
 
-    var selectedFileDetail: SelectedFileDetail? {
-        guard let selectedFile = selectedFiles.first(where: { selectedFileIDs.contains($0.id) }) else {
-            return nil
-        }
+    var selectedFileReview: SelectedFileReview {
+        let selectedFiles = selectedFiles.filter { selectedFileIDs.contains($0.id) }
 
-        return SelectedFileDetail(
-            filename: selectedFile.displayName,
-            containingFolderName: selectedFile.containingFolderName,
-            containingFolderURL: selectedFile.containingFolderURL,
-            latestResult: selectedFile.latestResult,
-            latestMessage: selectedFile.latestMessage,
-            latestDiagnosticDetail: selectedFile.latestDiagnosticDetail
-        )
+        switch selectedFiles.count {
+        case 0:
+            return .none
+        case 1:
+            guard let selectedFile = selectedFiles.first else {
+                return .none
+            }
+
+            return .single(Self.detail(for: selectedFile))
+        default:
+            return .multiple(
+                SelectedFilesSummary(
+                    selectedCount: selectedFiles.count,
+                    fileTypeCounts: Self.counts(selectedFiles.map(\.kind)),
+                    latestResultCounts: Self.counts(selectedFiles.map(\.latestResult))
+                )
+            )
+        }
+    }
+
+    var selectedFileDetail: SelectedFileDetail? {
+        if case .single(let detail) = selectedFileReview {
+            detail
+        } else {
+            nil
+        }
     }
 
     @ObservationIgnored
@@ -221,6 +266,23 @@ final class FileIntakeViewModel {
             latestMessage: result.message,
             latestDiagnosticDetail: result.detailForReview
         )
+    }
+
+    private static func detail(for selectedFile: SelectedMediaFile) -> SelectedFileDetail {
+        SelectedFileDetail(
+            filename: selectedFile.displayName,
+            containingFolderName: selectedFile.containingFolderName,
+            containingFolderURL: selectedFile.containingFolderURL,
+            latestResult: selectedFile.latestResult,
+            latestMessage: selectedFile.latestMessage,
+            latestDiagnosticDetail: selectedFile.latestDiagnosticDetail
+        )
+    }
+
+    private static func counts<Value: Hashable>(_ values: [Value]) -> [Value: Int] {
+        values.reduce(into: [:]) { counts, value in
+            counts[value, default: 0] += 1
+        }
     }
 }
 

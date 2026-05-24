@@ -1,12 +1,12 @@
 import SwiftUI
 
 struct FileDetailPanel: View {
-    let detail: FileIntakeViewModel.SelectedFileDetail?
+    let review: FileIntakeViewModel.SelectedFileReview
     let latestWarnings: [IntakeWarning]
 
     var body: some View {
         VStack(alignment: .leading, spacing: AppDesign.Spacing.md) {
-            SelectedFileDetailContent(detail: detail)
+            SelectedFileReviewContent(review: review)
             WarningSummaryView(warnings: latestWarnings)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -16,11 +16,16 @@ struct FileDetailPanel: View {
     }
 }
 
-private struct SelectedFileDetailContent: View {
-    let detail: FileIntakeViewModel.SelectedFileDetail?
+private struct SelectedFileReviewContent: View {
+    let review: FileIntakeViewModel.SelectedFileReview
 
     var body: some View {
-        if let detail {
+        switch review {
+        case .none:
+            Label("Select a row to review file details", systemImage: "sidebar.left")
+                .font(.body)
+                .foregroundStyle(.secondary)
+        case .single(let detail):
             VStack(alignment: .leading, spacing: AppDesign.Spacing.sm) {
                 Label(detail.filename, systemImage: "doc")
                     .font(.body)
@@ -56,11 +61,44 @@ private struct SelectedFileDetailContent: View {
                     .font(.caption)
                 }
             }
-        } else {
-            Label("Select a row to review file details", systemImage: "sidebar.left")
+        case .multiple(let summary):
+            SelectedFilesSummaryContent(summary: summary)
+        }
+    }
+}
+
+private struct SelectedFilesSummaryContent: View {
+    let summary: FileIntakeViewModel.SelectedFilesSummary
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: AppDesign.Spacing.sm) {
+            Label("\(summary.selectedCount) files selected", systemImage: "checkmark.circle")
                 .font(.body)
+
+            CountSummary(title: "Types", counts: summary.fileTypeCounts, label: \.displayName)
+            CountSummary(title: "Latest results", counts: summary.latestResultCounts, label: \.displayName)
+        }
+    }
+}
+
+private struct CountSummary<Value: Hashable>: View {
+    let title: String
+    let counts: [Value: Int]
+    let label: (Value) -> String
+
+    var body: some View {
+        if counts.isEmpty == false {
+            Text("\(title): \(summaryText)")
+                .font(.caption)
                 .foregroundStyle(.secondary)
         }
+    }
+
+    private var summaryText: String {
+        counts
+            .map { value, count in "\(label(value)) \(count)" }
+            .sorted()
+            .joined(separator: ", ")
     }
 }
 

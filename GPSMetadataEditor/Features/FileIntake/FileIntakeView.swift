@@ -19,34 +19,56 @@ struct FileIntakeView: View {
                         FileDropZone(mode: .compact, viewModel: viewModel)
                     }
 
-                    VStack(alignment: .leading, spacing: AppDesign.Spacing.md) {
-                        HStack {
-                            Text("Selected Files")
-                                .font(.headline)
-                                .bold()
+                    if viewModel.selectedFiles.isEmpty == false {
+                        VStack(alignment: .leading, spacing: AppDesign.Spacing.md) {
+                            HStack {
+                                Text("Selected Files")
+                                    .font(.headline)
+                                    .bold()
 
-                            Spacer()
+                                Spacer()
 
-                            Text("\(viewModel.selectedFiles.count) \(viewModel.selectedFiles.count == 1 ? "file" : "files")")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
+                                Text("\(viewModel.selectedFiles.count) \(viewModel.selectedFiles.count == 1 ? "file" : "files")")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+
+                                Picker("Loaded files view", selection: $viewModel.selectedLoadedFilesViewMode) {
+                                    ForEach(FileIntakeViewModel.LoadedFilesViewMode.allCases) { mode in
+                                        Text(mode.displayName)
+                                            .tag(mode)
+                                    }
+                                }
+                                .pickerStyle(.segmented)
+                                .frame(maxWidth: 180)
+                            }
+
+                            switch viewModel.selectedLoadedFilesViewMode {
+                            case .table:
+                                SelectedFilesTable(
+                                    files: viewModel.selectedFiles,
+                                    selection: $viewModel.selectedFileIDs
+                                )
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(AppDesign.Spacing.md)
+                                .background(.background)
+                                .clipShape(.rect(cornerSize: AppDesign.Radius.mediumSize))
+                            case .grid:
+                                SelectedFilesGrid(
+                                    files: viewModel.selectedFiles,
+                                    selection: $viewModel.selectedFileIDs
+                                )
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .background(.background)
+                                .clipShape(.rect(cornerSize: AppDesign.Radius.mediumSize))
+                            }
+
+                            FileDetailPanel(
+                                review: viewModel.selectedFileReview,
+                                latestWarnings: viewModel.latestWarningDetails
+                            )
+
+                            BatchHistorySection(onUseCoordinate: coordinateViewModel.selectBatchRunSummary)
                         }
-
-                        SelectedFilesTable(
-                            files: viewModel.selectedFiles,
-                            selection: $viewModel.selectedFileIDs
-                        )
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(AppDesign.Spacing.md)
-                        .background(.background)
-                        .clipShape(.rect(cornerSize: AppDesign.Radius.mediumSize))
-
-                        FileDetailPanel(
-                            review: viewModel.selectedFileReview,
-                            latestWarnings: viewModel.latestWarningDetails
-                        )
-
-                        BatchHistorySection(onUseCoordinate: coordinateViewModel.selectBatchRunSummary)
                     }
                 }
                 .frame(minWidth: AppDesign.Layout.leftColumnMinimumWidth, idealWidth: AppDesign.Layout.leftColumnIdealWidth)

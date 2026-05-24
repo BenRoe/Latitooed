@@ -1,3 +1,4 @@
+import SwiftUI
 import Testing
 @testable import GPSMetadataEditor
 
@@ -6,6 +7,12 @@ struct FileIntakeSmokeTests {
         let view = FileIntakeView()
 
         #expect(String(describing: type(of: view)) == "FileIntakeView")
+    }
+
+    @Test func selectedFilesGridCanBeCreated() {
+        let view = SelectedFilesGrid(files: [], selection: .constant([]))
+
+        #expect(String(describing: type(of: view)) == "SelectedFilesGrid")
     }
 
     @Test func designConstantsReserveUtilityWindowSpace() {

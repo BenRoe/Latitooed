@@ -26,6 +26,7 @@
 		1A2B3C4D5E6F700000000012 /* FileDetailPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000013 /* FileDetailPanel.swift */; };
 		1A2B3C4D5E6F700000000014 /* WarningSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000015 /* WarningSummaryView.swift */; };
 		1A2B3C4D5E6F700000000016 /* ReservedLocationPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000017 /* ReservedLocationPanel.swift */; };
+		1A2B3C4D5E6F700000000018 /* SelectedFilesGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000019 /* SelectedFilesGrid.swift */; };
 		1A2B3C4D5E6F700000000300 /* CoordinateSelectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000400 /* CoordinateSelectionViewModel.swift */; };
 		1A2B3C4D5E6F700000000301 /* CoordinateSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000401 /* CoordinateSelectionView.swift */; };
 		1A2B3C4D5E6F700000000302 /* CoordinateSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000402 /* CoordinateSelection.swift */; };
@@ -89,6 +90,7 @@
 		1A2B3C4D5E6F700000000013 /* FileDetailPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileDetailPanel.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F700000000015 /* WarningSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WarningSummaryView.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F700000000017 /* ReservedLocationPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReservedLocationPanel.swift; sourceTree = "<group>"; };
+		1A2B3C4D5E6F700000000019 /* SelectedFilesGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedFilesGrid.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F700000000400 /* CoordinateSelectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateSelectionViewModel.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F700000000401 /* CoordinateSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateSelectionView.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F700000000402 /* CoordinateSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateSelection.swift; sourceTree = "<group>"; };
@@ -289,6 +291,7 @@
 			children = (
 				1A2B3C4D5E6F70000000010F /* FileDropZone.swift */,
 				1A2B3C4D5E6F700000000011 /* SelectedFilesTable.swift */,
+				1A2B3C4D5E6F700000000019 /* SelectedFilesGrid.swift */,
 				1A2B3C4D5E6F700000000013 /* FileDetailPanel.swift */,
 				1A2B3C4D5E6F700000000015 /* WarningSummaryView.swift */,
 				1A2B3C4D5E6F700000000017 /* ReservedLocationPanel.swift */,
@@ -465,6 +468,7 @@
 				1A2B3C4D5E6F70000000000E /* FileIntakeViewModel.swift in Sources */,
 				1A2B3C4D5E6F70000000000F /* FileDropZone.swift in Sources */,
 				1A2B3C4D5E6F700000000010 /* SelectedFilesTable.swift in Sources */,
+				1A2B3C4D5E6F700000000018 /* SelectedFilesGrid.swift in Sources */,
 				1A2B3C4D5E6F700000000012 /* FileDetailPanel.swift in Sources */,
 				1A2B3C4D5E6F700000000014 /* WarningSummaryView.swift in Sources */,
 				1A2B3C4D5E6F700000000016 /* ReservedLocationPanel.swift in Sources */,

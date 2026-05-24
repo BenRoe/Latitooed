@@ -22,7 +22,7 @@ private struct SelectedFileReviewContent: View {
     var body: some View {
         switch review {
         case .none:
-            Label("Select a row to review file details", systemImage: "sidebar.left")
+            Label("Select a file to review details", systemImage: "sidebar.left")
                 .font(.body)
                 .foregroundStyle(.secondary)
         case .single(let detail):

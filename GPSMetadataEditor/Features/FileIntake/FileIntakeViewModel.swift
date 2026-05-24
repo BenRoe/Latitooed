@@ -30,6 +30,12 @@ final class FileIntakeViewModel {
         }
     }
 
+    enum GridSelectionIntent: Equatable, Sendable {
+        case replace
+        case toggle
+        case range
+    }
+
     struct IntakeNotice: Equatable, Identifiable, Sendable {
         let id = UUID()
         let message: String
@@ -91,6 +97,7 @@ final class FileIntakeViewModel {
     var isMetadataBatchRunning = false
     var isFileImporterPresented = false
     var isDropTargeted = false
+    private(set) var lastGridSelectionAnchorID: SelectedMediaFile.ID?
 
     var selectedFileReview: SelectedFileReview {
         let selectedFiles = selectedFiles.filter { selectedFileIDs.contains($0.id) }
@@ -158,6 +165,54 @@ final class FileIntakeViewModel {
 
     func selectFiles(ids: Set<SelectedMediaFile.ID>) {
         selectedFileIDs = ids
+    }
+
+    func activateGridSelection(id: SelectedMediaFile.ID, intent: GridSelectionIntent) {
+        switch intent {
+        case .replace:
+            replaceGridSelection(with: id)
+        case .toggle:
+            toggleGridSelection(id: id)
+        case .range:
+            selectGridRange(to: id)
+        }
+    }
+
+    func replaceGridSelection(with id: SelectedMediaFile.ID) {
+        guard selectedFiles.contains(where: { $0.id == id }) else {
+            selectedFileIDs = []
+            lastGridSelectionAnchorID = nil
+            return
+        }
+
+        selectedFileIDs = [id]
+        lastGridSelectionAnchorID = id
+    }
+
+    func toggleGridSelection(id: SelectedMediaFile.ID) {
+        guard selectedFiles.contains(where: { $0.id == id }) else {
+            return
+        }
+
+        if selectedFileIDs.contains(id) {
+            selectedFileIDs.remove(id)
+        } else {
+            selectedFileIDs.insert(id)
+        }
+
+        lastGridSelectionAnchorID = id
+    }
+
+    func selectGridRange(to id: SelectedMediaFile.ID) {
+        guard let anchorID = lastGridSelectionAnchorID,
+              let anchorIndex = selectedFiles.firstIndex(where: { $0.id == anchorID }),
+              let targetIndex = selectedFiles.firstIndex(where: { $0.id == id }) else {
+            replaceGridSelection(with: id)
+            return
+        }
+
+        let range = min(anchorIndex, targetIndex)...max(anchorIndex, targetIndex)
+        selectedFileIDs = Set(selectedFiles[range].map(\.id))
     }
 
     func canApplyMetadata(selectedCoordinate: CoordinateSelection?) -> Bool {

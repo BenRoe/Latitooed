@@ -1,8 +1,10 @@
+import AppKit
 import SwiftUI
 
 struct SelectedFilesGrid: View {
     let files: [SelectedMediaFile]
     @Binding var selection: Set<SelectedMediaFile.ID>
+    let activateFile: (SelectedMediaFile.ID, FileIntakeViewModel.GridSelectionIntent) -> Void
 
     private let columns = [
         GridItem(.adaptive(minimum: 160, maximum: 220), spacing: AppDesign.Spacing.md)
@@ -13,7 +15,7 @@ struct SelectedFilesGrid: View {
             LazyVGrid(columns: columns, spacing: AppDesign.Spacing.md) {
                 ForEach(files) { file in
                     Button {
-                        selection = [file.id]
+                        activateFile(file.id, Self.selectionIntent)
                     } label: {
                         SelectedFileGridCard(file: file, isSelected: selection.contains(file.id))
                     }
@@ -23,6 +25,18 @@ struct SelectedFilesGrid: View {
             .padding(AppDesign.Spacing.md)
         }
         .frame(minHeight: 220)
+    }
+
+    private static var selectionIntent: FileIntakeViewModel.GridSelectionIntent {
+        let modifierFlags = NSApp.currentEvent?.modifierFlags ?? []
+
+        if modifierFlags.contains(.shift) {
+            .range
+        } else if modifierFlags.contains(.command) {
+            .toggle
+        } else {
+            .replace
+        }
     }
 }
 

@@ -53,10 +53,11 @@ struct FileIntakeView: View {
                                 .background(.background)
                                 .clipShape(.rect(cornerSize: AppDesign.Radius.mediumSize))
                             case .grid:
-                                SelectedFilesGrid(
-                                    files: viewModel.selectedFiles,
-                                    selection: $viewModel.selectedFileIDs
-                                )
+                            SelectedFilesGrid(
+                                files: viewModel.selectedFiles,
+                                selection: $viewModel.selectedFileIDs,
+                                activateFile: viewModel.activateGridSelection
+                            )
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .background(.background)
                                 .clipShape(.rect(cornerSize: AppDesign.Radius.mediumSize))

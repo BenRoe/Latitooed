@@ -10,7 +10,7 @@ struct FileIntakeSmokeTests {
     }
 
     @Test func selectedFilesGridCanBeCreated() {
-        let view = SelectedFilesGrid(files: [], selection: .constant([]))
+        let view = SelectedFilesGrid(files: [], selection: .constant([])) { _, _ in }
 
         #expect(String(describing: type(of: view)) == "SelectedFilesGrid")
     }

@@ -138,6 +138,58 @@ struct FileIntakeViewModelTests {
         #expect(summary.latestResultCounts[.success] == 1)
     }
 
+    @Test func replacingGridSelectionSelectsOnlyClickedFile() {
+        let viewModel = FileIntakeViewModel()
+        let files = makeGridSelectionFiles()
+
+        viewModel.apply(FileIntakeResult(accepted: files, warnings: []), source: .picker)
+        viewModel.replaceGridSelection(with: files[1].id)
+
+        #expect(viewModel.selectedFileIDs == [files[1].id])
+        #expect(viewModel.lastGridSelectionAnchorID == files[1].id)
+    }
+
+    @Test func togglingGridSelectionAddsAndRemovesClickedFile() {
+        let viewModel = FileIntakeViewModel()
+        let files = makeGridSelectionFiles()
+
+        viewModel.apply(FileIntakeResult(accepted: files, warnings: []), source: .picker)
+        viewModel.replaceGridSelection(with: files[0].id)
+        viewModel.toggleGridSelection(id: files[1].id)
+
+        #expect(viewModel.selectedFileIDs == [files[0].id, files[1].id])
+        #expect(viewModel.lastGridSelectionAnchorID == files[1].id)
+
+        viewModel.toggleGridSelection(id: files[1].id)
+
+        #expect(viewModel.selectedFileIDs == [files[0].id])
+        #expect(viewModel.lastGridSelectionAnchorID == files[1].id)
+    }
+
+    @Test func rangeGridSelectionUsesSelectedFilesOrder() {
+        let viewModel = FileIntakeViewModel()
+        let files = makeGridSelectionFiles()
+
+        viewModel.apply(FileIntakeResult(accepted: files, warnings: []), source: .picker)
+        viewModel.replaceGridSelection(with: files[0].id)
+        viewModel.selectGridRange(to: files[2].id)
+
+        #expect(viewModel.selectedFileIDs == [files[0].id, files[1].id, files[2].id])
+    }
+
+    @Test func staleGridRangeFallsBackToPlainSelection() {
+        let viewModel = FileIntakeViewModel()
+        let files = makeGridSelectionFiles()
+
+        viewModel.apply(FileIntakeResult(accepted: files, warnings: []), source: .picker)
+        viewModel.replaceGridSelection(with: files[0].id)
+        viewModel.selectedFiles.removeFirst()
+        viewModel.selectGridRange(to: files[2].id)
+
+        #expect(viewModel.selectedFileIDs == [files[2].id])
+        #expect(viewModel.lastGridSelectionAnchorID == files[2].id)
+    }
+
     @Test func latestWarningsExposeEveryRejectedItemForWarningSummary() {
         let viewModel = FileIntakeViewModel()
         let unsupported = IntakeWarning(filename: "notes.txt", url: URL(filePath: "/tmp/notes.txt"), reason: .unsupported)
@@ -170,6 +222,14 @@ struct FileIntakeViewModelTests {
         let url = URL.temporaryDirectory.appending(path: UUID().uuidString, directoryHint: .isDirectory)
         try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
         return url
+    }
+
+    private func makeGridSelectionFiles() -> [SelectedMediaFile] {
+        [
+            SelectedMediaFile(url: URL(filePath: "/Volumes/Photos/Trip/IMG 001.HEIC"), kind: .heic),
+            SelectedMediaFile(url: URL(filePath: "/Volumes/Photos/Trip/IMG 002.JPG"), kind: .jpeg),
+            SelectedMediaFile(url: URL(filePath: "/Volumes/Photos/Trip/clip.MOV"), kind: .mov),
+        ]
     }
 }
 

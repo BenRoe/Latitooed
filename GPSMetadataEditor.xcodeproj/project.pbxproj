@@ -19,6 +19,7 @@
 		1A2B3C4D5E6F70000000000A /* IntakeWarning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70000000010A /* IntakeWarning.swift */; };
 		1A2B3C4D5E6F70000000000B /* FileIntakeResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70000000010B /* FileIntakeResult.swift */; };
 		1A2B3C4D5E6F70000000000C /* FileIntakeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70000000010C /* FileIntakeService.swift */; };
+		1A2B3C4D5E6F70000000001A /* GPSMetadataReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70000000001B /* GPSMetadataReader.swift */; };
 		1A2B3C4D5E6F70000000000D /* FileIntakeViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70000000010D /* FileIntakeViewModelTests.swift */; };
 		1A2B3C4D5E6F70000000000E /* FileIntakeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70000000010E /* FileIntakeViewModel.swift */; };
 		1A2B3C4D5E6F70000000000F /* FileDropZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70000000010F /* FileDropZone.swift */; };
@@ -83,6 +84,7 @@
 		1A2B3C4D5E6F70000000010A /* IntakeWarning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntakeWarning.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F70000000010B /* FileIntakeResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileIntakeResult.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F70000000010C /* FileIntakeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileIntakeService.swift; sourceTree = "<group>"; };
+		1A2B3C4D5E6F70000000001B /* GPSMetadataReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPSMetadataReader.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F70000000010D /* FileIntakeViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileIntakeViewModelTests.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F70000000010E /* FileIntakeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileIntakeViewModel.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F70000000010F /* FileDropZone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileDropZone.swift; sourceTree = "<group>"; };
@@ -316,6 +318,7 @@
 			isa = PBXGroup;
 			children = (
 				1A2B3C4D5E6F70000000010C /* FileIntakeService.swift */,
+				1A2B3C4D5E6F70000000001B /* GPSMetadataReader.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -465,6 +468,7 @@
 				1A2B3C4D5E6F70000000000A /* IntakeWarning.swift in Sources */,
 				1A2B3C4D5E6F70000000000B /* FileIntakeResult.swift in Sources */,
 				1A2B3C4D5E6F70000000000C /* FileIntakeService.swift in Sources */,
+				1A2B3C4D5E6F70000000001A /* GPSMetadataReader.swift in Sources */,
 				1A2B3C4D5E6F70000000000E /* FileIntakeViewModel.swift in Sources */,
 				1A2B3C4D5E6F70000000000F /* FileDropZone.swift in Sources */,
 				1A2B3C4D5E6F700000000010 /* SelectedFilesTable.swift in Sources */,

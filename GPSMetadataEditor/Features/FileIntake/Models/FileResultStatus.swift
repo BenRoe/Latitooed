@@ -16,4 +16,17 @@ nonisolated enum FileResultStatus: String, CaseIterable, Sendable {
             "Failure"
         }
     }
+
+    var systemImage: String {
+        switch self {
+        case .pending:
+            "clock"
+        case .success:
+            "checkmark.circle"
+        case .warning:
+            "exclamationmark.triangle"
+        case .failure:
+            "xmark.circle"
+        }
+    }
 }

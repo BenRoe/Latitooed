@@ -50,6 +50,7 @@ final class FileIntakeViewModel {
         let filename: String
         let containingFolderName: String
         let containingFolderURL: URL
+        let gpsStatus: GPSStatus
         let latestResult: FileResultStatus
         let latestMessage: String?
         let latestDiagnosticDetail: String?
@@ -132,9 +133,15 @@ final class FileIntakeViewModel {
 
     @ObservationIgnored
     private let service: FileIntakeService
+    @ObservationIgnored
+    private let gpsMetadataReader: any GPSMetadataReading
 
-    init(service: FileIntakeService = FileIntakeService()) {
+    init(
+        service: FileIntakeService = FileIntakeService(),
+        gpsMetadataReader: any GPSMetadataReading = ExifToolGPSMetadataReader()
+    ) {
         self.service = service
+        self.gpsMetadataReader = gpsMetadataReader
     }
 
     func presentFileImporter() {
@@ -144,6 +151,11 @@ final class FileIntakeViewModel {
     func intake(urls: [URL], source: IntakeSource) {
         let result = service.intake(urls: urls, currentSelection: selectedFiles)
         apply(result, source: source)
+
+        let acceptedFiles = result.accepted
+        Task {
+            await refreshGPSStatuses(for: acceptedFiles)
+        }
     }
 
     func apply(_ result: FileIntakeResult, source: IntakeSource) {
@@ -323,11 +335,53 @@ final class FileIntakeViewModel {
         )
     }
 
+    private func resetMetadataWriteResults() {
+        selectedFiles = selectedFiles.map { file in
+            SelectedMediaFile(
+                url: file.url,
+                kind: file.kind,
+                gpsStatus: file.gpsStatus,
+                latestResult: .pending
+            )
+        }
+    }
+
+    private func refreshGPSStatuses(for files: [SelectedMediaFile]) async {
+        for file in files {
+            guard let gpsStatus = await gpsMetadataReader.gpsStatus(for: file) else {
+                continue
+            }
+
+            replaceGPSStatus(gpsStatus, for: file)
+        }
+    }
+
+    private func replaceGPSStatus(_ gpsStatus: GPSStatus, for file: SelectedMediaFile) {
+        guard let index = selectedFiles.firstIndex(where: { $0.id == file.id }) else {
+            return
+        }
+
+        let existing = selectedFiles[index]
+        guard existing.gpsStatus != .updated else {
+            return
+        }
+
+        selectedFiles[index] = SelectedMediaFile(
+            url: existing.url,
+            kind: existing.kind,
+            gpsStatus: gpsStatus,
+            latestResult: existing.latestResult,
+            latestMessage: existing.latestMessage,
+            latestDiagnosticDetail: existing.latestDiagnosticDetail
+        )
+    }
+
     private static func detail(for selectedFile: SelectedMediaFile) -> SelectedFileDetail {
         SelectedFileDetail(
             filename: selectedFile.displayName,
             containingFolderName: selectedFile.containingFolderName,
             containingFolderURL: selectedFile.containingFolderURL,
+            gpsStatus: selectedFile.gpsStatus,
             latestResult: selectedFile.latestResult,
             latestMessage: selectedFile.latestMessage,
             latestDiagnosticDetail: selectedFile.latestDiagnosticDetail

@@ -44,7 +44,8 @@ nonisolated struct ExifToolMetadataWriter: MetadataWriter {
             return .success(
                 for: file,
                 message: "GPS metadata updated.",
-                diagnosticDetail: diagnostics
+                diagnosticDetail: diagnostics,
+                coordinate: coordinate
             )
         } catch let error as BundledExifToolResolver.ResolverError {
             return .failure(

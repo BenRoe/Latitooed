@@ -38,9 +38,15 @@ private struct SelectedFileReviewContent: View {
                     .lineLimit(1)
                     .help(detail.containingFolderURL.path())
 
-                Label("Latest result: \(detail.latestResult.displayName)", systemImage: "clock")
+                Label("GPS: \(detail.gpsStatus.displayName)", systemImage: detail.gpsStatus.systemImage)
                     .font(.caption)
                     .foregroundStyle(.secondary)
+
+                if detail.latestResult.isVisibleInDetail {
+                    Label("Latest result: \(detail.latestResult.displayName)", systemImage: detail.latestResult.systemImage)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
 
                 if let latestMessage = detail.latestMessage {
                     Text(latestMessage)
@@ -76,8 +82,12 @@ private struct SelectedFilesSummaryContent: View {
                 .font(.body)
 
             CountSummary(title: "Types", counts: summary.fileTypeCounts, label: \.displayName)
-            CountSummary(title: "Latest results", counts: summary.latestResultCounts, label: \.displayName)
+            CountSummary(title: "Latest results", counts: visibleLatestResultCounts, label: \.displayName)
         }
+    }
+
+    private var visibleLatestResultCounts: [FileResultStatus: Int] {
+        summary.latestResultCounts.filter { status, _ in status.isVisibleInDetail }
     }
 }
 
@@ -103,6 +113,15 @@ private struct CountSummary<Value: Hashable>: View {
 }
 
 private extension FileResultStatus {
+    var isVisibleInDetail: Bool {
+        switch self {
+        case .success, .warning, .failure:
+            true
+        case .pending:
+            false
+        }
+    }
+
     var supportsDiagnosticReview: Bool {
         switch self {
         case .warning, .failure:

@@ -38,7 +38,7 @@ struct ExifToolMetadataWriterTests {
         #expect(resolvedPath.contains("/usr/bin/env") == false)
     }
 
-    @Test func jpegSuccessMapsToSuccessUpdatedGPSAndPreservesDiagnostics() async throws {
+    @Test func jpegSuccessMapsToSuccessWrittenCoordinatesAndPreservesDiagnostics() async throws {
         let bundle = try bundleWithHelper(isExecutable: true)
         let file = SelectedMediaFile(url: URL(filePath: "/Volumes/Photos/IMG_0001.jpg"), kind: .jpeg)
         let runner = RecordingRunner(result: ProcessResult(terminationStatus: 0, standardOutput: "ok", standardError: "minor note"))
@@ -47,7 +47,7 @@ struct ExifToolMetadataWriterTests {
         let result = await writer.writeGPS(.berlin, to: file)
 
         #expect(result.status == .success)
-        #expect(result.gpsStatus == .updated)
+        #expect(result.gpsStatus == .present(latitude: 52.520008, longitude: 13.404954))
         #expect(result.diagnosticDetail?.contains("ok") == true)
         #expect(result.diagnosticDetail?.contains("minor note") == true)
         #expect(await runner.calls.count == 1)
@@ -62,7 +62,7 @@ struct ExifToolMetadataWriterTests {
         let result = await writer.writeGPS(.berlin, to: file)
 
         #expect(result.status == .success)
-        #expect(result.gpsStatus == .updated)
+        #expect(result.gpsStatus == .present(latitude: 52.520008, longitude: 13.404954))
         #expect(await runner.calls.count == 1)
     }
 
@@ -82,7 +82,7 @@ struct ExifToolMetadataWriterTests {
         let result = await writer.writeGPS(.berlin, to: file)
 
         #expect(result.status == .success)
-        #expect(result.gpsStatus == .updated)
+        #expect(result.gpsStatus == .present(latitude: 52.520008, longitude: 13.404954))
         #expect(result.message == "GPS metadata updated.")
         #expect(await runner.calls.count == 1)
         #expect(await runner.calls.first?.arguments.contains("-Keys:GPSCoordinates=52.520008, 13.404954") == true)

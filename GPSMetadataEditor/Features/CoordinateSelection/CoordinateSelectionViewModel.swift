@@ -96,6 +96,10 @@ final class CoordinateSelectionViewModel {
         setCoordinate(batchRunSummary.coordinate, label: batchRunSummary.coordinateLabel, collapseResults: true)
     }
 
+    func selectLoadedFileCoordinate(_ coordinate: CoordinateSelection) {
+        setCoordinate(coordinate, label: nil, collapseResults: true)
+    }
+
     func collapseSearchResults() {
         isSearchResultsExpanded = false
     }

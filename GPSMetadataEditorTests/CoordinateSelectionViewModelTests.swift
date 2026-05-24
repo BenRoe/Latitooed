@@ -190,6 +190,29 @@ struct CoordinateSelectionViewModelTests {
         #expect(viewModel.isSearchResultsExpanded == false)
     }
 
+    @Test func selectingLoadedFileCoordinateUpdatesMarkerWithoutLabel() throws {
+        let coordinate = try #require(CoordinateSelection(latitude: 52.520008, longitude: 13.404954))
+        let viewModel = CoordinateSelectionViewModel(searchService: FakeCoordinateSearchService())
+        viewModel.isSearchResultsExpanded = true
+
+        viewModel.selectLoadedFileCoordinate(coordinate)
+
+        #expect(viewModel.selectedCoordinate == coordinate)
+        #expect(viewModel.selectedCoordinateLabel == nil)
+        #expect(viewModel.latitudeField.text == "52.520008")
+        #expect(viewModel.longitudeField.text == "13.404954")
+        #expect(viewModel.isSearchResultsExpanded == false)
+    }
+
+    @Test func gpsStatusPresentExposesCoordinateForCardActivation() throws {
+        let coordinate = try #require(GPSStatus.present(latitude: 52.520008, longitude: 13.404954).coordinate)
+
+        #expect(coordinate.latitude == 52.520008)
+        #expect(coordinate.longitude == 13.404954)
+        #expect(GPSStatus.notPresent.coordinate == nil)
+        #expect(GPSStatus.notChecked.coordinate == nil)
+    }
+
     @Test func manualCoordinateUsesDisplayTextAsFallbackLabel() throws {
         let viewModel = CoordinateSelectionViewModel(searchService: FakeCoordinateSearchService())
 

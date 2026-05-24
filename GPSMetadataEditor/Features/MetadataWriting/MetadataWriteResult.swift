@@ -27,7 +27,8 @@ nonisolated struct MetadataWriteResult: Equatable, Sendable {
     static func success(
         for file: SelectedMediaFile,
         message: String,
-        diagnosticDetail: String? = nil
+        diagnosticDetail: String? = nil,
+        coordinate: CoordinateSelection? = nil
     ) -> MetadataWriteResult {
         MetadataWriteResult(
             fileID: file.id,
@@ -35,7 +36,7 @@ nonisolated struct MetadataWriteResult: Equatable, Sendable {
             status: .success,
             message: message,
             diagnosticDetail: diagnosticDetail,
-            gpsStatus: .updated
+            gpsStatus: coordinate.map { .present(latitude: $0.latitude, longitude: $0.longitude) } ?? .updated
         )
     }
 

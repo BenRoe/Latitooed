@@ -85,6 +85,7 @@ struct FileIntakeViewModelTests {
         #expect(detail.filename == "IMG 001.HEIC")
         #expect(detail.containingFolderName == "Trip")
         #expect(detail.containingFolderURL == URL(filePath: "/Volumes/Photos/Trip", directoryHint: .isDirectory))
+        #expect(detail.gpsStatus == .notChecked)
         #expect(detail.latestResult == .warning)
         #expect(detail.latestMessage == "GPS write completed with warnings.")
         #expect(detail.latestDiagnosticDetail == "ExifTool warning")
@@ -109,6 +110,22 @@ struct FileIntakeViewModelTests {
         #expect(detail.filename == "clip.MP4")
         #expect(detail.latestResult == .warning)
         #expect(detail.latestMessage == "Video metadata support will be checked during writing.")
+    }
+
+    @Test func selectedDetailIncludesScannedLatitudeAndLongitude() throws {
+        let viewModel = FileIntakeViewModel()
+        let file = SelectedMediaFile(
+            url: URL(filePath: "/Volumes/Photos/Trip/located.JPG"),
+            kind: .jpeg,
+            gpsStatus: .present(latitude: 52.520008, longitude: 13.404954)
+        )
+
+        viewModel.apply(FileIntakeResult(accepted: [file], warnings: []), source: .picker)
+        viewModel.selectFile(id: file.id)
+
+        let detail = try #require(viewModel.selectedFileDetail)
+        #expect(detail.gpsStatus == .present(latitude: 52.520008, longitude: 13.404954))
+        #expect(detail.gpsStatus.displayName == "52.520008, 13.404954")
     }
 
     @Test func selectedFileIDsSupportMultipleTableRows() throws {
@@ -218,6 +235,129 @@ struct FileIntakeViewModelTests {
         #expect(viewModel.latestWarningDetails.map(\.reason) == [.unsupported])
     }
 
+    @Test func intakeCommandScansAcceptedFilesForExistingGPSCoordinates() async throws {
+        let directory = try temporaryDirectory()
+        let locatedURL = directory.appending(path: "located.JPG")
+        let unlocatedURL = directory.appending(path: "unlocated.HEIC")
+        try Data().write(to: locatedURL)
+        try Data().write(to: unlocatedURL)
+        let viewModel = FileIntakeViewModel(
+            gpsMetadataReader: FakeGPSMetadataReader(statuses: [
+                locatedURL: .present(latitude: 52.520008, longitude: 13.404954),
+                unlocatedURL: .notPresent,
+            ])
+        )
+
+        viewModel.intake(urls: [locatedURL, unlocatedURL], source: .picker)
+
+        try await waitUntil {
+            viewModel.selectedFiles.map(\.gpsStatus) == [.present(latitude: 52.520008, longitude: 13.404954), .notPresent]
+        }
+
+        #expect(viewModel.selectedFiles.first?.gpsStatus.displayName == "52.520008, 13.404954")
+        #expect(viewModel.selectedFiles.last?.gpsStatus.displayName == "No coordinates")
+    }
+
+    @Test func gpsStatusDisplaysLatitudeAndLongitudeInsteadOfPresenceLabels() {
+        let status = GPSStatus.present(latitude: 48.137154, longitude: 11.576124)
+
+        #expect(status.displayName == "48.137154, 11.576124")
+        #expect(GPSStatus.notPresent.displayName == "No coordinates")
+        #expect(GPSStatus.notPresent.displayName != "No GPS")
+        #expect(status.displayName != "Has GPS")
+    }
+
+    @Test func exifToolGPSMetadataReaderMapsJSONCoordinatesToDisplayableStatus() async throws {
+        let file = SelectedMediaFile(url: URL(filePath: "/Volumes/Photos/located.jpg"), kind: .jpeg)
+        let reader = ExifToolGPSMetadataReader(
+            resolver: BundledExifToolResolver(bundle: try Self.fakeExifToolBundle()),
+            processRunner: RecordingGPSReadRunner(
+                result: ProcessResult(
+                    terminationStatus: 0,
+                    standardOutput: #"""
+                    [
+                        {"SourceFile":"/Volumes/Photos/located.jpg","GPSLatitude":52.520008,"GPSLongitude":13.404954}
+                    ]
+                    """#,
+                    standardError: ""
+                )
+            )
+        )
+
+        let status = await reader.gpsStatus(for: file)
+
+        #expect(status == .present(latitude: 52.520008, longitude: 13.404954))
+        #expect(status?.displayName == "52.520008, 13.404954")
+    }
+
+    @Test func exifToolGPSMetadataReaderMapsMissingCoordinatesToNoCoordinates() async throws {
+        let file = SelectedMediaFile(url: URL(filePath: "/Volumes/Photos/unlocated.jpg"), kind: .jpeg)
+        let reader = ExifToolGPSMetadataReader(
+            resolver: BundledExifToolResolver(bundle: try Self.fakeExifToolBundle()),
+            processRunner: RecordingGPSReadRunner(
+                result: ProcessResult(
+                    terminationStatus: 0,
+                    standardOutput: #"""
+                    [
+                        {"SourceFile":"/Volumes/Photos/unlocated.jpg"}
+                    ]
+                    """#,
+                    standardError: ""
+                )
+            )
+        )
+
+        let status = await reader.gpsStatus(for: file)
+
+        #expect(status == .notPresent)
+    }
+
+    @Test func exifToolGPSMetadataReaderMapsVideoGPSCoordinatesString() async throws {
+        let file = SelectedMediaFile(url: URL(filePath: "/Volumes/Photos/clip.mov"), kind: .mov)
+        let reader = ExifToolGPSMetadataReader(
+            resolver: BundledExifToolResolver(bundle: try Self.fakeExifToolBundle()),
+            processRunner: RecordingGPSReadRunner(
+                result: ProcessResult(
+                    terminationStatus: 0,
+                    standardOutput: #"""
+                    [
+                        {"SourceFile":"/Volumes/Photos/clip.mov","GPSCoordinates":"+52.520008+013.404954/"}
+                    ]
+                    """#,
+                    standardError: ""
+                )
+            )
+        )
+
+        let status = await reader.gpsStatus(for: file)
+
+        #expect(status == .present(latitude: 52.520008, longitude: 13.404954))
+    }
+
+    private static func fakeExifToolBundle() throws -> Bundle {
+        let bundleURL = URL.temporaryDirectory
+            .appending(path: UUID().uuidString, directoryHint: .isDirectory)
+        let helperDirectoryURL = bundleURL.appending(path: "ExifTool", directoryHint: .isDirectory)
+        let helperURL = helperDirectoryURL.appending(path: "exiftool")
+        try FileManager.default.createDirectory(at: helperDirectoryURL, withIntermediateDirectories: true)
+        try Data().write(to: helperURL)
+        try FileManager.default.setAttributes([.posixPermissions: 0o755], ofItemAtPath: helperURL.path(percentEncoded: false))
+
+        return try #require(Bundle(url: bundleURL))
+    }
+
+    private struct RecordingGPSReadRunner: ProcessRunning {
+        let result: ProcessResult
+
+        func run(executableURL: URL, arguments: [String]) async throws -> ProcessResult {
+            #expect(arguments.contains("-json"))
+            #expect(arguments.contains("-n"))
+            #expect(arguments.contains("-GPSLatitude"))
+            #expect(arguments.contains("-GPSLongitude"))
+            return result
+        }
+    }
+
     private func temporaryDirectory() throws -> URL {
         let url = URL.temporaryDirectory.appending(path: UUID().uuidString, directoryHint: .isDirectory)
         try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
@@ -231,6 +371,34 @@ struct FileIntakeViewModelTests {
             SelectedMediaFile(url: URL(filePath: "/Volumes/Photos/Trip/clip.MOV"), kind: .mov),
         ]
     }
+}
+
+private struct FakeGPSMetadataReader: GPSMetadataReading {
+    let statuses: [URL: GPSStatus]
+
+    func gpsStatus(for file: SelectedMediaFile) async -> GPSStatus? {
+        statuses[file.url]
+    }
+}
+
+private func waitUntil(
+    _ condition: @MainActor @escaping () -> Bool,
+    fileID: String = #fileID,
+    filePath: String = #filePath,
+    line: Int = #line,
+    column: Int = #column
+) async throws {
+    for _ in 0..<20 {
+        if await condition() {
+            return
+        }
+        await Task.yield()
+    }
+
+    Issue.record(
+        "Condition was not met",
+        sourceLocation: SourceLocation(fileID: fileID, filePath: filePath, line: line, column: column)
+    )
 }
 
 private extension FileIntakeViewModel {

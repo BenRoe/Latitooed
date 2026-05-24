@@ -56,7 +56,7 @@ struct FileIntakeView: View {
                             SelectedFilesGrid(
                                 files: viewModel.selectedFiles,
                                 selection: $viewModel.selectedFileIDs,
-                                activateFile: viewModel.activateGridSelection
+                                activateFile: activateLoadedFile
                             )
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .background(.background)
@@ -121,6 +121,21 @@ struct FileIntakeView: View {
 
     private func presentOverwriteConfirmation() {
         isOverwriteConfirmationPresented = true
+    }
+
+    private func activateLoadedFile(
+        id: SelectedMediaFile.ID,
+        intent: FileIntakeViewModel.GridSelectionIntent
+    ) {
+        viewModel.activateGridSelection(id: id, intent: intent)
+
+        guard intent == .replace,
+              let file = viewModel.selectedFiles.first(where: { $0.id == id }),
+              let coordinate = file.gpsStatus.coordinate else {
+            return
+        }
+
+        coordinateViewModel.selectLoadedFileCoordinate(coordinate)
     }
 
     private func confirmOverwrite() {

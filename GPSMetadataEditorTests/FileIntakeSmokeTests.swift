@@ -15,6 +15,12 @@ struct FileIntakeSmokeTests {
         #expect(String(describing: type(of: view)) == "SelectedFilesGrid")
     }
 
+    @Test func fileDetailPanelCanBeCreated() {
+        let view = FileDetailPanel(review: .none, latestWarnings: [])
+
+        #expect(String(describing: type(of: view)) == "FileDetailPanel")
+    }
+
     @Test func designConstantsReserveUtilityWindowSpace() {
         #expect(AppDesign.Layout.leftColumnMinimumWidth >= 420)
         #expect(AppDesign.Layout.rightColumnMinimumWidth >= 320)

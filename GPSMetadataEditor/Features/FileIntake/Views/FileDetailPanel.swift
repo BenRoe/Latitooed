@@ -3,11 +3,19 @@ import SwiftUI
 struct FileDetailPanel: View {
     let review: FileIntakeViewModel.SelectedFileReview
     let latestWarnings: [IntakeWarning]
+    @State private var isExpanded = true
 
     var body: some View {
-        VStack(alignment: .leading, spacing: AppDesign.Spacing.md) {
-            SelectedFileReviewContent(review: review)
-            WarningSummaryView(warnings: latestWarnings)
+        DisclosureGroup(isExpanded: $isExpanded) {
+            VStack(alignment: .leading, spacing: AppDesign.Spacing.md) {
+                SelectedFileReviewContent(review: review)
+                WarningSummaryView(warnings: latestWarnings)
+            }
+            .padding(.top, AppDesign.Spacing.sm)
+        } label: {
+            Label("Details", systemImage: "info.circle")
+                .font(.body)
+                .bold()
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(AppDesign.Spacing.md)

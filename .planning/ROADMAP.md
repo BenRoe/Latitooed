@@ -15,6 +15,7 @@
 | 4 | Batch Results, Video, and History | Complete | BATCH-02, BATCH-03, BATCH-04, META-03, META-04, PERSIST-01, PERSIST-02, PERSIST-03, PERSIST-04 |
 | 5 | Packaging and Release Verification | Complete | PKG-01, PKG-02, PKG-03, PKG-04 |
 | 6 | Loaded Files Grid View | Complete | GRID-01, GRID-02, GRID-03, GRID-04, GRID-05 |
+| 7 | Live Place Search | Replace submit-gated search with live-as-you-type search using MapKit, floating dropdown results, and Apple Maps UX patterns. | LOC-02 |
 
 ## Phases
 
@@ -144,6 +145,27 @@ Plans:
 - [x] 06-01 Loaded-files mode and review state
 - [x] 06-02 Selected-files grid and Table/Grid switch
 - [x] 06-03 Grid selection hardening and host UAT checklist
+
+### Phase 7: Live Place Search
+
+**Goal:** Replace submit-gated search with live-as-you-type search using MapKit, floating dropdown results, and Apple Maps UX patterns.
+**Mode:** mvp
+**UI hint:** yes
+**Requirements:** LOC-02
+**Depends on:** Phase 2
+
+**Success Criteria:**
+1. Search results appear automatically as the user types, with no submit button required.
+2. Results appear in a floating dropdown anchored below the search field, overlaying the map.
+3. Search fires after 3 characters with a 500 ms debounce on the last keystroke.
+4. An X clear button appears when the field has text; Escape also clears and dismisses results.
+5. Selecting a result keeps the query text in the field and dismisses the dropdown.
+6. In-flight MapKit requests are cancelled when a new search supersedes them.
+
+**Notes:**
+- Debounce via `onChange` + `Task.sleep` or Combine — whichever fits existing async patterns.
+- Existing `searchGeneration` guard and task cancellation infrastructure already present.
+- Remove the Search button and `performSearchOnSubmit` from `CoordinateSearchPanel`.
 
 ## Coverage
 

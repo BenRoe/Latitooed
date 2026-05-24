@@ -19,6 +19,7 @@ Users can reliably apply a chosen GPS coordinate to many local media files witho
 - [ ] User can select multiple local image and video files through a file picker.
 - [ ] User can drag and drop supported files into the app window.
 - [ ] User can view selected files with filename, file type, current GPS status, and write result.
+- [ ] User can switch loaded files into a grid view for visual batch review.
 - [ ] User can search for places using Apple MapKit without Google API keys.
 - [ ] User can switch between standard, satellite, and hybrid map presentations.
 - [ ] User can click the map or choose a search result to set the target coordinate.
@@ -89,4 +90,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-05-15 after initialization*
+*Last updated: 2026-05-24 after adding Phase 6 loaded-files grid view*

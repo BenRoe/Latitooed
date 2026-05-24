@@ -155,7 +155,7 @@ private struct GPSStatusCell: View {
     let status: GPSStatus
 
     var body: some View {
-        Label(status.displayName, systemImage: "location.slash")
+        Label(status.displayName, systemImage: status.systemImage)
             .labelStyle(.titleAndIcon)
             .foregroundStyle(.secondary)
     }
@@ -165,7 +165,7 @@ private struct LatestResultCell: View {
     let status: FileResultStatus
 
     var body: some View {
-        Label(status.displayName, systemImage: "clock")
+        Label(status.displayName, systemImage: status.systemImage)
             .labelStyle(.titleAndIcon)
             .foregroundStyle(.secondary)
     }

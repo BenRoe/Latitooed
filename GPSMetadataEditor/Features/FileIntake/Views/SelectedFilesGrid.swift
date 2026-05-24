@@ -21,7 +21,7 @@ struct SelectedFilesGrid: View {
                         SelectedFileGridCard(file: file, isSelected: selection.contains(file.id))
                     }
                     .buttonStyle(.plain)
-                    .frame(width: GridCardMetrics.width, height: GridCardMetrics.height)
+                    .frame(width: GridCardMetrics.width)
                 }
             }
             .padding(AppDesign.Spacing.md)
@@ -53,20 +53,13 @@ private struct SelectedFileGridCard: View {
             Text(file.displayName)
                 .font(.body)
                 .lineLimit(2)
-                .frame(height: 48, alignment: .topLeading)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .help(file.displayName)
 
             StatusLabel(title: file.gpsStatus.displayName, systemImage: file.gpsStatus.systemImage)
-            StatusLabel(title: file.latestResult.displayName, systemImage: file.latestResult.systemImage)
-
-            Label("Selected", systemImage: "checkmark.circle.fill")
-                .font(.caption)
-                .foregroundStyle(.tint)
-                .opacity(isSelected ? 1 : 0)
         }
         .padding(AppDesign.Spacing.md)
-        .frame(width: GridCardMetrics.width, height: GridCardMetrics.height, alignment: .topLeading)
+        .frame(width: GridCardMetrics.width, alignment: .topLeading)
         .background {
             if isSelected {
                 Color.accentColor.opacity(0.12)
@@ -84,13 +77,45 @@ private struct SelectedFileGridCard: View {
                     .stroke(.quaternary, lineWidth: 1)
             }
         }
+        .overlay(alignment: .topTrailing) {
+            WriteResultMarker(status: file.latestResult)
+                .padding(AppDesign.Spacing.sm)
+        }
         .clipShape(.rect(cornerSize: AppDesign.Radius.smallSize))
         .accessibilityElement(children: .combine)
         .accessibilityLabel(accessibilityLabel)
     }
 
     private var accessibilityLabel: String {
-        "\(file.displayName), file type \(file.kind.displayName), GPS status \(file.gpsStatus.displayName), latest result \(file.latestResult.displayName), \(isSelected ? "selected" : "not selected")"
+        var parts = [
+            file.displayName,
+            "file type \(file.kind.displayName)",
+            "GPS status \(file.gpsStatus.displayName)",
+            isSelected ? "selected" : "not selected",
+        ]
+
+        if let accessibilityDescription = file.latestResult.accessibilityDescription {
+            parts.insert(accessibilityDescription, at: 3)
+        }
+
+        return parts.joined(separator: ", ")
+    }
+}
+
+private struct WriteResultMarker: View {
+    let status: FileResultStatus
+
+    var body: some View {
+        if let marker = status.cardMarker {
+            Image(systemName: marker.systemImage)
+                .font(.caption)
+                .bold()
+                .foregroundStyle(.white)
+                .frame(width: 20, height: 20)
+                .background(marker.background)
+                .clipShape(.circle)
+                .accessibilityLabel(marker.accessibilityLabel)
+        }
     }
 }
 
@@ -134,7 +159,6 @@ private struct FilePreviewFallback: View {
 
 private enum GridCardMetrics {
     static let width: CGFloat = 220
-    static let height: CGFloat = 300
     static let previewHeight: CGFloat = 150
 }
 
@@ -185,32 +209,28 @@ private extension SelectedMediaFile {
     }
 }
 
-private extension GPSStatus {
-    var systemImage: String {
+private extension FileResultStatus {
+    var cardMarker: (systemImage: String, background: Color, accessibilityLabel: String)? {
         switch self {
-        case .notChecked:
-            "location.slash"
-        case .notPresent:
-            "location.slash"
-        case .present:
-            "location"
-        case .updated:
-            "location.fill"
+        case .success:
+            ("checkmark", .green, "Location write succeeded")
+        case .failure:
+            ("xmark", .red, "Location write failed")
+        case .pending, .warning:
+            nil
         }
     }
-}
 
-private extension FileResultStatus {
-    var systemImage: String {
+    var accessibilityDescription: String? {
         switch self {
-        case .pending:
-            "clock"
         case .success:
-            "checkmark.circle"
-        case .warning:
-            "exclamationmark.triangle"
+            "location write succeeded"
         case .failure:
-            "xmark.circle"
+            "location write failed"
+        case .warning:
+            "location write warning"
+        case .pending:
+            nil
         }
     }
 }

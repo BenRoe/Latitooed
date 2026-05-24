@@ -250,6 +250,7 @@ final class FileIntakeViewModel {
 
         isMetadataBatchRunning = true
         latestMetadataBatchSummary = nil
+        resetMetadataWriteResults()
         defer {
             currentMetadataBatchProgress = nil
             isMetadataBatchRunning = false

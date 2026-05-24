@@ -106,6 +106,43 @@ struct MetadataBatchViewModelTests {
         #expect(viewModel.selectedFiles.first?.latestResult == .success)
     }
 
+    @Test func applyingMetadataClearsPreviousWriteMarkersBeforeNewResultsArrive() async throws {
+        let first = SelectedMediaFile(
+            url: URL(filePath: "/Volumes/Photos/first.jpg"),
+            kind: .jpeg,
+            gpsStatus: .present(latitude: 52.520008, longitude: 13.404954),
+            latestResult: .success,
+            latestMessage: "Previous success"
+        )
+        let second = SelectedMediaFile(
+            url: URL(filePath: "/Volumes/Photos/second.heic"),
+            kind: .heic,
+            gpsStatus: .notPresent,
+            latestResult: .failure,
+            latestMessage: "Previous failure",
+            latestDiagnosticDetail: "Old stderr"
+        )
+        let writer = SuspendedMetadataWriter()
+        let viewModel = FileIntakeViewModel()
+        viewModel.apply(FileIntakeResult(accepted: [first, second], warnings: []), source: .picker)
+
+        let batchTask = Task {
+            await viewModel.applyMetadata(coordinate: .berlin, writer: writer)
+        }
+
+        try await waitUntil { viewModel.currentMetadataBatchProgress != nil }
+        #expect(viewModel.selectedFiles.map(\.latestResult) == [.pending, .pending])
+        #expect(viewModel.selectedFiles.map(\.latestMessage) == [nil, nil])
+        #expect(viewModel.selectedFiles.map(\.latestDiagnosticDetail) == [nil, nil])
+        #expect(viewModel.selectedFiles.map(\.gpsStatus) == [.present(latitude: 52.520008, longitude: 13.404954), .notPresent])
+
+        await writer.resumeNext(with: .success(for: first, message: "Updated"))
+        await writer.resumeNext(with: .failure(for: second, message: "Failed"))
+        await batchTask.value
+
+        #expect(viewModel.selectedFiles.map(\.latestResult) == [.success, .failure])
+    }
+
     @Test func oneFailureDoesNotStopLaterFiles() async {
         let first = jpegFile("first.jpg")
         let second = heicFile("second.heic")

@@ -4,17 +4,7 @@ struct WarningSummaryView: View {
     let warnings: [IntakeWarning]
 
     var body: some View {
-        if warnings.isEmpty {
-            HStack(spacing: AppDesign.Spacing.md) {
-                Label("GPS: Not checked", systemImage: "location.slash")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-
-                Label("Latest result: Pending", systemImage: "clock")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-        } else {
+        if warnings.isEmpty == false {
             VStack(alignment: .leading, spacing: AppDesign.Spacing.sm) {
                 Label("\(warnings.count) \(warnings.count == 1 ? "item" : "items") could not be added", systemImage: "exclamationmark.triangle")
                     .font(.body)

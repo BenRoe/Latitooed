@@ -14,6 +14,7 @@
 | 3 | Core Metadata Writing | Complete | BATCH-01, BATCH-05, BATCH-06, META-01, META-02, META-05, META-06, META-07 |
 | 4 | Batch Results, Video, and History | Complete | BATCH-02, BATCH-03, BATCH-04, META-03, META-04, PERSIST-01, PERSIST-02, PERSIST-03, PERSIST-04 |
 | 5 | Packaging and Release Verification | Complete | PKG-01, PKG-02, PKG-03, PKG-04 |
+| 6 | 1/3 | In Progress|  |
 
 ## Phases
 
@@ -118,11 +119,35 @@
 - This phase should test the packaged app, not only debug builds.
 - Avoid accidentally falling back to `/opt/homebrew/bin/exiftool`.
 
+### Phase 6: Loaded Files Grid View
+
+**Goal:** Let users browse loaded media in a visual grid while preserving the existing table-oriented review workflow.
+**Mode:** mvp
+**UI hint:** yes
+**Requirements:** GRID-01, GRID-02, GRID-03, GRID-04, GRID-05
+**Depends on:** Phase 5
+**Plans:** 1/3 plans executed
+
+**Success Criteria:**
+1. User can switch loaded files between the existing table/list review and a grid view.
+2. Grid cells show enough file identity and status information to support batch review: thumbnail or type fallback, filename, file type, GPS status, and latest write result.
+3. Selecting a file in the grid updates the same details/diagnostics surface used by the existing selected-file workflow.
+4. Grid layout remains usable for small and large batches without breaking file selection, warning visibility, or batch actions.
+5. Unsupported, inaccessible, warning, success, and failure states remain visually distinguishable in grid mode.
+
+**Notes:**
+- Reuse existing loaded-file state and result models; do not create a separate grid-only source of truth.
+- Keep the table/list review available so dense metadata scanning remains possible.
+- Prefer native SwiftUI grid APIs and avoid third-party UI frameworks.
+
+Plans:
+- [ ] TBD (run /gsd-plan-phase 6 to break down)
+
 ## Coverage
 
 | Requirement Count | Covered | Unmapped |
 |-------------------|---------|----------|
-| 32 | 32 | 0 |
+| 37 | 37 | 0 |
 
 ---
 *Roadmap created: 2026-05-15*

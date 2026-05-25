@@ -3,50 +3,107 @@ import SwiftUI
 struct CoordinateSearchPanel: View {
     @Bindable var viewModel: CoordinateSelectionViewModel
 
+    @State private var debounceTask: Task<Void, Never>?
+    @State private var isDropdownVisible = false
+
     var body: some View {
         VStack(alignment: .leading, spacing: AppDesign.Spacing.sm) {
             HStack(spacing: AppDesign.Spacing.sm) {
                 TextField("Search for a place", text: $viewModel.searchQuery)
                     .textFieldStyle(.roundedBorder)
-                    .onSubmit {
-                        viewModel.performSearchOnSubmit()
+                    .overlay(alignment: .trailing) {
+                        if !viewModel.searchQuery.isEmpty {
+                            Button {
+                                viewModel.searchQuery = ""
+                                debounceTask?.cancel()
+                                viewModel.cancelSearch()
+                                isDropdownVisible = false
+                            } label: {
+                                Image(systemName: "xmark.circle.fill")
+                                    .foregroundStyle(.secondary)
+                            }
+                            .buttonStyle(.plain)
+                            .accessibilityLabel("Clear search field")
+                            .padding(.trailing, AppDesign.Spacing.xs)
+                        }
                     }
+                    .onExitCommand {
+                        viewModel.searchQuery = ""
+                        debounceTask?.cancel()
+                        viewModel.cancelSearch()
+                        isDropdownVisible = false
+                    }
+            }
+            .onChange(of: viewModel.searchQuery) { _, newValue in
+                debounceTask?.cancel()
+                let trimmed = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
+                guard trimmed.count >= 3 else {
+                    viewModel.cancelSearch()
+                    viewModel.clearSearch()
+                    isDropdownVisible = false
+                    return
+                }
+                isDropdownVisible = true
+                debounceTask = Task { @MainActor in
+                    try? await Task.sleep(for: .milliseconds(500))
+                    guard !Task.isCancelled else { return }
+                    viewModel.search()
+                }
+            }
+            .onChange(of: viewModel.isSearchResultsExpanded) { _, newValue in
+                if !newValue { isDropdownVisible = false }
+            }
+            .overlay(alignment: .bottom) {
+                if isDropdownVisible {
+                    dropdownContent
+                        .offset(y: 36)
+                }
+            }
+            .onDisappear {
+                debounceTask?.cancel()
+            }
+        }
+    }
 
-                Button("Search", systemImage: "magnifyingglass", action: viewModel.search)
-                    .disabled(viewModel.isSearchButtonDisabled)
+    private var dropdownContent: some View {
+        VStack(alignment: .leading, spacing: AppDesign.Spacing.sm) {
+            Text("Results")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+
+            if viewModel.searchStatus == .searching {
+                ProgressView()
+                    .controlSize(.small)
+                    .accessibilityLabel("Searching")
             }
 
-            if viewModel.isSearchResultsExpanded {
-                VStack(alignment: .leading, spacing: AppDesign.Spacing.sm) {
-                    Text("Results")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+            if let statusText = viewModel.searchStatusText {
+                Text(statusText)
+                    .font(.caption)
+                    .foregroundStyle(viewModel.searchStatus == .failed ? .orange : .secondary)
+            }
 
-                    if viewModel.searchStatus == .searching {
-                        ProgressView()
-                            .controlSize(.small)
-                    }
-
-                    if let statusText = viewModel.searchStatusText {
-                        Text(statusText)
-                            .font(.caption)
-                            .foregroundStyle(viewModel.searchStatus == .failed ? .orange : .secondary)
-                    }
-
+            ScrollView {
+                VStack(alignment: .leading, spacing: 0) {
                     ForEach(viewModel.searchResults) { result in
                         Button {
                             viewModel.selectSearchResult(result)
+                            isDropdownVisible = false
                         } label: {
                             CoordinateSearchResultRow(result: result)
                         }
                         .buttonStyle(.plain)
                     }
                 }
-                .padding(AppDesign.Spacing.sm)
-                .background(.regularMaterial)
-                .clipShape(.rect(cornerSize: AppDesign.Radius.mediumSize))
             }
+            .frame(maxHeight: 240)
         }
+        .frame(maxWidth: .infinity)
+        .padding(AppDesign.Spacing.sm)
+        .background(.regularMaterial)
+        .clipShape(.rect(cornerSize: AppDesign.Radius.mediumSize))
+        .shadow(color: .black.opacity(0.12), radius: 8, x: 0, y: 4)
+        .accessibilityElement(children: .contain)
     }
 }
 

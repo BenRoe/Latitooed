@@ -22,15 +22,11 @@ struct FileIntakeView: View {
                     if viewModel.selectedFiles.isEmpty == false {
                         VStack(alignment: .leading, spacing: AppDesign.Spacing.md) {
                             HStack {
-                                Text("Selected Files")
+                                Text("Loaded Files")
                                     .font(.headline)
                                     .bold()
 
                                 Spacer()
-
-                                Text("\(viewModel.selectedFiles.count) \(viewModel.selectedFiles.count == 1 ? "file" : "files")")
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
 
                                 Picker("Loaded files view", selection: $viewModel.selectedLoadedFilesViewMode) {
                                     ForEach(FileIntakeViewModel.LoadedFilesViewMode.allCases) { mode in
@@ -38,6 +34,7 @@ struct FileIntakeView: View {
                                             .tag(mode)
                                     }
                                 }
+                                .labelsHidden()
                                 .pickerStyle(.segmented)
                                 .frame(maxWidth: 180)
                             }
@@ -80,7 +77,8 @@ struct FileIntakeView: View {
             Divider()
 
             FileIntakeFooter(
-                selectedFileCount: viewModel.selectedFiles.count,
+                loadedFileCount: viewModel.selectedFiles.count,
+                selectedFileCount: viewModel.selectedLoadedFileCount,
                 latestNotice: viewModel.latestNotice,
                 metadataBatchProgress: viewModel.currentMetadataBatchProgress,
                 isApplyEnabled: viewModel.canApplyMetadata(selectedCoordinate: coordinateViewModel.selectedCoordinate),
@@ -175,6 +173,7 @@ struct FileIntakeView: View {
 }
 
 private struct FileIntakeFooter: View {
+    let loadedFileCount: Int
     let selectedFileCount: Int
     let latestNotice: FileIntakeViewModel.IntakeNotice?
     let metadataBatchProgress: FileIntakeViewModel.MetadataBatchProgress?
@@ -197,6 +196,13 @@ private struct FileIntakeFooter: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
 
+            HStack(spacing: AppDesign.Spacing.sm) {
+                Label("Loaded: \(loadedFileCount)", systemImage: "tray.full")
+                Label("Selected: \(selectedFileCount)", systemImage: "checkmark.circle")
+            }
+            .font(.caption)
+            .foregroundStyle(.secondary)
+
             Button("Apply Location", systemImage: "location.fill", action: applyAction)
                 .disabled(isApplyEnabled == false)
         }
@@ -209,7 +215,7 @@ private struct FileIntakeFooter: View {
             metadataBatchProgress.displayString
         } else if isMetadataBatchRunning {
             "Applying selected location..."
-        } else if selectedFileCount == 0 {
+        } else if loadedFileCount == 0 {
             "Add files to start the intake review."
         } else {
             "Review selected files before applying a location."

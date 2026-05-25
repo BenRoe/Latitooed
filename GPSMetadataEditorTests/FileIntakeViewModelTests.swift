@@ -31,6 +31,7 @@ struct FileIntakeViewModelTests {
         #expect(viewModel.selectedFiles.count == 2)
         #expect(viewModel.latestWarningDetails.isEmpty)
         #expect(viewModel.latestNotice?.style == .success)
+        #expect(viewModel.latestNotice?.message == "2 files loaded.")
     }
 
     @Test func duplicateAndUnsupportedWarningsUpdateLatestDetailsWithoutAddingRows() {
@@ -146,6 +147,7 @@ struct FileIntakeViewModelTests {
         viewModel.selectFiles(ids: [first.id, second.id])
 
         #expect(viewModel.selectedFileIDs == [first.id, second.id])
+        #expect(viewModel.selectedLoadedFileCount == 2)
         #expect(viewModel.selectedFileDetail == nil)
 
         let summary = try #require(viewModel.multipleFileReviewSummary)
@@ -154,6 +156,17 @@ struct FileIntakeViewModelTests {
         #expect(summary.fileTypeCounts[.jpeg] == 1)
         #expect(summary.latestResultCounts[.warning] == 1)
         #expect(summary.latestResultCounts[.success] == 1)
+    }
+
+    @Test func selectedLoadedFileCountExcludesUnselectedLoadedFiles() {
+        let viewModel = FileIntakeViewModel()
+        let files = makeGridSelectionFiles()
+
+        viewModel.apply(FileIntakeResult(accepted: files, warnings: []), source: .picker)
+        viewModel.selectFile(id: files[0].id)
+
+        #expect(viewModel.selectedFiles.count == 3)
+        #expect(viewModel.selectedLoadedFileCount == 1)
     }
 
     @Test func replacingGridSelectionSelectsOnlyClickedFile() {

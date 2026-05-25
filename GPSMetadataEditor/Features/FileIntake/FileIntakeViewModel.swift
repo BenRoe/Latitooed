@@ -124,6 +124,10 @@ final class FileIntakeViewModel {
         }
     }
 
+    var selectedLoadedFileCount: Int {
+        selectedFiles.filter { selectedFileIDs.contains($0.id) }.count
+    }
+
     var selectedFileDetail: SelectedFileDetail? {
         if case .single(let detail) = selectedFileReview {
             detail
@@ -308,12 +312,7 @@ final class FileIntakeViewModel {
         }
 
         let itemLabel = result.accepted.count == 1 ? "file" : "files"
-        let sourceLabel = switch source {
-        case .picker:
-            "selected"
-        case .drop:
-            "dropped"
-        }
+        let sourceLabel = source == .drop ? "dropped" : "loaded"
 
         return IntakeNotice(
             message: "\(result.accepted.count) \(itemLabel) \(sourceLabel).",

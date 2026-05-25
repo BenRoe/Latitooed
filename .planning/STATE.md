@@ -3,13 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: active
-last_updated: "2026-05-25T01:27:20+02:00"
+last_updated: "2026-05-25T01:17:00Z"
+last_activity: 2026-05-25
 progress:
   total_phases: 7
-  completed_phases: 6
+  completed_phases: 7
   total_plans: 22
-  completed_plans: 21
-  percent: 86
+  completed_plans: 22
+  percent: 100
 ---
 
 # Project State: GPS Metadata Editor
@@ -19,7 +20,7 @@ progress:
 See: `.planning/PROJECT.md` (updated 2026-05-15)
 
 **Core value:** Users can reliably apply a chosen GPS coordinate to many local media files without installing command-line dependencies.
-**Current focus:** Phase 06 — loaded-files grid verified
+**Current focus:** Phase 07 — live-place-search
 
 ## Workflow
 
@@ -42,6 +43,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-15)
 | 4 - Batch Results, Video, and History | Complete, Approved | 100% |
 | 5 - Packaging and Release Verification | Complete, Host Verified | 100% |
 | 6 - Loaded Files Grid View | Complete, Host Verified | 100% |
+| 7 - Live Place Search | Plan 01 Complete, Host Verification Pending | 100% |
 
 ## Accumulated Context
 
@@ -72,10 +74,11 @@ See: `.planning/PROJECT.md` (updated 2026-05-15)
 - Phase 4 host verification was approved by the user on 2026-05-20; `04-HUMAN-UAT.md` is passed.
 - Phase 5 completed signed `.app` package verification on 2026-05-22: host `xcodebuild test` passed, bundled ExifTool version `13.58` executed from the signed app after codesign verification, stripped-PATH JPEG/HEIC smoke wrote Berlin GPS metadata to copied fixtures, and `05-HUMAN-UAT.md` is passed.
 - Phase 6 added session-only Table/Grid mode, an adaptive loaded-files grid, aggregate multi-selection detail summaries, modifier-aware grid selection helpers, and host UAT passed on 2026-05-24.
+- Phase 7 Plan 01 replaced submit-gated MapKit search with onChange debounce (3 chars / 500 ms), floating dropdown overlay, X clear button, and Escape handler. Removed Search button and performSearchOnSubmit(). Added clearSearch() to ViewModel. isSearchResultsExpanded kept to avoid breaking existing tests; view uses its own @State isDropdownVisible synced via onChange.
 
 ## Next Action
 
-Phase 6 host verification is complete. Run milestone closeout or plan the next milestone.
+Phase 7 Plan 01 complete. Host verification pending (xcodebuild + app launch smoke test required on macOS host).
 
 ### Quick Tasks Completed
 
@@ -83,7 +86,7 @@ Phase 6 host verification is complete. Run milestone closeout or plan the next m
 |---|-------------|------|--------|-----------|
 | 260525-1xy | Add the full path to the detail pane when a file is selected and make the pane collapsible | 2026-05-25 | 675264c | [260525-1xy-add-the-full-path-to-the-detail-pane-if-](./quick/260525-1xy-add-the-full-path-to-the-detail-pane-if-/) |
 
-Last activity: 2026-05-25 - Completed quick task 260525-1xy: Add full selected file path to detail pane and make it collapsible.
+Last activity: 2026-05-25
 
 ---
 *State initialized: 2026-05-15*

@@ -6,21 +6,38 @@ struct FileDetailPanel: View {
     @State private var isExpanded = true
 
     var body: some View {
-        DisclosureGroup(isExpanded: $isExpanded) {
-            VStack(alignment: .leading, spacing: AppDesign.Spacing.md) {
+        VStack(alignment: .leading, spacing: AppDesign.Spacing.md) {
+            Button(action: toggleExpanded) {
+                HStack(spacing: AppDesign.Spacing.sm) {
+                    Image(systemName: isExpanded ? "chevron.down" : "chevron.right")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+
+                    Label("Details", systemImage: "info.circle")
+                        .font(.body)
+                        .bold()
+
+                    Spacer()
+                }
+                .contentShape(.rect)
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel(isExpanded ? "Collapse details" : "Expand details")
+
+            if isExpanded {
                 SelectedFileReviewContent(review: review)
                 WarningSummaryView(warnings: latestWarnings)
             }
-            .padding(.top, AppDesign.Spacing.sm)
-        } label: {
-            Label("Details", systemImage: "info.circle")
-                .font(.body)
-                .bold()
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(AppDesign.Spacing.md)
+        .padding(.horizontal, AppDesign.Spacing.md)
+        .padding(.vertical, 5)
         .background(.background)
         .clipShape(.rect(cornerSize: AppDesign.Radius.mediumSize))
+    }
+
+    private func toggleExpanded() {
+        isExpanded.toggle()
     }
 }
 

@@ -137,6 +137,7 @@ struct MetadataBatchViewModelTests {
         #expect(viewModel.selectedFiles.map(\.gpsStatus) == [.present(latitude: 52.520008, longitude: 13.404954), .notPresent])
 
         await writer.resumeNext(with: .success(for: first, message: "Updated"))
+        try await waitUntil { viewModel.currentMetadataBatchProgress?.displayString.hasSuffix("(2 of 2)") == true }
         await writer.resumeNext(with: .failure(for: second, message: "Failed"))
         await batchTask.value
 
@@ -311,7 +312,7 @@ private func waitUntil(
         if await condition() {
             return
         }
-        await Task.yield()
+        try await Task.sleep(for: .milliseconds(10))
     }
 
     Issue.record(

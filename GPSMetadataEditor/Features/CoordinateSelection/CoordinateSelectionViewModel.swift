@@ -66,10 +66,6 @@ final class CoordinateSelectionViewModel {
         }
     }
 
-    var isSearchButtonDisabled: Bool {
-        searchQuery.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-    }
-
     func updateLatitude(_ text: String) {
         latitudeField.update(text, kind: .latitude)
         updateCoordinateFromFieldsIfValid()
@@ -155,14 +151,15 @@ final class CoordinateSelectionViewModel {
         }
     }
 
-    func performSearchOnSubmit() {
-        search()
-    }
-
     func cancelSearch() {
         activeSearchTask?.cancel()
         activeSearchTask = nil
         searchGeneration += 1
+    }
+
+    func clearSearch() {
+        searchResults = []
+        searchStatus = .idle
     }
 
     private func updateCoordinateFromFieldsIfValid() {

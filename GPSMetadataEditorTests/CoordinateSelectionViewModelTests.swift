@@ -284,6 +284,19 @@ struct CoordinateSelectionViewModelTests {
         #expect(viewModel.isSearchResultsExpanded == false)
         #expect(viewModel.searchQuery == "Berlin")
     }
+
+    @Test func clearSearchResetsResultsAndStatus() throws {
+        let coordinate = try #require(CoordinateSelection(latitude: 52.520008, longitude: 13.404954))
+        let result = CoordinateSearchResult(title: "Berlin", subtitle: "Germany", coordinate: coordinate)
+        let viewModel = CoordinateSelectionViewModel(searchService: FakeCoordinateSearchService(results: [result]))
+        viewModel.searchResults = [result]
+        viewModel.searchStatus = .searching
+
+        viewModel.clearSearch()
+
+        #expect(viewModel.searchResults.isEmpty == true)
+        #expect(viewModel.searchStatus == .idle)
+    }
 }
 
 struct FakeCoordinateSearchService: CoordinateSearchServicing {

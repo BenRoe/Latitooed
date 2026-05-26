@@ -45,6 +45,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-15)
 | 6 - Loaded Files Grid View | Complete, Host Verified | 100% |
 | 7 - Live Place Search | Plan 01 Complete, Host Verification Pending | 100% |
 | 8 - Multi-Result Search Completer | Complete, Host Verified | 100% |
+| 9 - Video Thumbnail Async | Complete, Host Verified | 100% |
 
 ## Accumulated Context
 

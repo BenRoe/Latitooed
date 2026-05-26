@@ -198,6 +198,17 @@ Plans:
 **Plans:**
 - [x] 08-01-PLAN.md — Replace MKLocalSearch with MKLocalSearchCompleter; two-step resolve on selection
 
+### Phase 9: Video Thumbnail Async
+
+**Status:** Complete, Host Verified
+**Depends on:** Phase 4 (AVFoundation video support)
+**Requirements:** —
+
+**Goal:** Replace deprecated `AVAssetImageGenerator.copyCGImage(at:actualTime:)` (macOS 15) with the async `AVAssetImageGenerator.image(at:)` API. Move thumbnail loading off the cooperative thread pool via `Task.detached` and `.task(id:)` in the view.
+
+**Plans:**
+- [x] 09-01-PLAN.md — Replace synchronous copyCGImage with async AVAssetImageGenerator.image(at:)
+
 ## Coverage
 
 | Requirement Count | Covered | Unmapped |

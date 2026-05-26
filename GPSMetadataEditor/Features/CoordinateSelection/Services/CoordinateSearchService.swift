@@ -10,7 +10,7 @@ nonisolated enum CoordinateSearchError: Error, Equatable, Sendable {
 }
 
 @MainActor
-private final class SearchCompleterDelegate: NSObject, MKLocalSearchCompleterDelegate {
+private final class SearchCompleterDelegate: NSObject, @preconcurrency MKLocalSearchCompleterDelegate {
     private let completer: MKLocalSearchCompleter
     private(set) var lastCompletions: [MKLocalSearchCompletion] = []
     private var continuation: CheckedContinuation<[CoordinateSearchResult], Error>?
@@ -24,11 +24,10 @@ private final class SearchCompleterDelegate: NSObject, MKLocalSearchCompleterDel
 
     func search(for query: String) async throws -> [CoordinateSearchResult] {
         if completer.isSearching { completer.cancel() }
-        continuation = nil // discard any stale continuation
+        continuation = nil
 
         return try await withTaskCancellationHandler {
             try await withCheckedThrowingContinuation { cont in
-                // Body runs synchronously before suspension — no weak capture needed
                 self.continuation = cont
                 self.completer.queryFragment = query
             }
@@ -41,30 +40,25 @@ private final class SearchCompleterDelegate: NSObject, MKLocalSearchCompleterDel
         }
     }
 
-    // nonisolated: MKLocalSearchCompleterDelegate requires nonisolated conformance.
-    // MainActor.assumeIsolated is safe: MapKit guarantees delegate callbacks on the main thread.
-    nonisolated func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
-        MainActor.assumeIsolated {
-            // Use self.completer (not the param) — param is non-Sendable, can't cross into assumeIsolated
-            let slice = Array(self.completer.results.prefix(8))
-            self.lastCompletions = slice
-            let results = slice.map { completion in
-                CoordinateSearchResult(
-                    title: completion.title,
-                    subtitle: completion.subtitle.isEmpty ? nil : completion.subtitle,
-                    coordinate: .berlin // placeholder — real coord resolved on selection
-                )
-            }
-            continuation?.resume(returning: results)
-            continuation = nil // fire-once guard (Pitfall 2)
+    // @preconcurrency conformance: MapKit calls these on the main thread via ObjC runtime.
+    // The class is @MainActor so these run on MainActor — no nonisolated/assumeIsolated needed.
+    func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
+        let slice = Array(completer.results.prefix(8))
+        lastCompletions = slice
+        let results = slice.map { completion in
+            CoordinateSearchResult(
+                title: completion.title,
+                subtitle: completion.subtitle.isEmpty ? nil : completion.subtitle,
+                coordinate: .berlin
+            )
         }
+        continuation?.resume(returning: results)
+        continuation = nil
     }
 
-    nonisolated func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
-        MainActor.assumeIsolated {
-            continuation?.resume(throwing: error)
-            continuation = nil
-        }
+    func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
+        continuation?.resume(throwing: error)
+        continuation = nil
     }
 }
 

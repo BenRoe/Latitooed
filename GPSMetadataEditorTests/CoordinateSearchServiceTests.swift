@@ -7,9 +7,9 @@ struct CoordinateSearchServiceTests {
         let result = CoordinateSearchResult(title: "Berlin", subtitle: "Germany", coordinate: coordinate)
         let service = FakeCoordinateSearchService(results: [result])
 
-        let results = try await service.search(for: "Berlin", near: .berlin)
+        let bundle = try await service.search(for: "Berlin", near: .berlin)
 
-        #expect(results == [result])
+        #expect(bundle.results == [result])
     }
 
     @Test func emptyQueryErrorIsDistinct() {

@@ -51,6 +51,12 @@ private final class SearchCompleterDelegate: NSObject, @preconcurrency MKLocalSe
 
     private let completer: MKLocalSearchCompleter
     private var continuation: CheckedContinuation<CoordinateSearchResults, Error>?
+    /// Identity stamp incremented per `search(for:)` call. The cancellation handler
+    /// hops to MainActor asynchronously — by the time it runs, a fresh search may
+    /// have already started. Snapshotting the ID at dispatch time and re-checking
+    /// it on the MainActor lets us no-op when the cancel applies to a search that
+    /// has already been superseded.
+    private var currentSearchID: UInt64 = 0
 
     override init() {
         completer = MKLocalSearchCompleter()
@@ -69,6 +75,8 @@ private final class SearchCompleterDelegate: NSObject, @preconcurrency MKLocalSe
             pending.resume(throwing: CancellationError())
         }
         continuation = nil
+        currentSearchID &+= 1
+        let searchID = currentSearchID
 
         return try await withTaskCancellationHandler {
             try await withCheckedThrowingContinuation { cont in
@@ -77,9 +85,13 @@ private final class SearchCompleterDelegate: NSObject, @preconcurrency MKLocalSe
             }
         } onCancel: { [weak self] in
             Task { @MainActor [weak self] in
-                self?.continuation?.resume(throwing: CancellationError())
-                self?.continuation = nil
-                self?.completer.cancel()
+                // Identity guard: only cancel if we're still the in-flight search.
+                // A freshly-started search past this point owns its own continuation
+                // and completer state and must not be torn down by us.
+                guard let self, self.currentSearchID == searchID else { return }
+                self.continuation?.resume(throwing: CancellationError())
+                self.continuation = nil
+                self.completer.cancel()
             }
         }
     }

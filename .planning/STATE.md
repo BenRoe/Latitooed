@@ -20,7 +20,7 @@ progress:
 See: `.planning/PROJECT.md` (updated 2026-05-15)
 
 **Core value:** Users can reliably apply a chosen GPS coordinate to many local media files without installing command-line dependencies.
-**Current focus:** Phase 08 — multi-result-search-completer
+**Current focus:** Milestone v1.0 complete — all 8 phases shipped
 
 ## Workflow
 
@@ -44,7 +44,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-15)
 | 5 - Packaging and Release Verification | Complete, Host Verified | 100% |
 | 6 - Loaded Files Grid View | Complete, Host Verified | 100% |
 | 7 - Live Place Search | Plan 01 Complete, Host Verification Pending | 100% |
-| 8 - Multi-Result Search Completer | Plan 01 Complete, Host Verification Pending | 100% |
+| 8 - Multi-Result Search Completer | Complete, Host Verified | 100% |
 
 ## Accumulated Context
 

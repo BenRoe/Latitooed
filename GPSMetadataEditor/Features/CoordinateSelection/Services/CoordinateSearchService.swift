@@ -150,8 +150,8 @@ final class MapKitCoordinateSearchService: CoordinateSearchServicing {
             let response = try await MKLocalSearch(request: request).start()
             guard let item = response.mapItems.first,
                   let coord = CoordinateSelection(
-                    latitude: item.placemark.coordinate.latitude,
-                    longitude: item.placemark.coordinate.longitude
+                    latitude: item.location.coordinate.latitude,
+                    longitude: item.location.coordinate.longitude
                   ) else {
                 throw CoordinateSearchError.unresolvable
             }

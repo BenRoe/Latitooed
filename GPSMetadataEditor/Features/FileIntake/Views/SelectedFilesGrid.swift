@@ -137,7 +137,7 @@ private struct FilePreview: View {
         .frame(maxWidth: .infinity)
         .clipShape(.rect(cornerSize: AppDesign.Radius.smallSize))
         .task(id: file.url) {
-            previewImage = file.previewImage
+            previewImage = await file.previewImage
         }
     }
 }
@@ -187,26 +187,23 @@ private extension MediaFileKind {
 
 private extension SelectedMediaFile {
     var previewImage: NSImage? {
-        switch kind {
-        case .jpeg, .heic:
-            NSImage(contentsOf: url)
-        case .mov, .mp4:
-            videoPreviewImage
+        get async {
+            switch kind {
+            case .jpeg, .heic:
+                NSImage(contentsOf: url)
+            case .mov, .mp4:
+                await loadVideoThumbnail(for: url)
+            }
         }
     }
+}
 
-    var videoPreviewImage: NSImage? {
-        let asset = AVURLAsset(url: url)
-        let generator = AVAssetImageGenerator(asset: asset)
-        generator.appliesPreferredTrackTransform = true
-
-        do {
-            let image = try generator.copyCGImage(at: CMTime(seconds: 0, preferredTimescale: 600), actualTime: nil)
-            return NSImage(cgImage: image, size: .zero)
-        } catch {
-            return nil
-        }
-    }
+private func loadVideoThumbnail(for url: URL) async -> NSImage? {
+    let asset = AVURLAsset(url: url)
+    let generator = AVAssetImageGenerator(asset: asset)
+    generator.appliesPreferredTrackTransform = true
+    guard let (cgImage, _) = try? await generator.image(at: .zero) else { return nil }
+    return NSImage(cgImage: cgImage, size: .zero)
 }
 
 private extension FileResultStatus {

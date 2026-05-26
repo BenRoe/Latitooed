@@ -1,28 +1,66 @@
 import Foundation
 import MapKit
 
-nonisolated protocol CoordinateSearchServicing: Sendable {
-    func search(for query: String, near center: CoordinateSelection) async throws -> [CoordinateSearchResult]
+/// Opaque, service-owned token that names a single completion result so the
+/// view-model can ask the service to resolve it later. Test fakes can construct
+/// resolvers that already know a coordinate; the MapKit service constructs
+/// resolvers backed by `MKLocalSearchCompletion` and resolves them with
+/// `MKLocalSearch`.
+nonisolated enum CoordinateResolver: Sendable {
+    /// Pre-resolved coordinate (used by `FakeCoordinateSearchService`).
+    case immediate(CoordinateSelection)
+    /// MapKit completion that must be resolved via `MKLocalSearch`.
+    case mapKitCompletion(MKLocalSearchCompletionBox)
 }
 
-nonisolated enum CoordinateSearchError: Error, Equatable, Sendable {
+/// Sendable wrapper around `MKLocalSearchCompletion` (an `NSObject` that is
+/// safe to read across actors but not Sendable in Swift's strict model).
+nonisolated final class MKLocalSearchCompletionBox: @unchecked Sendable {
+    let completion: MKLocalSearchCompletion
+    init(_ completion: MKLocalSearchCompletion) { self.completion = completion }
+}
+
+/// Bundle returned by `CoordinateSearchServicing.search` so the view-model
+/// never has to type-check the concrete service or read a mutable side-channel
+/// property. The two arrays/dictionaries are produced atomically by the same
+/// service callback, eliminating the index-misalignment race (see CR-03).
+nonisolated struct CoordinateSearchResults: Sendable {
+    let results: [CoordinateSearchResult]
+    let resolvers: [UUID: CoordinateResolver]
+
+    init(results: [CoordinateSearchResult], resolvers: [UUID: CoordinateResolver]) {
+        self.results = results
+        self.resolvers = resolvers
+    }
+}
+
+protocol CoordinateSearchServicing: Sendable {
+    func search(for query: String, near center: CoordinateSelection) async throws -> CoordinateSearchResults
+    func resolve(_ resolver: CoordinateResolver) async throws -> CoordinateSelection
+}
+
+enum CoordinateSearchError: Error, Equatable, Sendable {
     case emptyQuery
+    case unresolvable
 }
 
 @MainActor
 private final class SearchCompleterDelegate: NSObject, @preconcurrency MKLocalSearchCompleterDelegate {
+    /// UX cap from phase 08 plan — keep dropdown short enough to scan at a glance.
+    static let maxCompletionsShown = 8
+
     private let completer: MKLocalSearchCompleter
-    private(set) var lastCompletions: [MKLocalSearchCompletion] = []
-    private var continuation: CheckedContinuation<[CoordinateSearchResult], Error>?
+    private var continuation: CheckedContinuation<CoordinateSearchResults, Error>?
 
     override init() {
         completer = MKLocalSearchCompleter()
         super.init()
         completer.delegate = self
-        // D-02: no region — global search (A3: default resultTypes is fine)
+        // No region biasing: surface global results so users in any locale can find places.
+        // Default resultTypes (.address | .pointOfInterest | .query) is appropriate.
     }
 
-    func search(for query: String) async throws -> [CoordinateSearchResult] {
+    func search(for query: String) async throws -> CoordinateSearchResults {
         if completer.isSearching { completer.cancel() }
         // CheckedContinuation requires exactly one resume. If a prior search is still
         // pending, hand it a CancellationError before dropping the reference so the
@@ -49,17 +87,24 @@ private final class SearchCompleterDelegate: NSObject, @preconcurrency MKLocalSe
     // @preconcurrency conformance: MapKit calls these on the main thread via ObjC runtime.
     // The class is @MainActor so these run on MainActor — no nonisolated/assumeIsolated needed.
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
-        let slice = Array(completer.results.prefix(8))
-        lastCompletions = slice
-        let results = slice.map { completion in
-            CoordinateSearchResult(
+        // Ignore later updates: MKLocalSearchCompleter can fire this callback multiple
+        // times per search as the query refines. Resuming twice traps; mutating
+        // shared state after resume creates an alignment race. Snapshot once and bail.
+        guard let cont = continuation else { return }
+        continuation = nil
+
+        let slice = Array(completer.results.prefix(Self.maxCompletionsShown))
+        var resolvers: [UUID: CoordinateResolver] = [:]
+        let results: [CoordinateSearchResult] = slice.map { completion in
+            let result = CoordinateSearchResult(
                 title: completion.title,
                 subtitle: completion.subtitle.isEmpty ? nil : completion.subtitle,
-                coordinate: .berlin
+                coordinate: nil // resolved later via MKLocalSearch
             )
+            resolvers[result.id] = .mapKitCompletion(MKLocalSearchCompletionBox(completion))
+            return result
         }
-        continuation?.resume(returning: results)
-        continuation = nil
+        cont.resume(returning: CoordinateSearchResults(results: results, resolvers: resolvers))
     }
 
     func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
@@ -72,20 +117,33 @@ private final class SearchCompleterDelegate: NSObject, @preconcurrency MKLocalSe
 final class MapKitCoordinateSearchService: CoordinateSearchServicing {
     private let delegate = SearchCompleterDelegate()
 
-    var lastCompletions: [MKLocalSearchCompletion] {
-        delegate.lastCompletions
-    }
-
-    func search(for query: String, near center: CoordinateSelection) async throws -> [CoordinateSearchResult] {
+    func search(for query: String, near center: CoordinateSelection) async throws -> CoordinateSearchResults {
         let trimmedQuery = query.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmedQuery.isEmpty else {
             throw CoordinateSearchError.emptyQuery
         }
 
         try Task.checkCancellation()
-        let results = try await delegate.search(for: trimmedQuery)
+        let bundle = try await delegate.search(for: trimmedQuery)
         try Task.checkCancellation()
-        print("[Completer] '\(trimmedQuery)' → \(results.count) completions")
-        return results
+        return bundle
+    }
+
+    func resolve(_ resolver: CoordinateResolver) async throws -> CoordinateSelection {
+        switch resolver {
+        case .immediate(let coord):
+            return coord
+        case .mapKitCompletion(let box):
+            let request = MKLocalSearch.Request(completion: box.completion)
+            let response = try await MKLocalSearch(request: request).start()
+            guard let item = response.mapItems.first,
+                  let coord = CoordinateSelection(
+                    latitude: item.placemark.coordinate.latitude,
+                    longitude: item.placemark.coordinate.longitude
+                  ) else {
+                throw CoordinateSearchError.unresolvable
+            }
+            return coord
+        }
     }
 }

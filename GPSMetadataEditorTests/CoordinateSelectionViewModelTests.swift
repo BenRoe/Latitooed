@@ -298,18 +298,32 @@ struct CoordinateSelectionViewModelTests {
         #expect(viewModel.searchStatus == .idle)
     }
 
-    @Test func selectingSearchResultWithoutCompletionMapEntryFallsBackToDirectSet() throws {
+    @Test func selectingSearchResultWithPreResolvedCoordinateSetsTargetSynchronously() throws {
         let coordinate = try #require(CoordinateSelection(latitude: 52.520008, longitude: 13.404954))
         let result = CoordinateSearchResult(title: "Berlin", coordinate: coordinate)
         let viewModel = CoordinateSelectionViewModel(searchService: FakeCoordinateSearchService())
         viewModel.isSearchResultsExpanded = true
 
-        // completionMap is empty (FakeCoordinateSearchService never populates it) — fallback path
+        // Result carries a coordinate, so selectSearchResult takes the immediate
+        // path: no async resolve, the model is updated before the call returns.
         viewModel.selectSearchResult(result)
 
         #expect(viewModel.selectedCoordinate == coordinate)
         #expect(viewModel.isSearchResultsExpanded == false)
         #expect(viewModel.readyStatusText.hasPrefix("Target set:"))
+    }
+
+    @Test func selectingSearchResultWithoutResolverAndWithoutCoordinateIsDropped() {
+        let result = CoordinateSearchResult(title: "Phantom", coordinate: nil)
+        let viewModel = CoordinateSelectionViewModel(searchService: FakeCoordinateSearchService())
+        viewModel.isSearchResultsExpanded = true
+
+        // No resolverMap entry, no coordinate on the result — the selection is
+        // dropped rather than seeding the model with a default (CR-01).
+        viewModel.selectSearchResult(result)
+
+        #expect(viewModel.selectedCoordinate == nil)
+        #expect(viewModel.isSearchResultsExpanded == false)
     }
 
     @Test func readyStatusTextShowsResolvingOverrideWhenSet() {
@@ -335,12 +349,30 @@ struct FakeCoordinateSearchService: CoordinateSearchServicing {
     var results: [CoordinateSearchResult] = []
     var error: (any Error & Sendable)?
 
-    func search(for query: String, near center: CoordinateSelection) async throws -> [CoordinateSearchResult] {
+    func search(for query: String, near center: CoordinateSelection) async throws -> CoordinateSearchResults {
         if let error {
             throw error
         }
 
-        return results
+        // Auto-bind resolvers from any pre-resolved coordinates on the results so
+        // tests that exercise the resolve flow can rely on selectSearchResult
+        // setting selectedCoordinate without each test wiring up resolvers.
+        var resolvers: [UUID: CoordinateResolver] = [:]
+        for result in results {
+            if let coord = result.coordinate {
+                resolvers[result.id] = .immediate(coord)
+            }
+        }
+        return CoordinateSearchResults(results: results, resolvers: resolvers)
+    }
+
+    func resolve(_ resolver: CoordinateResolver) async throws -> CoordinateSelection {
+        switch resolver {
+        case .immediate(let coord):
+            return coord
+        case .mapKitCompletion:
+            throw CoordinateSearchError.unresolvable
+        }
     }
 }
 
@@ -351,11 +383,30 @@ private enum TestSearchError: Error, Sendable {
 private struct DelayedCoordinateSearchService: CoordinateSearchServicing {
     let resultsByQuery: [String: [CoordinateSearchResult]]
 
-    func search(for query: String, near center: CoordinateSelection) async throws -> [CoordinateSearchResult] {
+    func search(for query: String, near center: CoordinateSelection) async throws -> CoordinateSearchResults {
         if query == "Berlin" {
-            await Task.yield()
+            // Deterministic delay (vs Task.yield()) so the Paris call below is
+            // guaranteed to be dispatched while Berlin is still suspended,
+            // making the "stale response loses" ordering unambiguous in CI.
+            try await Task.sleep(for: .milliseconds(20))
         }
 
-        return resultsByQuery[query, default: []]
+        let results = resultsByQuery[query, default: []]
+        var resolvers: [UUID: CoordinateResolver] = [:]
+        for result in results {
+            if let coord = result.coordinate {
+                resolvers[result.id] = .immediate(coord)
+            }
+        }
+        return CoordinateSearchResults(results: results, resolvers: resolvers)
+    }
+
+    func resolve(_ resolver: CoordinateResolver) async throws -> CoordinateSelection {
+        switch resolver {
+        case .immediate(let coord):
+            return coord
+        case .mapKitCompletion:
+            throw CoordinateSearchError.unresolvable
+        }
     }
 }

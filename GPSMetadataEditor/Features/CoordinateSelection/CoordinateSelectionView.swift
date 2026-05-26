@@ -11,6 +11,7 @@ struct CoordinateSelectionView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: AppDesign.Spacing.md) {
             CoordinateSearchPanel(viewModel: viewModel)
+                .zIndex(1)
 
             CoordinateFieldsView(viewModel: viewModel)
 

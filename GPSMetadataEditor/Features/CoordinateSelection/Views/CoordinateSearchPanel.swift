@@ -5,6 +5,7 @@ struct CoordinateSearchPanel: View {
 
     @State private var debounceTask: Task<Void, Never>?
     @State private var isDropdownVisible = false
+    @State private var fieldHeight: CGFloat = 28
 
     var body: some View {
         VStack(alignment: .leading, spacing: AppDesign.Spacing.sm) {
@@ -45,18 +46,28 @@ struct CoordinateSearchPanel: View {
                 }
                 isDropdownVisible = true
                 debounceTask = Task { @MainActor in
-                    try? await Task.sleep(for: .milliseconds(500))
-                    guard !Task.isCancelled else { return }
+                    do {
+                        try await Task.sleep(for: .milliseconds(500))
+                    } catch {
+                        return
+                    }
                     viewModel.search()
                 }
             }
             .onChange(of: viewModel.isSearchResultsExpanded) { _, newValue in
                 if !newValue { isDropdownVisible = false }
             }
-            .overlay(alignment: .bottom) {
+            .background {
+                GeometryReader { geo in
+                    Color.clear
+                        .onAppear { fieldHeight = geo.size.height }
+                        .onChange(of: geo.size.height) { _, h in fieldHeight = h }
+                }
+            }
+            .overlay(alignment: .top) {
                 if isDropdownVisible {
-                    dropdownContent
-                        .offset(y: 36)
+                    SearchDropdownView(viewModel: viewModel, onDismiss: { isDropdownVisible = false })
+                        .offset(y: fieldHeight)
                 }
             }
             .onDisappear {
@@ -64,8 +75,13 @@ struct CoordinateSearchPanel: View {
             }
         }
     }
+}
 
-    private var dropdownContent: some View {
+private struct SearchDropdownView: View {
+    let viewModel: CoordinateSelectionViewModel
+    let onDismiss: () -> Void
+
+    var body: some View {
         VStack(alignment: .leading, spacing: AppDesign.Spacing.sm) {
             Text("Results")
                 .font(.caption)
@@ -83,20 +99,22 @@ struct CoordinateSearchPanel: View {
                     .foregroundStyle(viewModel.searchStatus == .failed ? .orange : .secondary)
             }
 
-            ScrollView {
-                VStack(alignment: .leading, spacing: 0) {
-                    ForEach(viewModel.searchResults) { result in
-                        Button {
-                            viewModel.selectSearchResult(result)
-                            isDropdownVisible = false
-                        } label: {
-                            CoordinateSearchResultRow(result: result)
+            if !viewModel.searchResults.isEmpty {
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 0) {
+                        ForEach(viewModel.searchResults) { result in
+                            Button {
+                                viewModel.selectSearchResult(result)
+                                onDismiss()
+                            } label: {
+                                CoordinateSearchResultRow(result: result)
+                            }
+                            .buttonStyle(.plain)
                         }
-                        .buttonStyle(.plain)
                     }
                 }
+                .frame(height: 240)
             }
-            .frame(maxHeight: 240)
         }
         .frame(maxWidth: .infinity)
         .padding(AppDesign.Spacing.sm)

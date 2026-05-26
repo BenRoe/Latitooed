@@ -186,11 +186,12 @@ private extension MediaFileKind {
 }
 
 private extension SelectedMediaFile {
+    // URLs are stable per session — task(id: file.url) fires once per unique file.
     var previewImage: NSImage? {
         get async {
             switch kind {
             case .jpeg, .heic:
-                NSImage(contentsOf: url)
+                await Task.detached(priority: .utility) { NSImage(contentsOf: url) }.value
             case .mov, .mp4:
                 await loadVideoThumbnail(for: url)
             }
@@ -202,8 +203,13 @@ private func loadVideoThumbnail(for url: URL) async -> NSImage? {
     let asset = AVURLAsset(url: url)
     let generator = AVAssetImageGenerator(asset: asset)
     generator.appliesPreferredTrackTransform = true
+    let scale = await MainActor.run { NSScreen.main?.backingScaleFactor ?? 2.0 }
+    generator.maximumSize = NSSize(
+        width: GridCardMetrics.width * scale,
+        height: GridCardMetrics.previewHeight * scale
+    )
     guard let (cgImage, _) = try? await generator.image(at: .zero) else { return nil }
-    return NSImage(cgImage: cgImage, size: .zero)
+    return NSImage(cgImage: cgImage, size: NSSize(width: cgImage.width, height: cgImage.height))
 }
 
 private extension FileResultStatus {

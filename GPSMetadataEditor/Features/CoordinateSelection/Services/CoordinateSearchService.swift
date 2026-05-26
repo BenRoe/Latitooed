@@ -5,44 +5,90 @@ nonisolated protocol CoordinateSearchServicing: Sendable {
     func search(for query: String, near center: CoordinateSelection) async throws -> [CoordinateSearchResult]
 }
 
-nonisolated struct MapKitCoordinateSearchService: CoordinateSearchServicing {
-    func search(for query: String, near center: CoordinateSelection) async throws -> [CoordinateSearchResult] {
-        let trimmedQuery = query.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard trimmedQuery.isEmpty == false else {
-            throw CoordinateSearchError.emptyQuery
-        }
+nonisolated enum CoordinateSearchError: Error, Equatable, Sendable {
+    case emptyQuery
+}
 
-        let request = MKLocalSearch.Request()
-        request.naturalLanguageQuery = trimmedQuery
-        request.region = MKCoordinateRegion(
-            center: CLLocationCoordinate2D(latitude: center.latitude, longitude: center.longitude),
-            span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5)
-        )
+@MainActor
+private final class SearchCompleterDelegate: NSObject, MKLocalSearchCompleterDelegate {
+    private let completer: MKLocalSearchCompleter
+    private(set) var lastCompletions: [MKLocalSearchCompletion] = []
+    private var continuation: CheckedContinuation<[CoordinateSearchResult], Error>?
 
-        try Task.checkCancellation()
-        let response = try await MKLocalSearch(request: request).start()
-        try Task.checkCancellation()
+    override init() {
+        completer = MKLocalSearchCompleter()
+        super.init()
+        completer.delegate = self
+        // D-02: no region — global search (A3: default resultTypes is fine)
+    }
 
-        return response.mapItems.compactMap { item in
-            let mapCoordinate = item.location.coordinate
-            let subtitle = item.addressRepresentations?.fullAddress(includingRegion: true, singleLine: true)
+    func search(for query: String) async throws -> [CoordinateSearchResult] {
+        if completer.isSearching { completer.cancel() }
+        continuation = nil // discard any stale continuation
 
-            guard let coordinate = CoordinateSelection(
-                latitude: mapCoordinate.latitude,
-                longitude: mapCoordinate.longitude
-            ) else {
-                return nil
+        return try await withTaskCancellationHandler {
+            try await withCheckedThrowingContinuation { [weak self] cont in
+                guard let self else {
+                    cont.resume(throwing: CancellationError())
+                    return
+                }
+                self.continuation = cont
+                self.completer.queryFragment = query
             }
+        } onCancel: { [weak self] in
+            Task { @MainActor [weak self] in
+                self?.continuation?.resume(throwing: CancellationError())
+                self?.continuation = nil
+                self?.completer.cancel()
+            }
+        }
+    }
 
-            return CoordinateSearchResult(
-                title: item.name ?? subtitle ?? trimmedQuery,
-                subtitle: subtitle,
-                coordinate: coordinate
-            )
+    // nonisolated: MKLocalSearchCompleterDelegate requires nonisolated conformance.
+    // MainActor.assumeIsolated is safe: MapKit guarantees delegate callbacks on the main thread.
+    nonisolated func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
+        MainActor.assumeIsolated {
+            // Slice once — UUID alignment with lastCompletions requires a single slice (Pitfall 4)
+            let slice = Array(completer.results.prefix(8))
+            self.lastCompletions = slice
+            let results = slice.map { completion in
+                CoordinateSearchResult(
+                    title: completion.title,
+                    subtitle: completion.subtitle.isEmpty ? nil : completion.subtitle,
+                    coordinate: .berlin // placeholder — real coord resolved on selection
+                )
+            }
+            continuation?.resume(returning: results)
+            continuation = nil // fire-once guard (Pitfall 2)
+        }
+    }
+
+    nonisolated func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
+        MainActor.assumeIsolated {
+            continuation?.resume(throwing: error)
+            continuation = nil
         }
     }
 }
 
-nonisolated enum CoordinateSearchError: Error, Equatable, Sendable {
-    case emptyQuery
+@MainActor
+final class MapKitCoordinateSearchService: CoordinateSearchServicing {
+    private let delegate = SearchCompleterDelegate()
+
+    var lastCompletions: [MKLocalSearchCompletion] {
+        delegate.lastCompletions
+    }
+
+    func search(for query: String, near center: CoordinateSelection) async throws -> [CoordinateSearchResult] {
+        let trimmedQuery = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmedQuery.isEmpty else {
+            throw CoordinateSearchError.emptyQuery
+        }
+
+        try Task.checkCancellation()
+        let results = try await delegate.search(for: trimmedQuery)
+        try Task.checkCancellation()
+        print("[Completer] '\(trimmedQuery)' → \(results.count) completions")
+        return results
+    }
 }

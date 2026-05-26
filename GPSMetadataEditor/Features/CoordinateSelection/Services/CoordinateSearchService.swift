@@ -27,11 +27,8 @@ private final class SearchCompleterDelegate: NSObject, MKLocalSearchCompleterDel
         continuation = nil // discard any stale continuation
 
         return try await withTaskCancellationHandler {
-            try await withCheckedThrowingContinuation { [weak self] cont in
-                guard let self else {
-                    cont.resume(throwing: CancellationError())
-                    return
-                }
+            try await withCheckedThrowingContinuation { cont in
+                // Body runs synchronously before suspension — no weak capture needed
                 self.continuation = cont
                 self.completer.queryFragment = query
             }
@@ -48,8 +45,8 @@ private final class SearchCompleterDelegate: NSObject, MKLocalSearchCompleterDel
     // MainActor.assumeIsolated is safe: MapKit guarantees delegate callbacks on the main thread.
     nonisolated func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
         MainActor.assumeIsolated {
-            // Slice once — UUID alignment with lastCompletions requires a single slice (Pitfall 4)
-            let slice = Array(completer.results.prefix(8))
+            // Use self.completer (not the param) — param is non-Sendable, can't cross into assumeIsolated
+            let slice = Array(self.completer.results.prefix(8))
             self.lastCompletions = slice
             let results = slice.map { completion in
                 CoordinateSearchResult(

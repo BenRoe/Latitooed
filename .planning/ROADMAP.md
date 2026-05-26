@@ -16,6 +16,7 @@
 | 5 | Packaging and Release Verification | Complete | PKG-01, PKG-02, PKG-03, PKG-04 |
 | 6 | Loaded Files Grid View | Complete | GRID-01, GRID-02, GRID-03, GRID-04, GRID-05 |
 | 7 | Live Place Search | Replace submit-gated search with live-as-you-type search using MapKit, floating dropdown results, and Apple Maps UX patterns. | LOC-02 |
+| 8 | Multi-Result Search Completer | Replace MKLocalSearch with MKLocalSearchCompleter to return multiple autocomplete suggestions for partial queries, matching Apple Maps UX. | LOC-01, LOC-02 |
 
 ## Phases
 
@@ -169,7 +170,33 @@ Plans:
 - Remove the Search button and `performSearchOnSubmit` from `CoordinateSearchPanel`.
 
 Plans:
-- [ ] 07-01-PLAN.md — Live search panel: ViewModel cleanup, onChange debounce, floating dropdown overlay
+- [x] 07-01-PLAN.md — Live search panel: ViewModel cleanup, onChange debounce, floating dropdown overlay
+
+### Phase 8: Multi-Result Search Completer
+
+**Status:** Plan 01 Complete, Host Verification Pending
+**Depends on:** Phase 7
+**Requirements:** LOC-01, LOC-02
+
+**Goal:** Replace `MKLocalSearch` with `MKLocalSearchCompleter` so partial queries (3+ chars) return multiple autocomplete suggestions instead of a single result. On selection, resolve the chosen completion to coordinates via `MKLocalSearch(request: .init(completion:))`. Keeps `CoordinateSearchServicing` protocol unchanged — only the `MapKitCoordinateSearchService` implementation changes.
+
+**Success Criteria:**
+1. Typing 3+ characters in the search field returns 5 or more suggestions in the dropdown.
+2. Each suggestion shows a title and optional subtitle (e.g. city + country).
+3. Selecting a suggestion correctly resolves to a coordinate and sets it on the map.
+4. Partial queries (e.g. "leip", "ber") return relevant completions, not just exact matches.
+5. Cancellation of in-flight completer requests works correctly when the user types faster than results arrive.
+6. All existing `CoordinateSelectionViewModelTests` and `CoordinateSearchServiceTests` pass unchanged.
+
+**Notes:**
+- `MKLocalSearchCompleter` is delegate-based — wrap in `withCheckedThrowingContinuation`.
+- Completions have no coordinates — resolve via `MKLocalSearch(request: .init(completion:))` on selection only (one call, not N parallel calls).
+- `CoordinateSearchResult` model stays unchanged; `CoordinateSearchServicing` protocol stays unchanged.
+- `SearchDropdownView` already handles scrollable results list — no UI changes needed.
+- Two-step flow: completer returns `[MKLocalSearchCompletion]` → service maps to `[CoordinateSearchResult]` with placeholder coords → ViewModel stores completions → on `selectSearchResult`, resolve completion to real coords before calling `setCoordinate`.
+
+**Plans:**
+- [x] 08-01-PLAN.md — Replace MKLocalSearch with MKLocalSearchCompleter; two-step resolve on selection
 
 ## Coverage
 

@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: active
-last_updated: "2026-05-25T01:17:00Z"
-last_activity: 2026-05-25
+status: Phase 08 Complete
+last_updated: "2026-05-26T17:10:00.000Z"
+last_activity: 2026-05-26
 progress:
-  total_phases: 7
-  completed_phases: 7
-  total_plans: 22
-  completed_plans: 22
+  total_phases: 8
+  completed_phases: 8
+  total_plans: 23
+  completed_plans: 23
   percent: 100
 ---
 
@@ -20,7 +20,7 @@ progress:
 See: `.planning/PROJECT.md` (updated 2026-05-15)
 
 **Core value:** Users can reliably apply a chosen GPS coordinate to many local media files without installing command-line dependencies.
-**Current focus:** Phase 07 — live-place-search
+**Current focus:** Phase 08 — multi-result-search-completer
 
 ## Workflow
 
@@ -44,6 +44,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-15)
 | 5 - Packaging and Release Verification | Complete, Host Verified | 100% |
 | 6 - Loaded Files Grid View | Complete, Host Verified | 100% |
 | 7 - Live Place Search | Plan 01 Complete, Host Verification Pending | 100% |
+| 8 - Multi-Result Search Completer | Plan 01 Complete, Host Verification Pending | 100% |
 
 ## Accumulated Context
 
@@ -75,10 +76,11 @@ See: `.planning/PROJECT.md` (updated 2026-05-15)
 - Phase 5 completed signed `.app` package verification on 2026-05-22: host `xcodebuild test` passed, bundled ExifTool version `13.58` executed from the signed app after codesign verification, stripped-PATH JPEG/HEIC smoke wrote Berlin GPS metadata to copied fixtures, and `05-HUMAN-UAT.md` is passed.
 - Phase 6 added session-only Table/Grid mode, an adaptive loaded-files grid, aggregate multi-selection detail summaries, modifier-aware grid selection helpers, and host UAT passed on 2026-05-24.
 - Phase 7 Plan 01 replaced submit-gated MapKit search with onChange debounce (3 chars / 500 ms), floating dropdown overlay, X clear button, and Escape handler. Removed Search button and performSearchOnSubmit(). Added clearSearch() to ViewModel. isSearchResultsExpanded kept to avoid breaking existing tests; view uses its own @State isDropdownVisible synced via onChange.
+- Phase 8 Plan 01 replaced MKLocalSearch suggestions with MKLocalSearchCompleter. SearchCompleterDelegate @MainActor inner class bridges delegate callbacks to withCheckedThrowingContinuation. completionMap ([UUID: MKLocalSearchCompletion]) on ViewModel enables two-step resolve: service returns placeholder coords, ViewModel resolves real coord on selection via MKLocalSearch.Request(completion:). readyStatusOverride drives "Resolving location…" and "Could not load location. Try again." status bar states.
 
 ## Next Action
 
-Phase 7 Plan 01 complete. Host verification pending (xcodebuild + app launch smoke test required on macOS host).
+Phase 8 Plan 01 complete. Host verification pending (xcodebuild test + partial query smoke test required on macOS host — verify "leip" returns 5+ suggestions in dropdown).
 
 ### Quick Tasks Completed
 
@@ -86,7 +88,7 @@ Phase 7 Plan 01 complete. Host verification pending (xcodebuild + app launch smo
 |---|-------------|------|--------|-----------|
 | 260525-1xy | Add the full path to the detail pane when a file is selected and make the pane collapsible | 2026-05-25 | 675264c | [260525-1xy-add-the-full-path-to-the-detail-pane-if-](./quick/260525-1xy-add-the-full-path-to-the-detail-pane-if-/) |
 
-Last activity: 2026-05-25
+Last activity: 2026-05-26
 
 ---
 *State initialized: 2026-05-15*

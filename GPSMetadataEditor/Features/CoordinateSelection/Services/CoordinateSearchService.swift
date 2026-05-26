@@ -24,6 +24,12 @@ private final class SearchCompleterDelegate: NSObject, @preconcurrency MKLocalSe
 
     func search(for query: String) async throws -> [CoordinateSearchResult] {
         if completer.isSearching { completer.cancel() }
+        // CheckedContinuation requires exactly one resume. If a prior search is still
+        // pending, hand it a CancellationError before dropping the reference so the
+        // awaiting Task doesn't leak (SWIFT TASK CONTINUATION MISUSE).
+        if let pending = continuation {
+            pending.resume(throwing: CancellationError())
+        }
         continuation = nil
 
         return try await withTaskCancellationHandler {

@@ -1,4 +1,5 @@
 import Foundation
+import MapKit
 import Observation
 
 @Observable
@@ -22,6 +23,9 @@ final class CoordinateSelectionViewModel {
     var searchStatus: SearchStatus = .idle
     var searchResults: [CoordinateSearchResult] = []
 
+    // internal (not private) so @testable import tests can read/write directly
+    var readyStatusOverride: String? = nil
+
     @ObservationIgnored
     private let searchService: any CoordinateSearchServicing
 
@@ -29,7 +33,16 @@ final class CoordinateSelectionViewModel {
     private var activeSearchTask: Task<Void, Never>?
 
     @ObservationIgnored
+    private var activeResolveTask: Task<Void, Never>?
+
+    @ObservationIgnored
+    private var activeErrorClearTask: Task<Void, Never>?
+
+    @ObservationIgnored
     private var searchGeneration = 0
+
+    @ObservationIgnored
+    private var completionMap: [UUID: MKLocalSearchCompletion] = [:]
 
     init(searchService: any CoordinateSearchServicing = MapKitCoordinateSearchService()) {
         self.searchService = searchService
@@ -37,6 +50,8 @@ final class CoordinateSelectionViewModel {
 
     deinit {
         activeSearchTask?.cancel()
+        activeResolveTask?.cancel()
+        activeErrorClearTask?.cancel()
     }
 
     var defaultMapCenter: CoordinateSelection {
@@ -44,6 +59,10 @@ final class CoordinateSelectionViewModel {
     }
 
     var readyStatusText: String {
+        if let override = readyStatusOverride {
+            return override
+        }
+
         guard let selectedCoordinate else {
             return "No target coordinate selected."
         }
@@ -81,7 +100,41 @@ final class CoordinateSelectionViewModel {
     }
 
     func selectSearchResult(_ result: CoordinateSearchResult) {
-        setCoordinate(result.coordinate, label: result.title, collapseResults: true)
+        isSearchResultsExpanded = false // optimistic dismiss (D-01)
+
+        guard let completion = completionMap[result.id] else {
+            // No completion in map — FakeCoordinateSearchService path or old code path.
+            // Fall back to direct coordinate set so all existing tests stay green.
+            setCoordinate(result.coordinate, label: result.title, collapseResults: false)
+            return
+        }
+
+        readyStatusOverride = "Resolving location…"
+        activeResolveTask?.cancel()
+        activeResolveTask = Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                let request = MKLocalSearch.Request(completion: completion)
+                let response = try await MKLocalSearch(request: request).start()
+                guard !Task.isCancelled else { return }
+                if let item = response.mapItems.first,
+                   let coord = CoordinateSelection(
+                       latitude: item.placemark.coordinate.latitude,
+                       longitude: item.placemark.coordinate.longitude
+                   ) {
+                    self.setCoordinate(coord, label: result.title, collapseResults: false)
+                    self.readyStatusOverride = nil
+                } else {
+                    self.showResolveError()
+                }
+            } catch is CancellationError {
+                // Superseded by a newer selection — drop silently
+                return
+            } catch {
+                guard !Task.isCancelled else { return }
+                self.showResolveError()
+            }
+        }
     }
 
     func selectRecentCoordinate(_ recentCoordinate: RecentCoordinateSnapshot) {
@@ -105,6 +158,7 @@ final class CoordinateSelectionViewModel {
     }
 
     func search() {
+        completionMap = [:] // Pitfall 5: clear stale entries before new search
         activeSearchTask?.cancel()
         searchGeneration += 1
         let generation = searchGeneration
@@ -117,22 +171,38 @@ final class CoordinateSelectionViewModel {
             return
         }
 
-        searchResults = []
         isSearchResultsExpanded = true
         searchStatus = .searching
+        readyStatusOverride = nil // clear any prior resolve error when user starts new search
         let searchCenter = selectedCoordinate ?? defaultMapCenter
 
-        activeSearchTask = Task { [weak self, searchService] in
+        activeSearchTask = Task { @MainActor [weak self, searchService] in
             do {
                 let results = try await searchService.search(for: query, near: searchCenter)
+                let genMatch = generation == (self?.searchGeneration ?? -1)
+                print("[Search] got \(results.count) results, gen=\(generation), selfGen=\(self?.searchGeneration ?? -1), genMatch=\(genMatch), cancelled=\(Task.isCancelled)")
                 guard let self, generation == self.searchGeneration, Task.isCancelled == false else {
+                    print("[Search] guard failed — dropping results")
                     return
                 }
 
+                // Build completionMap from MapKitCoordinateSearchService.lastCompletions (Option B)
+                // index-aligned with results via zip (Pitfall 4)
+                if let concreteService = searchService as? MapKitCoordinateSearchService {
+                    let completions = concreteService.lastCompletions
+                    for (result, completion) in zip(results, completions) {
+                        self.completionMap[result.id] = completion
+                    }
+                }
+                // else: FakeCoordinateSearchService — completionMap stays empty, existing tests unaffected
+
+                print("[Search] writing \(results.count) results to viewModel")
                 self.searchResults = results
                 self.searchStatus = results.isEmpty ? .noResults : .idle
                 self.activeSearchTask = nil
+                print("[Search] done, searchResults.count=\(self.searchResults.count)")
             } catch is CancellationError {
+                print("[Search] CancellationError gen=\(generation)")
                 guard let self, generation == self.searchGeneration else {
                     return
                 }
@@ -140,6 +210,7 @@ final class CoordinateSelectionViewModel {
                 self.searchStatus = .idle
                 self.activeSearchTask = nil
             } catch {
+                print("[Search] error=\(error) gen=\(generation)")
                 guard let self, generation == self.searchGeneration else {
                     return
                 }
@@ -158,8 +229,19 @@ final class CoordinateSelectionViewModel {
     }
 
     func clearSearch() {
+        readyStatusOverride = nil // clear any resolve error from prior selection attempt
         searchResults = []
         searchStatus = .idle
+    }
+
+    private func showResolveError() {
+        activeErrorClearTask?.cancel() // cancel prior timer before starting new one (D-04)
+        readyStatusOverride = "Could not load location. Try again."
+        activeErrorClearTask = Task { @MainActor [weak self] in
+            try? await Task.sleep(for: .seconds(3))
+            guard !(Task.isCancelled) else { return }
+            self?.readyStatusOverride = nil
+        }
     }
 
     private func updateCoordinateFromFieldsIfValid() {

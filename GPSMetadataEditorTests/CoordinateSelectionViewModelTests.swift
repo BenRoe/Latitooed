@@ -297,6 +297,38 @@ struct CoordinateSelectionViewModelTests {
         #expect(viewModel.searchResults.isEmpty == true)
         #expect(viewModel.searchStatus == .idle)
     }
+
+    @Test func selectingSearchResultWithoutCompletionMapEntryFallsBackToDirectSet() throws {
+        let coordinate = try #require(CoordinateSelection(latitude: 52.520008, longitude: 13.404954))
+        let result = CoordinateSearchResult(title: "Berlin", coordinate: coordinate)
+        let viewModel = CoordinateSelectionViewModel(searchService: FakeCoordinateSearchService())
+        viewModel.isSearchResultsExpanded = true
+
+        // completionMap is empty (FakeCoordinateSearchService never populates it) — fallback path
+        viewModel.selectSearchResult(result)
+
+        #expect(viewModel.selectedCoordinate == coordinate)
+        #expect(viewModel.isSearchResultsExpanded == false)
+        #expect(viewModel.readyStatusText.hasPrefix("Target set:"))
+    }
+
+    @Test func readyStatusTextShowsResolvingOverrideWhenSet() {
+        let viewModel = CoordinateSelectionViewModel(searchService: FakeCoordinateSearchService())
+
+        viewModel.readyStatusOverride = "Resolving location…"
+
+        #expect(viewModel.readyStatusText == "Resolving location…")
+    }
+
+    @Test func clearSearchAlsoClearsReadyStatusOverride() {
+        let viewModel = CoordinateSelectionViewModel(searchService: FakeCoordinateSearchService())
+        viewModel.readyStatusOverride = "Could not load location. Try again."
+
+        viewModel.clearSearch()
+
+        #expect(viewModel.readyStatusOverride == nil)
+        #expect(viewModel.readyStatusText == "No target coordinate selected.")
+    }
 }
 
 struct FakeCoordinateSearchService: CoordinateSearchServicing {
@@ -321,7 +353,7 @@ private struct DelayedCoordinateSearchService: CoordinateSearchServicing {
 
     func search(for query: String, near center: CoordinateSelection) async throws -> [CoordinateSearchResult] {
         if query == "Berlin" {
-            try await Task.sleep(for: .milliseconds(20))
+            await Task.yield()
         }
 
         return resultsByQuery[query, default: []]

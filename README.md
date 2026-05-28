@@ -2,7 +2,15 @@
   <img src="docs/app-icon-rounded.png" width="96" alt="Latitooed icon">
   <h1>Latitooed</h1>
   <p>Ink your coordinates into every shot.</p>
+  <a href="https://github.com/BenRoe/Latitooed/releases/latest">⬇️ Download latest release</a>
 </div>
+
+---
+
+> **Note:** Latitooed is not code-signed or notarized. On first launch macOS will block it. Right-click the app → **Open** to proceed, or run:
+> ```bash
+> xattr -cr /Applications/Latitooed.app
+> ```
 
 ---
 
@@ -36,12 +44,21 @@ Everything runs locally on your Mac. No files are uploaded, no analytics collect
 **Requirements:** macOS 15+, Xcode 26+
 
 ```bash
-git clone https://github.com/BenRoe/image-exif-gps.git
+git clone https://github.com/BenRoe/Latitooed.git
 cd image-exif-gps
 open Latitooed.xcodeproj
 ```
 
 Select the `Latitooed` scheme and press **Run**.
+
+To build a distributable DMG:
+
+```bash
+./scripts/build-dmg.sh
+# outputs: dist/Latitooed-<version>.dmg
+```
+
+> **First launch:** macOS will show a Gatekeeper warning since the app is unsigned. Right-click → Open to proceed, or run `xattr -cr /Applications/Latitooed.app`.
 
 ---
 

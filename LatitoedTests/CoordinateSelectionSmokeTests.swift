@@ -1,6 +1,6 @@
 import MapKit
 import Testing
-@testable import GPSMetadataEditor
+@testable import Latitooed
 
 @MainActor
 struct CoordinateSelectionSmokeTests {

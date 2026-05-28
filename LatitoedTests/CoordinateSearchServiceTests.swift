@@ -1,5 +1,5 @@
 import Testing
-@testable import GPSMetadataEditor
+@testable import Latitooed
 
 struct CoordinateSearchServiceTests {
     @Test func fakeSearchServiceReturnsLightweightResult() async throws {

@@ -16,9 +16,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "1A2B3C4D5E6F700000000110"
-               BuildableName = "GPSMetadataEditor.app"
-               BlueprintName = "GPSMetadataEditor"
-               ReferencedContainer = "container:GPSMetadataEditor.xcodeproj">
+               BuildableName = "Latitooed.app"
+               BlueprintName = "Latitooed"
+               ReferencedContainer = "container:Latitooed.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -35,9 +35,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "1A2B3C4D5E6F700000000111"
-               BuildableName = "GPSMetadataEditorTests.xctest"
-               BlueprintName = "GPSMetadataEditorTests"
-               ReferencedContainer = "container:GPSMetadataEditor.xcodeproj">
+               BuildableName = "LatitoedTests.xctest"
+               BlueprintName = "LatitoedTests"
+               ReferencedContainer = "container:Latitooed.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -57,9 +57,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1A2B3C4D5E6F700000000110"
-            BuildableName = "GPSMetadataEditor.app"
-            BlueprintName = "GPSMetadataEditor"
-            ReferencedContainer = "container:GPSMetadataEditor.xcodeproj">
+            BuildableName = "Latitooed.app"
+            BlueprintName = "Latitooed"
+            ReferencedContainer = "container:Latitooed.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -74,9 +74,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1A2B3C4D5E6F700000000110"
-            BuildableName = "GPSMetadataEditor.app"
-            BlueprintName = "GPSMetadataEditor"
-            ReferencedContainer = "container:GPSMetadataEditor.xcodeproj">
+            BuildableName = "Latitooed.app"
+            BlueprintName = "Latitooed"
+            ReferencedContainer = "container:Latitooed.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

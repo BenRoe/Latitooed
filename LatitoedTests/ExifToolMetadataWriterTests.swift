@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import GPSMetadataEditor
+@testable import Latitooed
 
 struct ExifToolMetadataWriterTests {
     @Test func missingHelperMapsToStructuredFailure() async throws {

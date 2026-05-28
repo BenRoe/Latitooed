@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1A2B3C4D5E6F700000000001 /* GPSMetadataEditorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000101 /* GPSMetadataEditorApp.swift */; };
+		1A2B3C4D5E6F700000000001 /* LatitoedApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000101 /* LatitoedApp.swift */; };
 		1A2B3C4D5E6F700000000002 /* FileIntakeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000102 /* FileIntakeView.swift */; };
 		1A2B3C4D5E6F700000000003 /* FileIntakeSmokeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000103 /* FileIntakeSmokeTests.swift */; };
 		1A2B3C4D5E6F700000000004 /* AppDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000104 /* AppDesign.swift */; };
@@ -60,6 +60,7 @@
 		1A2B3C4D5E6F700000000804 /* BatchHistorySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000904 /* BatchHistorySection.swift */; };
 		1A2B3C4D5E6F700000000810 /* BatchHistoryStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000910 /* BatchHistoryStoreTests.swift */; };
 		1A2B3C4D5E6F700000000620 /* ExifTool in Resources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000730 /* ExifTool */; };
+		1A2B3C4D5E6F700000000621 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000732 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,12 +69,12 @@
 			containerPortal = 1A2B3C4D5E6F700000000100 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 1A2B3C4D5E6F700000000110;
-			remoteInfo = GPSMetadataEditor;
+			remoteInfo = Latitooed;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		1A2B3C4D5E6F700000000101 /* GPSMetadataEditorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPSMetadataEditorApp.swift; sourceTree = "<group>"; };
+		1A2B3C4D5E6F700000000101 /* LatitoedApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatitoedApp.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F700000000102 /* FileIntakeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileIntakeView.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F700000000103 /* FileIntakeSmokeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileIntakeSmokeTests.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F700000000104 /* AppDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDesign.swift; sourceTree = "<group>"; };
@@ -120,14 +121,15 @@
 		1A2B3C4D5E6F700000000712 /* ProcessRunnerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessRunnerTests.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F700000000713 /* MetadataBatchViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetadataBatchViewModelTests.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F700000000730 /* ExifTool */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ExifTool; sourceTree = "<group>"; };
+		1A2B3C4D5E6F700000000732 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1A2B3C4D5E6F700000000900 /* RecentCoordinate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentCoordinate.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F700000000901 /* BatchHistoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchHistoryStore.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F700000000902 /* RecentCoordinatesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentCoordinatesView.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F700000000903 /* BatchRunSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchRunSummary.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F700000000904 /* BatchHistorySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchHistorySection.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F700000000910 /* BatchHistoryStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchHistoryStoreTests.swift; sourceTree = "<group>"; };
-		1A2B3C4D5E6F700000000120 /* GPSMetadataEditor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GPSMetadataEditor.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		1A2B3C4D5E6F700000000121 /* GPSMetadataEditorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GPSMetadataEditorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1A2B3C4D5E6F700000000120 /* Latitooed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Latitooed.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1A2B3C4D5E6F700000000121 /* LatitoedTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LatitoedTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -151,21 +153,21 @@
 		1A2B3C4D5E6F700000000140 = {
 			isa = PBXGroup;
 			children = (
-				1A2B3C4D5E6F700000000141 /* GPSMetadataEditor */,
-				1A2B3C4D5E6F700000000145 /* GPSMetadataEditorTests */,
+				1A2B3C4D5E6F700000000141 /* Latitooed */,
+				1A2B3C4D5E6F700000000145 /* LatitoedTests */,
 				1A2B3C4D5E6F700000000146 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		1A2B3C4D5E6F700000000141 /* GPSMetadataEditor */ = {
+		1A2B3C4D5E6F700000000141 /* Latitooed */ = {
 			isa = PBXGroup;
 			children = (
-				1A2B3C4D5E6F700000000101 /* GPSMetadataEditorApp.swift */,
+				1A2B3C4D5E6F700000000101 /* LatitoedApp.swift */,
 				1A2B3C4D5E6F700000000142 /* Features */,
 				1A2B3C4D5E6F700000000731 /* Resources */,
 				1A2B3C4D5E6F700000000144 /* Support */,
 			);
-			path = GPSMetadataEditor;
+			path = Latitooed;
 			sourceTree = "<group>";
 		};
 		1A2B3C4D5E6F700000000142 /* Features */ = {
@@ -231,6 +233,7 @@
 		1A2B3C4D5E6F700000000731 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				1A2B3C4D5E6F700000000732 /* Assets.xcassets */,
 				1A2B3C4D5E6F700000000730 /* ExifTool */,
 			);
 			path = Resources;
@@ -334,7 +337,7 @@
 			path = Support;
 			sourceTree = "<group>";
 		};
-		1A2B3C4D5E6F700000000145 /* GPSMetadataEditorTests */ = {
+		1A2B3C4D5E6F700000000145 /* LatitoedTests */ = {
 			isa = PBXGroup;
 			children = (
 				1A2B3C4D5E6F700000000103 /* FileIntakeSmokeTests.swift */,
@@ -349,14 +352,14 @@
 				1A2B3C4D5E6F700000000713 /* MetadataBatchViewModelTests.swift */,
 				1A2B3C4D5E6F700000000910 /* BatchHistoryStoreTests.swift */,
 			);
-			path = GPSMetadataEditorTests;
+			path = LatitoedTests;
 			sourceTree = "<group>";
 		};
 		1A2B3C4D5E6F700000000146 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1A2B3C4D5E6F700000000120 /* GPSMetadataEditor.app */,
-				1A2B3C4D5E6F700000000121 /* GPSMetadataEditorTests.xctest */,
+				1A2B3C4D5E6F700000000120 /* Latitooed.app */,
+				1A2B3C4D5E6F700000000121 /* LatitoedTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -364,9 +367,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		1A2B3C4D5E6F700000000110 /* GPSMetadataEditor */ = {
+		1A2B3C4D5E6F700000000110 /* Latitooed */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1A2B3C4D5E6F700000000200 /* Build configuration list for PBXNativeTarget "GPSMetadataEditor" */;
+			buildConfigurationList = 1A2B3C4D5E6F700000000200 /* Build configuration list for PBXNativeTarget "Latitooed" */;
 			buildPhases = (
 				1A2B3C4D5E6F700000000150 /* Sources */,
 				1A2B3C4D5E6F700000000130 /* Frameworks */,
@@ -376,14 +379,14 @@
 			);
 			dependencies = (
 			);
-			name = GPSMetadataEditor;
-			productName = GPSMetadataEditor;
-			productReference = 1A2B3C4D5E6F700000000120 /* GPSMetadataEditor.app */;
+			name = Latitooed;
+			productName = Latitooed;
+			productReference = 1A2B3C4D5E6F700000000120 /* Latitooed.app */;
 			productType = "com.apple.product-type.application";
 		};
-		1A2B3C4D5E6F700000000111 /* GPSMetadataEditorTests */ = {
+		1A2B3C4D5E6F700000000111 /* LatitoedTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1A2B3C4D5E6F700000000201 /* Build configuration list for PBXNativeTarget "GPSMetadataEditorTests" */;
+			buildConfigurationList = 1A2B3C4D5E6F700000000201 /* Build configuration list for PBXNativeTarget "LatitoedTests" */;
 			buildPhases = (
 				1A2B3C4D5E6F700000000152 /* Sources */,
 				1A2B3C4D5E6F700000000131 /* Frameworks */,
@@ -394,9 +397,9 @@
 			dependencies = (
 				1A2B3C4D5E6F700000000021 /* PBXTargetDependency */,
 			);
-			name = GPSMetadataEditorTests;
-			productName = GPSMetadataEditorTests;
-			productReference = 1A2B3C4D5E6F700000000121 /* GPSMetadataEditorTests.xctest */;
+			name = LatitoedTests;
+			productName = LatitoedTests;
+			productReference = 1A2B3C4D5E6F700000000121 /* LatitoedTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -418,7 +421,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 1A2B3C4D5E6F700000000202 /* Build configuration list for PBXProject "GPSMetadataEditor" */;
+			buildConfigurationList = 1A2B3C4D5E6F700000000202 /* Build configuration list for PBXProject "Latitooed" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -432,8 +435,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				1A2B3C4D5E6F700000000110 /* GPSMetadataEditor */,
-				1A2B3C4D5E6F700000000111 /* GPSMetadataEditorTests */,
+				1A2B3C4D5E6F700000000110 /* Latitooed */,
+				1A2B3C4D5E6F700000000111 /* LatitoedTests */,
 			);
 		};
 /* End PBXProject section */
@@ -443,6 +446,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A2B3C4D5E6F700000000621 /* Assets.xcassets in Resources */,
 				1A2B3C4D5E6F700000000620 /* ExifTool in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -461,7 +465,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1A2B3C4D5E6F700000000001 /* GPSMetadataEditorApp.swift in Sources */,
+				1A2B3C4D5E6F700000000001 /* LatitoedApp.swift in Sources */,
 				1A2B3C4D5E6F700000000002 /* FileIntakeView.swift in Sources */,
 				1A2B3C4D5E6F700000000004 /* AppDesign.swift in Sources */,
 				1A2B3C4D5E6F700000000006 /* MediaFileKind.swift in Sources */,
@@ -528,7 +532,7 @@
 /* Begin PBXTargetDependency section */
 		1A2B3C4D5E6F700000000021 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 1A2B3C4D5E6F700000000110 /* GPSMetadataEditor */;
+			target = 1A2B3C4D5E6F700000000110 /* Latitooed */;
 			targetProxy = 1A2B3C4D5E6F700000000020 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -676,7 +680,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.GPSMetadataEditor;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.Latitooed;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFTUI_PREVIEWS = YES;
 			};
@@ -699,7 +703,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.GPSMetadataEditor;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.Latitooed;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFTUI_PREVIEWS = YES;
 			};
@@ -719,9 +723,9 @@
 					"@loader_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.GPSMetadataEditorTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.LatitoedTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GPSMetadataEditor.app/Contents/MacOS/GPSMetadataEditor";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Latitooed.app/Contents/MacOS/Latitooed";
 			};
 			name = Debug;
 		};
@@ -739,16 +743,16 @@
 					"@loader_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.GPSMetadataEditorTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.LatitoedTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GPSMetadataEditor.app/Contents/MacOS/GPSMetadataEditor";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Latitooed.app/Contents/MacOS/Latitooed";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1A2B3C4D5E6F700000000200 /* Build configuration list for PBXNativeTarget "GPSMetadataEditor" */ = {
+		1A2B3C4D5E6F700000000200 /* Build configuration list for PBXNativeTarget "Latitooed" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1A2B3C4D5E6F700000000212 /* Debug */,
@@ -757,7 +761,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		1A2B3C4D5E6F700000000201 /* Build configuration list for PBXNativeTarget "GPSMetadataEditorTests" */ = {
+		1A2B3C4D5E6F700000000201 /* Build configuration list for PBXNativeTarget "LatitoedTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1A2B3C4D5E6F700000000214 /* Debug */,
@@ -766,7 +770,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		1A2B3C4D5E6F700000000202 /* Build configuration list for PBXProject "GPSMetadataEditor" */ = {
+		1A2B3C4D5E6F700000000202 /* Build configuration list for PBXProject "Latitooed" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1A2B3C4D5E6F700000000210 /* Debug */,

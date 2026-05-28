@@ -12,7 +12,7 @@ enum AppMigrationPlan: SchemaMigrationPlan {
 }
 
 @main
-struct GPSMetadataEditorApp: App {
+struct LatitoedApp: App {
     let container: ModelContainer = {
         let schema = Schema([RecentCoordinate.self, BatchRunSummary.self])
         do {

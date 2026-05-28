@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import GPSMetadataEditor
+@testable import Latitooed
 
 struct FileIntakeServiceTests {
     @Test(

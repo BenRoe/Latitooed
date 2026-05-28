@@ -1,7 +1,7 @@
 import Foundation
 import SwiftData
 import Testing
-@testable import GPSMetadataEditor
+@testable import Latitooed
 
 @MainActor
 struct CoordinateSelectionViewModelTests {

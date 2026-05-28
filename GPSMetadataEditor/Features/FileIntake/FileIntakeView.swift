@@ -50,7 +50,7 @@ struct FileIntakeView: View {
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                     .padding(AppDesign.Spacing.md)
                                     .background(.background)
-                                    .clipShape(.rect(cornerSize: AppDesign.Radius.mediumSize))
+                                    .clipShape(.rect(cornerRadius: AppDesign.Radius.medium))
                                 case .grid:
                                 SelectedFilesGrid(
                                     files: viewModel.selectedFiles,
@@ -59,7 +59,7 @@ struct FileIntakeView: View {
                                 )
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                     .background(.background)
-                                    .clipShape(.rect(cornerSize: AppDesign.Radius.mediumSize))
+                                    .clipShape(.rect(cornerRadius: AppDesign.Radius.medium))
                                 }
 
                                 FileDetailPanel(

@@ -35,7 +35,7 @@ struct CoordinateMapView: View {
                 }
                 .padding(AppDesign.Spacing.sm)
             }
-            .clipShape(.rect(cornerSize: AppDesign.Radius.mediumSize))
+            .clipShape(.rect(cornerRadius: AppDesign.Radius.medium))
             .simultaneousGesture(
                 SpatialTapGesture()
                     .onEnded { value in

@@ -12,9 +12,9 @@ enum AppDesign {
     }
 
     enum Radius {
-        static let smallSize = CGSize(width: 6, height: 6)
-        static let mediumSize = CGSize(width: 8, height: 8)
-        static let largeSize = CGSize(width: 12, height: 12)
+        static let small: CGFloat = 6
+        static let medium: CGFloat = 8
+        static let large: CGFloat = 12
     }
 
     enum Layout {

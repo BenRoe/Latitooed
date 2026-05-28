@@ -52,7 +52,7 @@ private struct LargeDropZone: View {
         .frame(maxWidth: .infinity, minHeight: AppDesign.Layout.dropZoneMinimumHeight)
         .padding(AppDesign.Spacing.xl)
         .background(.background)
-        .fileDropTarget(viewModel: viewModel, cornerSize: AppDesign.Radius.largeSize)
+        .fileDropTarget(viewModel: viewModel, cornerRadius: AppDesign.Radius.large)
         .accessibilityElement(children: .combine)
     }
 }
@@ -74,18 +74,18 @@ private struct CompactDropStrip: View {
         }
         .padding(AppDesign.Spacing.md)
         .background(.background)
-        .fileDropTarget(viewModel: viewModel, cornerSize: AppDesign.Radius.mediumSize)
+        .fileDropTarget(viewModel: viewModel, cornerRadius: AppDesign.Radius.medium)
     }
 }
 
 private struct FileDropTargetModifier: ViewModifier {
     @Bindable var viewModel: FileIntakeViewModel
-    let cornerSize: CGSize
+    let cornerRadius: CGFloat
 
     func body(content: Content) -> some View {
         content
             .overlay {
-                RoundedRectangle(cornerSize: cornerSize)
+                RoundedRectangle(cornerRadius: cornerRadius)
                     .strokeBorder(
                         viewModel.isDropTargeted ? AnyShapeStyle(.tint) : AnyShapeStyle(.quaternary),
                         style: StrokeStyle(
@@ -94,7 +94,7 @@ private struct FileDropTargetModifier: ViewModifier {
                         )
                     )
             }
-            .clipShape(.rect(cornerSize: cornerSize))
+            .clipShape(.rect(cornerRadius: cornerRadius))
             .dropDestination(for: URL.self) { urls, _ in
                 viewModel.intake(urls: urls, source: .drop)
                 return true
@@ -105,7 +105,7 @@ private struct FileDropTargetModifier: ViewModifier {
 }
 
 private extension View {
-    func fileDropTarget(viewModel: FileIntakeViewModel, cornerSize: CGSize) -> some View {
-        modifier(FileDropTargetModifier(viewModel: viewModel, cornerSize: cornerSize))
+    func fileDropTarget(viewModel: FileIntakeViewModel, cornerRadius: CGFloat) -> some View {
+        modifier(FileDropTargetModifier(viewModel: viewModel, cornerRadius: cornerRadius))
     }
 }

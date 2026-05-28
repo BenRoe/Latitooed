@@ -70,10 +70,10 @@ private struct SelectedFileGridCard: View {
         }
         .overlay {
             if isSelected {
-                RoundedRectangle(cornerSize: AppDesign.Radius.smallSize)
+                RoundedRectangle(cornerRadius: AppDesign.Radius.small)
                     .stroke(.tint, lineWidth: 2)
             } else {
-                RoundedRectangle(cornerSize: AppDesign.Radius.smallSize)
+                RoundedRectangle(cornerRadius: AppDesign.Radius.small)
                     .stroke(.quaternary, lineWidth: 1)
             }
         }
@@ -81,7 +81,7 @@ private struct SelectedFileGridCard: View {
             WriteResultMarker(status: file.latestResult)
                 .padding(AppDesign.Spacing.sm)
         }
-        .clipShape(.rect(cornerSize: AppDesign.Radius.smallSize))
+        .clipShape(.rect(cornerRadius: AppDesign.Radius.small))
         .accessibilityElement(children: .combine)
         .accessibilityLabel(accessibilityLabel)
     }
@@ -135,7 +135,7 @@ private struct FilePreview: View {
         }
         .frame(height: GridCardMetrics.previewHeight)
         .frame(maxWidth: .infinity)
-        .clipShape(.rect(cornerSize: AppDesign.Radius.smallSize))
+        .clipShape(.rect(cornerRadius: AppDesign.Radius.small))
         .task(id: file.url) {
             previewImage = await file.previewImage
         }

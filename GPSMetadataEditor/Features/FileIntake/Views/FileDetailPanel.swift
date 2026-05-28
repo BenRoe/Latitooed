@@ -33,7 +33,7 @@ struct FileDetailPanel: View {
         .padding(.horizontal, AppDesign.Spacing.md)
         .padding(.vertical, 5)
         .background(.background)
-        .clipShape(.rect(cornerSize: AppDesign.Radius.mediumSize))
+        .clipShape(.rect(cornerRadius: AppDesign.Radius.medium))
     }
 
     private func toggleExpanded() {

@@ -31,7 +31,7 @@ struct BatchHistorySection: View {
                     .padding(AppDesign.Spacing.sm)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .background(.regularMaterial)
-                    .clipShape(.rect(cornerSize: AppDesign.Radius.smallSize))
+                    .clipShape(.rect(cornerRadius: AppDesign.Radius.small))
                 }
             }
         }

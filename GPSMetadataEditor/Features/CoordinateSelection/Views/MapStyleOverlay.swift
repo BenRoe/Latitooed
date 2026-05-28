@@ -12,7 +12,7 @@ struct MapStyleOverlay: View {
         }
         .padding(AppDesign.Spacing.xs)
         .background(.regularMaterial)
-        .clipShape(.rect(cornerSize: AppDesign.Radius.mediumSize))
+        .clipShape(.rect(cornerRadius: AppDesign.Radius.medium))
     }
 }
 

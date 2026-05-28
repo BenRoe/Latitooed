@@ -119,7 +119,7 @@ private struct SearchDropdownView: View {
         .frame(maxWidth: .infinity)
         .padding(AppDesign.Spacing.sm)
         .background(.regularMaterial)
-        .clipShape(.rect(cornerSize: AppDesign.Radius.mediumSize))
+        .clipShape(.rect(cornerRadius: AppDesign.Radius.medium))
         .shadow(color: .black.opacity(0.12), radius: 8, x: 0, y: 4)
         .accessibilityElement(children: .contain)
     }

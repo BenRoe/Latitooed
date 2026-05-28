@@ -143,7 +143,7 @@ private struct TypeBadge: View {
             .padding(.horizontal, AppDesign.Spacing.sm)
             .padding(.vertical, AppDesign.Spacing.xs)
             .background(.quaternary)
-            .clipShape(.rect(cornerSize: AppDesign.Radius.smallSize))
+            .clipShape(.rect(cornerRadius: AppDesign.Radius.small))
             .accessibilityLabel("File type \(kind.displayName)")
     }
 }

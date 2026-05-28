@@ -2,14 +2,47 @@ import AppKit
 import AVFoundation
 import SwiftUI
 
+enum ThumbnailSize: String, CaseIterable, Identifiable {
+    case small
+    case medium
+    case large
+
+    var id: String { rawValue }
+
+    var width: CGFloat {
+        switch self {
+        case .small: 140
+        case .medium: 220
+        case .large: 300
+        }
+    }
+
+    var previewHeight: CGFloat {
+        switch self {
+        case .small: 90
+        case .medium: 150
+        case .large: 200
+        }
+    }
+
+    var displayName: String {
+        switch self {
+        case .small: "Small"
+        case .medium: "Medium"
+        case .large: "Large"
+        }
+    }
+}
+
 struct SelectedFilesGrid: View {
     let files: [SelectedMediaFile]
     @Binding var selection: Set<SelectedMediaFile.ID>
     let activateFile: (SelectedMediaFile.ID, FileIntakeViewModel.GridSelectionIntent) -> Void
+    let thumbnailSize: ThumbnailSize
 
-    private let columns = [
-        GridItem(.adaptive(minimum: GridCardMetrics.width, maximum: GridCardMetrics.width), spacing: AppDesign.Spacing.md)
-    ]
+    private var columns: [GridItem] {
+        [GridItem(.adaptive(minimum: thumbnailSize.width, maximum: thumbnailSize.width), spacing: AppDesign.Spacing.md)]
+    }
 
     var body: some View {
         ScrollView {
@@ -18,10 +51,10 @@ struct SelectedFilesGrid: View {
                     Button {
                         activateFile(file.id, Self.selectionIntent)
                     } label: {
-                        SelectedFileGridCard(file: file, isSelected: selection.contains(file.id))
+                        SelectedFileGridCard(file: file, isSelected: selection.contains(file.id), thumbnailSize: thumbnailSize)
                     }
                     .buttonStyle(.plain)
-                    .frame(width: GridCardMetrics.width)
+                    .frame(width: thumbnailSize.width)
                 }
             }
             .padding(AppDesign.Spacing.md)
@@ -45,10 +78,11 @@ struct SelectedFilesGrid: View {
 private struct SelectedFileGridCard: View {
     let file: SelectedMediaFile
     let isSelected: Bool
+    let thumbnailSize: ThumbnailSize
 
     var body: some View {
         VStack(alignment: .leading, spacing: AppDesign.Spacing.sm) {
-            FilePreview(file: file)
+            FilePreview(file: file, thumbnailSize: thumbnailSize)
 
             Text(file.displayName)
                 .font(.body)
@@ -59,7 +93,7 @@ private struct SelectedFileGridCard: View {
             StatusLabel(title: file.gpsStatus.displayName, systemImage: file.gpsStatus.systemImage)
         }
         .padding(AppDesign.Spacing.md)
-        .frame(width: GridCardMetrics.width, alignment: .topLeading)
+        .frame(width: thumbnailSize.width, alignment: .topLeading)
         .background {
             if isSelected {
                 Color.accentColor.opacity(0.12)
@@ -121,6 +155,7 @@ private struct WriteResultMarker: View {
 
 private struct FilePreview: View {
     let file: SelectedMediaFile
+    let thumbnailSize: ThumbnailSize
     @State private var previewImage: NSImage?
 
     var body: some View {
@@ -133,11 +168,12 @@ private struct FilePreview: View {
                     .scaledToFill()
             }
         }
-        .frame(height: GridCardMetrics.previewHeight)
+        .frame(height: thumbnailSize.previewHeight)
         .frame(maxWidth: .infinity)
         .clipShape(.rect(cornerRadius: AppDesign.Radius.small))
         .task(id: file.url) {
-            previewImage = await file.previewImage
+            let maximumSize = NSSize(width: thumbnailSize.width, height: thumbnailSize.previewHeight)
+            previewImage = await file.previewImage(maximumSize: maximumSize)
         }
     }
 }
@@ -155,11 +191,6 @@ private struct FilePreviewFallback: View {
                 .foregroundStyle(.secondary)
         }
     }
-}
-
-private enum GridCardMetrics {
-    static let width: CGFloat = 220
-    static let previewHeight: CGFloat = 150
 }
 
 private struct StatusLabel: View {
@@ -187,26 +218,24 @@ private extension MediaFileKind {
 
 private extension SelectedMediaFile {
     // URLs are stable per session — task(id: file.url) fires once per unique file.
-    var previewImage: NSImage? {
-        get async {
-            switch kind {
-            case .jpeg, .heic:
-                await Task.detached(priority: .utility) { NSImage(contentsOf: url) }.value
-            case .mov, .mp4:
-                await loadVideoThumbnail(for: url)
-            }
+    func previewImage(maximumSize: NSSize) async -> NSImage? {
+        switch kind {
+        case .jpeg, .heic:
+            await Task.detached(priority: .utility) { NSImage(contentsOf: url) }.value
+        case .mov, .mp4:
+            await loadVideoThumbnail(for: url, maximumSize: maximumSize)
         }
     }
 }
 
-private func loadVideoThumbnail(for url: URL) async -> NSImage? {
+private func loadVideoThumbnail(for url: URL, maximumSize: NSSize) async -> NSImage? {
     let asset = AVURLAsset(url: url)
     let generator = AVAssetImageGenerator(asset: asset)
     generator.appliesPreferredTrackTransform = true
     let scale = await MainActor.run { NSScreen.main?.backingScaleFactor ?? 2.0 }
     generator.maximumSize = NSSize(
-        width: GridCardMetrics.width * scale,
-        height: GridCardMetrics.previewHeight * scale
+        width: maximumSize.width * scale,
+        height: maximumSize.height * scale
     )
     guard let (cgImage, _) = try? await generator.image(at: .zero) else { return nil }
     return NSImage(cgImage: cgImage, size: NSSize(width: cgImage.width, height: cgImage.height))

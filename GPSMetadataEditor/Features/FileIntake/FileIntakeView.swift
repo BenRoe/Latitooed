@@ -10,6 +10,7 @@ struct FileIntakeView: View {
     @State private var isOverwriteConfirmationPresented = false
     @State private var leftPanelWidth: CGFloat = AppDesign.Layout.leftColumnIdealWidth
     @State private var totalWidth: CGFloat = AppDesign.Layout.minimumWindowWidth
+    @AppStorage("thumbnailSize") private var thumbnailSize: ThumbnailSize = .medium
 
     var body: some View {
         VStack(spacing: 0) {
@@ -39,6 +40,17 @@ struct FileIntakeView: View {
                                     .labelsHidden()
                                     .pickerStyle(.segmented)
                                     .frame(maxWidth: 180)
+
+                                    if viewModel.selectedLoadedFilesViewMode == .grid {
+                                        Picker("Thumbnail size", selection: $thumbnailSize) {
+                                            ForEach(ThumbnailSize.allCases) { size in
+                                                Text(size.displayName).tag(size)
+                                            }
+                                        }
+                                        .labelsHidden()
+                                        .pickerStyle(.segmented)
+                                        .frame(maxWidth: 180)
+                                    }
                                 }
 
                                 switch viewModel.selectedLoadedFilesViewMode {
@@ -55,7 +67,8 @@ struct FileIntakeView: View {
                                 SelectedFilesGrid(
                                     files: viewModel.selectedFiles,
                                     selection: $viewModel.selectedFileIDs,
-                                    activateFile: activateLoadedFile
+                                    activateFile: activateLoadedFile,
+                                    thumbnailSize: thumbnailSize
                                 )
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                     .background(.background)

@@ -68,7 +68,7 @@ private struct SelectedFileReviewContent: View {
                     .foregroundStyle(.secondary)
 
                 if detail.latestResult.isVisibleInDetail {
-                    Label("Latest result: \(detail.latestResult.displayName)", systemImage: detail.latestResult.systemImage)
+                    Label("Last GPS write: \(detail.latestResult.displayName)", systemImage: detail.latestResult.systemImage)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }

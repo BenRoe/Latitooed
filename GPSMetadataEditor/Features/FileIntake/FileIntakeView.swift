@@ -8,71 +8,76 @@ struct FileIntakeView: View {
     @State private var viewModel = FileIntakeViewModel()
     @State private var coordinateViewModel = CoordinateSelectionViewModel()
     @State private var isOverwriteConfirmationPresented = false
+    @State private var leftPanelWidth: CGFloat = AppDesign.Layout.leftColumnIdealWidth
+    @State private var totalWidth: CGFloat = AppDesign.Layout.minimumWindowWidth
 
     var body: some View {
         VStack(spacing: 0) {
-            HSplitView {
-                VStack(alignment: .leading, spacing: AppDesign.Spacing.md) {
-                    if viewModel.selectedFiles.isEmpty {
-                        FileDropZone(mode: .large, viewModel: viewModel)
-                    } else {
-                        FileDropZone(mode: .compact, viewModel: viewModel)
-                    }
+            HStack(spacing: 0) {
+                    VStack(alignment: .leading, spacing: AppDesign.Spacing.md) {
+                        if viewModel.selectedFiles.isEmpty {
+                            FileDropZone(mode: .large, viewModel: viewModel)
+                        } else {
+                            FileDropZone(mode: .compact, viewModel: viewModel)
+                        }
 
-                    if viewModel.selectedFiles.isEmpty == false {
-                        VStack(alignment: .leading, spacing: AppDesign.Spacing.md) {
-                            HStack {
-                                Text("Loaded Files")
-                                    .font(.headline)
-                                    .bold()
+                        if viewModel.selectedFiles.isEmpty == false {
+                            VStack(alignment: .leading, spacing: AppDesign.Spacing.md) {
+                                HStack {
+                                    Text("Loaded Files")
+                                        .font(.headline)
+                                        .bold()
 
-                                Spacer()
+                                    Spacer()
 
-                                Picker("Loaded files view", selection: $viewModel.selectedLoadedFilesViewMode) {
-                                    ForEach(FileIntakeViewModel.LoadedFilesViewMode.allCases) { mode in
-                                        Text(mode.displayName)
-                                            .tag(mode)
+                                    Picker("Loaded files view", selection: $viewModel.selectedLoadedFilesViewMode) {
+                                        ForEach(FileIntakeViewModel.LoadedFilesViewMode.allCases) { mode in
+                                            Text(mode.displayName)
+                                                .tag(mode)
+                                        }
                                     }
+                                    .labelsHidden()
+                                    .pickerStyle(.segmented)
+                                    .frame(maxWidth: 180)
                                 }
-                                .labelsHidden()
-                                .pickerStyle(.segmented)
-                                .frame(maxWidth: 180)
-                            }
 
-                            switch viewModel.selectedLoadedFilesViewMode {
-                            case .table:
-                                SelectedFilesTable(
+                                switch viewModel.selectedLoadedFilesViewMode {
+                                case .table:
+                                    SelectedFilesTable(
+                                        files: viewModel.selectedFiles,
+                                        selection: $viewModel.selectedFileIDs
+                                    )
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .padding(AppDesign.Spacing.md)
+                                    .background(.background)
+                                    .clipShape(.rect(cornerSize: AppDesign.Radius.mediumSize))
+                                case .grid:
+                                SelectedFilesGrid(
                                     files: viewModel.selectedFiles,
-                                    selection: $viewModel.selectedFileIDs
+                                    selection: $viewModel.selectedFileIDs,
+                                    activateFile: activateLoadedFile
                                 )
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding(AppDesign.Spacing.md)
-                                .background(.background)
-                                .clipShape(.rect(cornerSize: AppDesign.Radius.mediumSize))
-                            case .grid:
-                            SelectedFilesGrid(
-                                files: viewModel.selectedFiles,
-                                selection: $viewModel.selectedFileIDs,
-                                activateFile: activateLoadedFile
-                            )
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .background(.background)
-                                .clipShape(.rect(cornerSize: AppDesign.Radius.mediumSize))
-                            }
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .background(.background)
+                                    .clipShape(.rect(cornerSize: AppDesign.Radius.mediumSize))
+                                }
 
-                            FileDetailPanel(
-                                review: viewModel.selectedFileReview,
-                                latestWarnings: viewModel.latestWarningDetails
-                            )
+                                FileDetailPanel(
+                                    review: viewModel.selectedFileReview,
+                                    latestWarnings: viewModel.latestWarningDetails
+                                )
+                            }
                         }
                     }
-                }
-                .frame(minWidth: AppDesign.Layout.leftColumnMinimumWidth, idealWidth: AppDesign.Layout.leftColumnIdealWidth)
-                .padding(AppDesign.Spacing.lg)
+                    .frame(width: leftPanelWidth)
+                    .padding(AppDesign.Spacing.lg)
 
-                CoordinateSelectionView(viewModel: coordinateViewModel)
-                    .frame(minWidth: AppDesign.Layout.rightColumnMinimumWidth, maxWidth: .infinity, maxHeight: .infinity)
-            }
+                    PanelDivider(leftWidth: $leftPanelWidth, totalWidth: totalWidth)
+
+                    CoordinateSelectionView(viewModel: coordinateViewModel)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
+                .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { totalWidth = $0 }
 
             Divider()
 
@@ -216,9 +221,9 @@ private struct FileIntakeFooter: View {
         } else if isMetadataBatchRunning {
             "Applying selected location..."
         } else if loadedFileCount == 0 {
-            "Add files to start the intake review."
+            ""
         } else {
-            "Review selected files before applying a location."
+            ""
         }
     }
 }

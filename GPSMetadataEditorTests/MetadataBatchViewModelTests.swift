@@ -303,22 +303,13 @@ private actor SuspendedMetadataWriter: MetadataWriter {
 
 private func waitUntil(
     _ condition: @MainActor @escaping () -> Bool,
-    fileID: String = #fileID,
-    filePath: String = #filePath,
-    line: Int = #line,
-    column: Int = #column
+    sourceLocation: SourceLocation = #_sourceLocation
 ) async throws {
     for _ in 0..<20 {
-        if await condition() {
-            return
-        }
-        try await Task.sleep(for: .milliseconds(10))
+        if await condition() { return }
+        await Task.yield()
     }
-
-    Issue.record(
-        "Condition was not met",
-        sourceLocation: SourceLocation(fileID: fileID, filePath: filePath, line: line, column: column)
-    )
+    Issue.record("Condition was not met", sourceLocation: sourceLocation)
 }
 
 private func jpegFile(_ filename: String) -> SelectedMediaFile {

@@ -5,20 +5,16 @@ import Testing
 
 @MainActor
 struct CoordinateSelectionViewModelTests {
-    @Test func latitudeAcceptsBoundaryValues() throws {
-        for value in [-90.0, 0.0, 90.0] {
-            let coordinate = try #require(CoordinateSelection(latitude: value, longitude: 0))
-
-            #expect(coordinate.latitude == value)
-        }
+    @Test("Latitude accepts boundary values", arguments: [-90.0, 0.0, 90.0])
+    func latitudeAcceptsBoundaryValues(value: Double) throws {
+        let coordinate = try #require(CoordinateSelection(latitude: value, longitude: 0))
+        #expect(coordinate.latitude == value)
     }
 
-    @Test func longitudeAcceptsBoundaryValues() throws {
-        for value in [-180.0, 0.0, 180.0] {
-            let coordinate = try #require(CoordinateSelection(latitude: 0, longitude: value))
-
-            #expect(coordinate.longitude == value)
-        }
+    @Test("Longitude accepts boundary values", arguments: [-180.0, 0.0, 180.0])
+    func longitudeAcceptsBoundaryValues(value: Double) throws {
+        let coordinate = try #require(CoordinateSelection(latitude: 0, longitude: value))
+        #expect(coordinate.longitude == value)
     }
 
     @Test func latitudeRejectsValuesOutsideRange() {
@@ -294,7 +290,7 @@ struct CoordinateSelectionViewModelTests {
 
         viewModel.clearSearch()
 
-        #expect(viewModel.searchResults.isEmpty == true)
+        #expect(viewModel.searchResults.isEmpty)
         #expect(viewModel.searchStatus == .idle)
     }
 

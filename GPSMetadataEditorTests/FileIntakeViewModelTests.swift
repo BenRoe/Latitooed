@@ -1,4 +1,4 @@
-    import Foundation
+import Foundation
 import Testing
 @testable import GPSMetadataEditor
 
@@ -283,69 +283,84 @@ struct FileIntakeViewModelTests {
 
     @Test func exifToolGPSMetadataReaderMapsJSONCoordinatesToDisplayableStatus() async throws {
         let file = SelectedMediaFile(url: URL(filePath: "/Volumes/Photos/located.jpg"), kind: .jpeg)
+        let runner = RecordingGPSReadRunner(
+            result: ProcessResult(
+                terminationStatus: 0,
+                standardOutput: #"""
+                [
+                    {"SourceFile":"/Volumes/Photos/located.jpg","GPSLatitude":52.520008,"GPSLongitude":13.404954}
+                ]
+                """#,
+                standardError: ""
+            )
+        )
         let reader = ExifToolGPSMetadataReader(
             resolver: BundledExifToolResolver(bundle: try Self.fakeExifToolBundle()),
-            processRunner: RecordingGPSReadRunner(
-                result: ProcessResult(
-                    terminationStatus: 0,
-                    standardOutput: #"""
-                    [
-                        {"SourceFile":"/Volumes/Photos/located.jpg","GPSLatitude":52.520008,"GPSLongitude":13.404954}
-                    ]
-                    """#,
-                    standardError: ""
-                )
-            )
+            processRunner: runner
         )
 
         let status = await reader.gpsStatus(for: file)
 
         #expect(status == .present(latitude: 52.520008, longitude: 13.404954))
         #expect(status?.displayName == "52.520008, 13.404954")
+        #expect(runner.capturedArguments.contains("-json"))
+        #expect(runner.capturedArguments.contains("-n"))
+        #expect(runner.capturedArguments.contains("-GPSLatitude"))
+        #expect(runner.capturedArguments.contains("-GPSLongitude"))
     }
 
     @Test func exifToolGPSMetadataReaderMapsMissingCoordinatesToNoCoordinates() async throws {
         let file = SelectedMediaFile(url: URL(filePath: "/Volumes/Photos/unlocated.jpg"), kind: .jpeg)
+        let runner = RecordingGPSReadRunner(
+            result: ProcessResult(
+                terminationStatus: 0,
+                standardOutput: #"""
+                [
+                    {"SourceFile":"/Volumes/Photos/unlocated.jpg"}
+                ]
+                """#,
+                standardError: ""
+            )
+        )
         let reader = ExifToolGPSMetadataReader(
             resolver: BundledExifToolResolver(bundle: try Self.fakeExifToolBundle()),
-            processRunner: RecordingGPSReadRunner(
-                result: ProcessResult(
-                    terminationStatus: 0,
-                    standardOutput: #"""
-                    [
-                        {"SourceFile":"/Volumes/Photos/unlocated.jpg"}
-                    ]
-                    """#,
-                    standardError: ""
-                )
-            )
+            processRunner: runner
         )
 
         let status = await reader.gpsStatus(for: file)
 
         #expect(status == .notPresent)
+        #expect(runner.capturedArguments.contains("-json"))
+        #expect(runner.capturedArguments.contains("-n"))
+        #expect(runner.capturedArguments.contains("-GPSLatitude"))
+        #expect(runner.capturedArguments.contains("-GPSLongitude"))
     }
 
     @Test func exifToolGPSMetadataReaderMapsVideoGPSCoordinatesString() async throws {
         let file = SelectedMediaFile(url: URL(filePath: "/Volumes/Photos/clip.mov"), kind: .mov)
+        let runner = RecordingGPSReadRunner(
+            result: ProcessResult(
+                terminationStatus: 0,
+                standardOutput: #"""
+                [
+                    {"SourceFile":"/Volumes/Photos/clip.mov","GPSCoordinates":"+52.520008+013.404954/"}
+                ]
+                """#,
+                standardError: ""
+            )
+        )
         let reader = ExifToolGPSMetadataReader(
             resolver: BundledExifToolResolver(bundle: try Self.fakeExifToolBundle()),
-            processRunner: RecordingGPSReadRunner(
-                result: ProcessResult(
-                    terminationStatus: 0,
-                    standardOutput: #"""
-                    [
-                        {"SourceFile":"/Volumes/Photos/clip.mov","GPSCoordinates":"+52.520008+013.404954/"}
-                    ]
-                    """#,
-                    standardError: ""
-                )
-            )
+            processRunner: runner
         )
 
         let status = await reader.gpsStatus(for: file)
 
         #expect(status == .present(latitude: 52.520008, longitude: 13.404954))
+        #expect(runner.capturedArguments.contains("-json"))
+        #expect(runner.capturedArguments.contains("-n"))
+        #expect(runner.capturedArguments.contains("-GPSLatitude"))
+        #expect(runner.capturedArguments.contains("-GPSLongitude"))
     }
 
     private static func fakeExifToolBundle() throws -> Bundle {
@@ -360,14 +375,14 @@ struct FileIntakeViewModelTests {
         return try #require(Bundle(url: bundleURL))
     }
 
-    private struct RecordingGPSReadRunner: ProcessRunning {
+    private final class RecordingGPSReadRunner: ProcessRunning, @unchecked Sendable {
         let result: ProcessResult
+        private(set) var capturedArguments: [String] = []
+
+        init(result: ProcessResult) { self.result = result }
 
         func run(executableURL: URL, arguments: [String]) async throws -> ProcessResult {
-            #expect(arguments.contains("-json"))
-            #expect(arguments.contains("-n"))
-            #expect(arguments.contains("-GPSLatitude"))
-            #expect(arguments.contains("-GPSLongitude"))
+            capturedArguments = arguments
             return result
         }
     }
@@ -397,22 +412,13 @@ private struct FakeGPSMetadataReader: GPSMetadataReading {
 
 private func waitUntil(
     _ condition: @MainActor @escaping () -> Bool,
-    fileID: String = #fileID,
-    filePath: String = #filePath,
-    line: Int = #line,
-    column: Int = #column
+    sourceLocation: SourceLocation = #_sourceLocation
 ) async throws {
     for _ in 0..<20 {
-        if await condition() {
-            return
-        }
+        if await condition() { return }
         await Task.yield()
     }
-
-    Issue.record(
-        "Condition was not met",
-        sourceLocation: SourceLocation(fileID: fileID, filePath: filePath, line: line, column: column)
-    )
+    Issue.record("Condition was not met", sourceLocation: sourceLocation)
 }
 
 private extension FileIntakeViewModel {

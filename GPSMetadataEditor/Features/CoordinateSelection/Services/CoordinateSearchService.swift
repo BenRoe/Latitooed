@@ -15,6 +15,8 @@ nonisolated enum CoordinateResolver: Sendable {
 
 /// Sendable wrapper around `MKLocalSearchCompletion` (an `NSObject` that is
 /// safe to read across actors but not Sendable in Swift's strict model).
+// @unchecked Sendable: immutable let wrapper — MKLocalSearchCompletion is safe to
+// read across actors but not declared Sendable by MapKit.
 nonisolated final class MKLocalSearchCompletionBox: @unchecked Sendable {
     let completion: MKLocalSearchCompletion
     init(_ completion: MKLocalSearchCompletion) { self.completion = completion }

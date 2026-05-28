@@ -270,6 +270,7 @@ final class CoordinateSelectionViewModel {
             return
         }
 
+        if coordinate.displayText == selectedCoordinate?.displayText { return }
         selectedCoordinate = coordinate
         selectedCoordinateLabel = nil
         isSearchResultsExpanded = false

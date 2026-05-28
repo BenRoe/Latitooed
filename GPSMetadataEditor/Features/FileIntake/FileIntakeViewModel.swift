@@ -140,6 +140,8 @@ final class FileIntakeViewModel {
     private let service: FileIntakeService
     @ObservationIgnored
     private let gpsMetadataReader: any GPSMetadataReading
+    @ObservationIgnored
+    private var activeGPSScanTask: Task<Void, Never>?
 
     init(
         service: FileIntakeService = FileIntakeService(),
@@ -147,6 +149,10 @@ final class FileIntakeViewModel {
     ) {
         self.service = service
         self.gpsMetadataReader = gpsMetadataReader
+    }
+
+    deinit {
+        activeGPSScanTask?.cancel()
     }
 
     func presentFileImporter() {
@@ -158,7 +164,8 @@ final class FileIntakeViewModel {
         apply(result, source: source)
 
         let acceptedFiles = result.accepted
-        Task {
+        activeGPSScanTask?.cancel()
+        activeGPSScanTask = Task {
             await refreshGPSStatuses(for: acceptedFiles)
         }
     }

@@ -36,27 +36,18 @@ final class BatchHistoryStore {
         coordinate: CoordinateSelection,
         lastUsedAt: Date = Date()
     ) throws {
-        let recentCoordinate = try existingRecentCoordinate(for: coordinate) ?? RecentCoordinate(
+        let coord = RecentCoordinate(
             label: label,
             latitude: coordinate.latitude,
             longitude: coordinate.longitude,
             lastUsedAt: lastUsedAt
         )
-
-        recentCoordinate.label = label
-        recentCoordinate.latitude = coordinate.latitude
-        recentCoordinate.longitude = coordinate.longitude
-        recentCoordinate.lastUsedAt = lastUsedAt
-
-        if recentCoordinate.modelContext == nil {
-            modelContext.insert(recentCoordinate)
-        }
-
+        modelContext.insert(coord)
+        // Set mutable fields after insert so SwiftData carries them on #Unique merge.
+        coord.label = label
+        coord.lastUsedAt = lastUsedAt
         try pruneRecentCoordinates()
-
-        if modelContext.hasChanges {
-            try modelContext.save()
-        }
+        try modelContext.save()
     }
 
     func recentCoordinates() throws -> [RecentCoordinateSnapshot] {
@@ -96,9 +87,7 @@ final class BatchHistoryStore {
 
         try pruneBatchRunSummaries()
 
-        if modelContext.hasChanges {
-            try modelContext.save()
-        }
+        try modelContext.save()
     }
 
     func batchRunSummaries() throws -> [BatchRunSummarySnapshot] {
@@ -117,12 +106,6 @@ final class BatchHistoryStore {
                 warningCount: summary.warningCount,
                 failureCount: summary.failureCount
             )
-        }
-    }
-
-    private func existingRecentCoordinate(for coordinate: CoordinateSelection) throws -> RecentCoordinate? {
-        try fetchRecentCoordinates().first {
-            $0.latitude == coordinate.latitude && $0.longitude == coordinate.longitude
         }
     }
 

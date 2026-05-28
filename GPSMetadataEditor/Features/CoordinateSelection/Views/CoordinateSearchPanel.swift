@@ -127,12 +127,10 @@ private struct SearchDropdownView: View {
 
 private struct CoordinateSearchResultRow: View {
     let result: CoordinateSearchResult
+    @State private var isHovered = false
 
     var body: some View {
         HStack(spacing: AppDesign.Spacing.sm) {
-            Image(systemName: "mappin.circle")
-                .foregroundStyle(.tint)
-
             VStack(alignment: .leading, spacing: AppDesign.Spacing.xs) {
                 Text(result.title)
                     .font(.body)
@@ -148,6 +146,9 @@ private struct CoordinateSearchResultRow: View {
             Spacer()
         }
         .padding(AppDesign.Spacing.sm)
+        .background(isHovered ? Color.accentColor.opacity(0.1) : Color.clear)
+        .clipShape(.rect(cornerRadius: 6))
         .contentShape(.rect)
+        .onHover { isHovered = $0 }
     }
 }

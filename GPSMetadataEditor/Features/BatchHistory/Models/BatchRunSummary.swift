@@ -3,6 +3,7 @@ import SwiftData
 
 @Model
 final class BatchRunSummary {
+    #Index<BatchRunSummary>([\.timestamp])
     var timestamp: Date
     var coordinateLabel: String
     var latitude: Double
@@ -32,6 +33,9 @@ final class BatchRunSummary {
         self.failureCount = failureCount
     }
 
+    // Warning: Do not use this computed property inside #Predicate expressions —
+    // SwiftData's predicate compiler does not support arbitrary computed properties
+    // and will crash at runtime.
     var coordinate: CoordinateSelection? {
         CoordinateSelection(latitude: latitude, longitude: longitude)
     }

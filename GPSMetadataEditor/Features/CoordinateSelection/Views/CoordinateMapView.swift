@@ -42,6 +42,9 @@ struct CoordinateMapView: View {
                         setCoordinate(at: value.location, using: proxy)
                     }
             )
+            .accessibilityAddTraits(.isButton)
+            .accessibilityLabel("Map. Tap to set GPS coordinate.")
+            .accessibilityHint("Double-tap to place a coordinate pin at the tapped location.")
         }
         .onChange(of: viewModel.selectedCoordinate) { _, newCoordinate in
             guard let newCoordinate else {

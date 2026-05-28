@@ -87,6 +87,7 @@ private struct RecentCoordinateRow: View {
 
             Label("Use Coordinate", systemImage: "mappin.and.ellipse")
                 .font(.caption)
+                .accessibilityHidden(true)
         }
         .padding(.horizontal, AppDesign.Spacing.sm)
         .padding(.vertical, 2)

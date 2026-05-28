@@ -7,10 +7,7 @@ struct SelectedFilesTable: View {
 
     var body: some View {
         if files.isEmpty {
-            Text("No files selected")
-                .font(.body)
-                .foregroundStyle(.secondary)
-                .frame(maxWidth: .infinity, minHeight: 120, alignment: .center)
+            ContentUnavailableView("No Files Selected", systemImage: "tray")
         } else {
             Table(files, selection: $selection) {
                 TableColumn("Display Name") { file in

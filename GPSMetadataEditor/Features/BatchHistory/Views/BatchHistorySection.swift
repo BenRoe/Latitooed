@@ -14,9 +14,7 @@ struct BatchHistorySection: View {
                 .foregroundStyle(.secondary)
 
             if snapshots.isEmpty {
-                Text("Recent batch summaries will appear after a write completes.")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                ContentUnavailableView("No Batch History", systemImage: "clock")
             } else {
                 ForEach(snapshots.prefix(10)) { snapshot in
                     VStack(alignment: .leading, spacing: AppDesign.Spacing.xs) {

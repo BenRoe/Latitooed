@@ -13,11 +13,19 @@ enum AppMigrationPlan: SchemaMigrationPlan {
 
 @main
 struct GPSMetadataEditorApp: App {
+    let container: ModelContainer = {
+        let schema = Schema([RecentCoordinate.self, BatchRunSummary.self])
+        do {
+            return try ModelContainer(for: schema, migrationPlan: AppMigrationPlan.self)
+        } catch {
+            fatalError("Failed to create ModelContainer: \(error)")
+        }
+    }()
+
     var body: some Scene {
         WindowGroup {
             FileIntakeView()
         }
-        .modelContainer(for: [RecentCoordinate.self, BatchRunSummary.self],
-                        migrationPlan: AppMigrationPlan.self)
+        .modelContainer(container)
     }
 }

@@ -53,7 +53,7 @@ struct RecentCoordinatesView: View {
 }
 
 private enum RecentCoordinateMetrics {
-    static let rowHeight: CGFloat = 38
+    static let rowHeight: CGFloat = 50
 
     static func listHeight(for rowCount: Int) -> CGFloat {
         let visibleRowCount = min(rowCount, 3)
@@ -76,6 +76,11 @@ private struct RecentCoordinateRow: View {
                     .foregroundStyle(.primary)
                     .lineLimit(1)
                     .help(snapshot.label)
+
+                Text(snapshot.coordinate.displayText)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
             }
 
             Spacer()

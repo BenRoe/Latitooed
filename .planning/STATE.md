@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: Phase 08 Complete
-last_updated: "2026-05-26T17:10:00.000Z"
-last_activity: 2026-05-26
+status: Phase 09.1 Inserted (URGENT)
+last_updated: "2026-05-28T14:38:31.367Z"
+last_activity: 2026-05-28
 progress:
-  total_phases: 8
-  completed_phases: 8
-  total_plans: 23
-  completed_plans: 23
-  percent: 100
+  total_phases: 10
+  completed_phases: 9
+  total_plans: 27
+  completed_plans: 24
+  percent: 89
 ---
 
 # Project State: GPS Metadata Editor
@@ -52,6 +52,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-15)
 ### Roadmap Evolution
 
 - Phase 6 added: Add a grid view for loaded files.
+- Phase 09.1 inserted after Phase 9: Swift Skills Code Quality — address findings from 4-skill audit (swiftui-pro, swiftdata-pro, swift-testing-pro, swift-concurrency-pro) (URGENT)
 
 ## Decisions To Carry Forward
 
@@ -81,7 +82,9 @@ See: `.planning/PROJECT.md` (updated 2026-05-15)
 
 ## Next Action
 
-Phase 8 Plan 01 complete. Host verification pending (xcodebuild test + partial query smoke test required on macOS host — verify "leip" returns 5+ suggestions in dropdown).
+Phase 09.1 inserted (URGENT): Swift Skills Code Quality. Address findings from 4-skill audit (swiftui-pro, swiftdata-pro, swift-testing-pro, swift-concurrency-pro) documented in `docs/swift-skills-code-review.md`.
+
+`/gsd-plan-phase 09.1`
 
 ### Quick Tasks Completed
 
@@ -89,7 +92,7 @@ Phase 8 Plan 01 complete. Host verification pending (xcodebuild test + partial q
 |---|-------------|------|--------|-----------|
 | 260525-1xy | Add the full path to the detail pane when a file is selected and make the pane collapsible | 2026-05-25 | 675264c | [260525-1xy-add-the-full-path-to-the-detail-pane-if-](./quick/260525-1xy-add-the-full-path-to-the-detail-pane-if-/) |
 
-Last activity: 2026-05-26
+Last activity: 2026-05-28
 
 ---
 *State initialized: 2026-05-15*

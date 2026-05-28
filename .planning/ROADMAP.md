@@ -217,3 +217,13 @@ Plans:
 
 ---
 *Roadmap created: 2026-05-15*
+
+### Phase 09.1: Swift Skills Code Quality (INSERTED)
+
+**Goal:** [Urgent work - to be planned]
+**Requirements**: TBD
+**Depends on:** Phase 9
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd-plan-phase 09.1 to break down)

@@ -28,6 +28,7 @@
 		1A2B3C4D5E6F700000000014 /* WarningSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000015 /* WarningSummaryView.swift */; };
 		1A2B3C4D5E6F700000000016 /* ReservedLocationPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000017 /* ReservedLocationPanel.swift */; };
 		1A2B3C4D5E6F700000000018 /* SelectedFilesGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000019 /* SelectedFilesGrid.swift */; };
+		1A2B3C4D5E6F700000000930 /* PanelDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000931 /* PanelDivider.swift */; };
 		1A2B3C4D5E6F700000000300 /* CoordinateSelectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000400 /* CoordinateSelectionViewModel.swift */; };
 		1A2B3C4D5E6F700000000301 /* CoordinateSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000401 /* CoordinateSelectionView.swift */; };
 		1A2B3C4D5E6F700000000302 /* CoordinateSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700000000402 /* CoordinateSelection.swift */; };
@@ -93,6 +94,7 @@
 		1A2B3C4D5E6F700000000015 /* WarningSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WarningSummaryView.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F700000000017 /* ReservedLocationPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReservedLocationPanel.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F700000000019 /* SelectedFilesGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedFilesGrid.swift; sourceTree = "<group>"; };
+		1A2B3C4D5E6F700000000931 /* PanelDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanelDivider.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F700000000400 /* CoordinateSelectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateSelectionViewModel.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F700000000401 /* CoordinateSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateSelectionView.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F700000000402 /* CoordinateSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateSelection.swift; sourceTree = "<group>"; };
@@ -297,6 +299,7 @@
 				1A2B3C4D5E6F700000000013 /* FileDetailPanel.swift */,
 				1A2B3C4D5E6F700000000015 /* WarningSummaryView.swift */,
 				1A2B3C4D5E6F700000000017 /* ReservedLocationPanel.swift */,
+				1A2B3C4D5E6F700000000931 /* PanelDivider.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -476,6 +479,7 @@
 				1A2B3C4D5E6F700000000012 /* FileDetailPanel.swift in Sources */,
 				1A2B3C4D5E6F700000000014 /* WarningSummaryView.swift in Sources */,
 				1A2B3C4D5E6F700000000016 /* ReservedLocationPanel.swift in Sources */,
+				1A2B3C4D5E6F700000000930 /* PanelDivider.swift in Sources */,
 				1A2B3C4D5E6F700000000300 /* CoordinateSelectionViewModel.swift in Sources */,
 				1A2B3C4D5E6F700000000301 /* CoordinateSelectionView.swift in Sources */,
 				1A2B3C4D5E6F700000000302 /* CoordinateSelection.swift in Sources */,

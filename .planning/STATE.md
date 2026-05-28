@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: Phase 09.1 Inserted (URGENT)
-last_updated: "2026-05-28T15:40:57.937Z"
+last_updated: "2026-05-28T15:47:29.239Z"
 last_activity: 2026-05-28
 progress:
   total_phases: 10
-  completed_phases: 9
+  completed_phases: 10
   total_plans: 27
-  completed_plans: 26
-  percent: 90
+  completed_plans: 27
+  percent: 100
 ---
 
 # Project State: GPS Metadata Editor
@@ -80,12 +80,13 @@ See: `.planning/PROJECT.md` (updated 2026-05-15)
 - Phase 7 Plan 01 replaced submit-gated MapKit search with onChange debounce (3 chars / 500 ms), floating dropdown overlay, X clear button, and Escape handler. Removed Search button and performSearchOnSubmit(). Added clearSearch() to ViewModel. isSearchResultsExpanded kept to avoid breaking existing tests; view uses its own @State isDropdownVisible synced via onChange.
 - Phase 8 Plan 01 replaced MKLocalSearch suggestions with MKLocalSearchCompleter. SearchCompleterDelegate @MainActor inner class bridges delegate callbacks to withCheckedThrowingContinuation. completionMap ([UUID: MKLocalSearchCompletion]) on ViewModel enables two-step resolve: service returns placeholder coords, ViewModel resolves real coord on selection via MKLocalSearch.Request(completion:). readyStatusOverride drives "Resolving location…" and "Could not load location. Try again." status bar states.
 - Plan 09.1-02 wired SchemaV1 + AppMigrationPlan into modelContainer; declared #Unique<RecentCoordinate>([\.latitude,\.longitude]) and #Index macros on both @Model types; replaced fetch-scan upsert with insert-then-set pattern; removed hasChanges guards. Host xcodebuild verification pending.
+- Plan 09.1-03: AppDesign.Radius tokens changed from CGSize to CGFloat, all 15 call sites migrated; VoiceOver button traits added to map; ContentUnavailableView replaces plain Text empty states; onGeometryChange replaces GeometryReader in CoordinateSearchPanel; count(where:) replaces filter{}.count at 4 sites in FileIntakeViewModel.
 
 ## Next Action
 
-Phase 09.1 Plan 02 complete. Execute Plan 03 (remaining audit findings).
+Phase 09.1 complete. All 3 plans executed. Host xcodebuild verification pending.
 
-`/gsd-execute-phase 09.1`
+`/gsd-transition`
 
 ### Quick Tasks Completed
 

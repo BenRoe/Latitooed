@@ -188,19 +188,6 @@ private struct FileIntakeFooter: View {
 
     var body: some View {
         HStack(spacing: AppDesign.Spacing.sm) {
-            Label(
-                latestNotice?.message ?? "Ready",
-                systemImage: latestNotice?.style == .warning ? "exclamationmark.triangle" : "tray"
-            )
-            .font(.caption)
-            .foregroundStyle(latestNotice?.style == .warning ? .orange : .secondary)
-
-            Spacer()
-
-            Text(statusText)
-                .font(.caption)
-                .foregroundStyle(.secondary)
-
             HStack(spacing: AppDesign.Spacing.sm) {
                 Label("Loaded: \(loadedFileCount)", systemImage: "tray.full")
                 Label("Selected: \(selectedFileCount)", systemImage: "checkmark.circle")
@@ -208,7 +195,23 @@ private struct FileIntakeFooter: View {
             .font(.caption)
             .foregroundStyle(.secondary)
 
+            if let latestNotice {
+                Divider()
+                    .padding(.horizontal, AppDesign.Spacing.md)
+                Label(latestNotice.message, systemImage: latestNotice.style == .warning ? "exclamationmark.triangle" : "tray")
+                    .font(.caption)
+                    .foregroundStyle(latestNotice.style == .warning ? .orange : .secondary)
+            }
+
+            Spacer()
+
+            Text(statusText)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+
             Button("Apply Location", systemImage: "location.fill", action: applyAction)
+                .buttonStyle(.borderedProminent)
+                .controlSize(.large)
                 .disabled(isApplyEnabled == false)
         }
         .frame(height: AppDesign.Layout.footerHeight)

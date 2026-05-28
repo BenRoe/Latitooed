@@ -20,10 +20,6 @@ struct CoordinateFieldsView: View {
                     onChange: viewModel.updateLongitude
                 )
             }
-
-            Label(viewModel.readyStatusText, systemImage: viewModel.selectedCoordinate == nil ? "mappin.slash" : "mappin")
-                .font(.caption)
-                .foregroundStyle(viewModel.selectedCoordinate == nil ? .secondary : .primary)
         }
     }
 }

@@ -70,7 +70,7 @@ final class CoordinateSelectionViewModel {
             return "No target coordinate selected."
         }
 
-        return "Target set: \(selectedCoordinate.displayText)"
+        return selectedCoordinate.displayText
     }
 
     var searchStatusText: String? {

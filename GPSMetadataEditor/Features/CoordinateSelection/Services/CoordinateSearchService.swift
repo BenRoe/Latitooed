@@ -83,6 +83,11 @@ private final class SearchCompleterDelegate: NSObject, @preconcurrency MKLocalSe
         return try await withTaskCancellationHandler {
             try await withCheckedThrowingContinuation { cont in
                 self.continuation = cont
+                // MKLocalSearchCompleter won't re-fire if queryFragment is unchanged.
+                // Force a reset so the same query after a clear triggers a new event.
+                if self.completer.queryFragment == query {
+                    self.completer.queryFragment = ""
+                }
                 self.completer.queryFragment = query
             }
         } onCancel: { [weak self] in

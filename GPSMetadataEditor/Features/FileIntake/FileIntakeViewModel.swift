@@ -125,7 +125,7 @@ final class FileIntakeViewModel {
     }
 
     var selectedLoadedFileCount: Int {
-        selectedFiles.filter { selectedFileIDs.contains($0.id) }.count
+        selectedFiles.count(where: { selectedFileIDs.contains($0.id) })
     }
 
     var selectedFileDetail: SelectedFileDetail? {
@@ -406,9 +406,9 @@ final class FileIntakeViewModel {
 
 private extension FileIntakeViewModel.MetadataBatchSummary {
     init(results: [MetadataWriteResult]) {
-        successCount = results.filter { $0.status == .success }.count
-        warningCount = results.filter { $0.status == .warning }.count
-        failureCount = results.filter { $0.status == .failure }.count
+        successCount = results.count(where: { $0.status == .success })
+        warningCount = results.count(where: { $0.status == .warning })
+        failureCount = results.count(where: { $0.status == .failure })
     }
 }
 

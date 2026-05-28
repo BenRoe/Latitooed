@@ -29,7 +29,7 @@ private struct MapStyleButton: View {
         .labelStyle(.iconOnly)
         .buttonStyle(.bordered)
         .controlSize(.small)
-        .foregroundStyle(isSelected ? Color.accentColor : Color.primary)
+        .foregroundStyle(isSelected ? Color.accentColor : .primary)
         .help(style.label)
     }
 }

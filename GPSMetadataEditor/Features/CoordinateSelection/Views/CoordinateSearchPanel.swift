@@ -57,13 +57,7 @@ struct CoordinateSearchPanel: View {
             .onChange(of: viewModel.isSearchResultsExpanded) { _, newValue in
                 if !newValue { isDropdownVisible = false }
             }
-            .background {
-                GeometryReader { geo in
-                    Color.clear
-                        .onAppear { fieldHeight = geo.size.height }
-                        .onChange(of: geo.size.height) { _, h in fieldHeight = h }
-                }
-            }
+            .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { fieldHeight = $0 }
             .overlay(alignment: .top) {
                 if isDropdownVisible {
                     SearchDropdownView(viewModel: viewModel, onDismiss: { isDropdownVisible = false })

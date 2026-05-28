@@ -31,7 +31,7 @@ struct FileDetailPanel: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal, AppDesign.Spacing.md)
-        .padding(.vertical, 5)
+        .padding(.vertical, AppDesign.Spacing.xs)
         .background(.background)
         .clipShape(.rect(cornerRadius: AppDesign.Radius.medium))
     }

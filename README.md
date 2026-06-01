@@ -3,11 +3,15 @@
   <h1>Latitooed</h1>
   <p>Ink your coordinates into every shot.</p>
   <a href="https://github.com/BenRoe/Latitooed/releases/latest">⬇️ Download latest release</a>
+  <br/><br/>
 </div>
+
+[![Screenshot 1.0](/docs/screenshot-1.0.jpg)](./docs/screenshot-1.0.jpg)
 
 ---
 
 > **Note:** Latitooed is not code-signed or notarized. On first launch macOS will block it. Right-click the app → **Open** to proceed, or run:
+>
 > ```bash
 > xattr -cr /Applications/Latitooed.app
 > ```
@@ -18,13 +22,15 @@
 
 Select multiple image or video files, pick a location via map search or manual coordinates, and write that GPS data to all files at once.
 
+Latitooed does not recompress, resize, or alter the image or video content itself. It only edits metadata fields.
+
 **Supported formats:** JPEG, HEIC, PNG, TIFF, RAW variants, MOV, MP4 (best effort)
 
 ---
 
 ## Privacy first
 
-Everything runs locally on your Mac. No files are uploaded, no analytics collected, no network requests made (except Apple Maps for map tiles and location search). GPS data is written directly to your files using a bundled copy of ExifTool — no external services involved.
+Everything runs locally on your Mac. No files are uploaded, no analytics collected, no network requests made (except Apple Maps for map tiles and location search). GPS data is written directly to your files — no external services involved. The app changes metadata only; it does not compress or modify the media pixels.
 
 ---
 
